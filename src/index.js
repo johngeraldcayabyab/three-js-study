@@ -1,5 +1,6 @@
 import * as THREE from 'THREE';
 import {GUI} from "dat.gui";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 function main() {
     const scene = new THREE.Scene();
@@ -13,8 +14,11 @@ function main() {
 
     const camera = new THREE.PerspectiveCamera(fov, windowInnerWidth / windowInnerHeight, near, far);
 
+
     const renderer = new THREE.WebGLRenderer({antialias: true});
     // renderer
+
+    const controls = new OrbitControls(camera, renderer.domElement);
 
     renderer.setSize(windowInnerWidth, windowInnerHeight);
     document.body.appendChild(renderer.domElement);
@@ -84,6 +88,7 @@ function main() {
         requestAnimationFrame(animate);
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.01;
+        controls.update();
         renderer.render(scene, camera);
     }
 
