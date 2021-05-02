@@ -1,6 +1,7 @@
 import * as THREE from 'THREE';
 import {GUI} from "dat.gui";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {DragControls} from "three/examples/jsm/controls/DragControls";
 
 function main() {
     const scene = new THREE.Scene();
@@ -18,7 +19,7 @@ function main() {
     const renderer = new THREE.WebGLRenderer({antialias: true});
     // renderer
 
-    const controls = new OrbitControls(camera, renderer.domElement);
+    // const controls = new OrbitControls(camera, renderer.domElement);
 
     renderer.setSize(windowInnerWidth, windowInnerHeight);
     document.body.appendChild(renderer.domElement);
@@ -40,7 +41,7 @@ function main() {
 
     camera.position.z = 5;
 
-    const light = new THREE.PointLight(0xffffff, 5);
+    const light = new THREE.PointLight(0xffffff, 10);
     light.position.z = 5;
 
     // light.shadow.camera.near = near;
@@ -82,13 +83,28 @@ function main() {
     }
 
     makeAxisGrid(cube, 'cube');
-    makeAxisGrid(light, 'ambient light');
+    makeAxisGrid(light, 'light');
+    makeAxisGrid(camera, 'camera');
+
+    const newControls = new DragControls( cube, camera, renderer.domElement );
+
+    newControls.addEventListener( 'dragstart', function ( event ) {
+
+        event.object.material.emissive.set( 0xaaaaaa );
+
+    } );
+
+    newControls.addEventListener( 'dragend', function ( event ) {
+
+        event.object.material.emissive.set( 0x000000 );
+
+    } );
 
     function animate() {
         requestAnimationFrame(animate);
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.01;
-        controls.update();
+        // controls.update();
         renderer.render(scene, camera);
     }
 
