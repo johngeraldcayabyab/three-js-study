@@ -17,7 +17,9 @@ function main() {
 
 
     const renderer = new THREE.WebGLRenderer({antialias: true});
-    // renderer
+    const enableSelection = false;
+    const mouse = new THREE.Vector2();
+    const raycaster = new THREE.Raycaster();
 
     // const controls = new OrbitControls(camera, renderer.domElement);
 
@@ -88,17 +90,43 @@ function main() {
 
     const newControls = new DragControls( cube, camera, renderer.domElement );
 
-    newControls.addEventListener( 'dragstart', function ( event ) {
+    newControls.addEventListener('drag', renderer, animate);
 
-        event.object.material.emissive.set( 0xaaaaaa );
 
-    } );
+    function onWindowResize(){
 
-    newControls.addEventListener( 'dragend', function ( event ) {
+    }
 
-        event.object.material.emissive.set( 0x000000 );
+    function onKeyDown(event){
+        event.preventDefault();
+        // if
+    }
 
-    } );
+    function onKeyUp(){
+
+    }
+
+    function onClick(event){
+        event.preventDefault();
+        if(enableSelection === true){
+            const draggableObjects = newControls.getObjects();
+            draggableObjects.length = 0;
+
+            mouse.x = (event.clientX / windowInnerWidth) * 2 -1;
+            mouse.y = (event.clientY / window.innerHeight) * 2 +1;
+
+            raycaster.setFromCamera(mouse, camera);
+
+            const intersections = raycaster.intersectObject(cube, true);
+
+            if(intersections.length > 0){
+
+            }
+        }
+    }
+
+
+    animate();
 
     function animate() {
         requestAnimationFrame(animate);
@@ -107,8 +135,6 @@ function main() {
         // controls.update();
         renderer.render(scene, camera);
     }
-
-    animate();
 }
 
 main();
