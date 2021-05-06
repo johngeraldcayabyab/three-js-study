@@ -1,62 +1,116 @@
 import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
+let main = () => {
 
-function main() {
-
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 500);
-    camera.position.set(0, 0, 100);
-    camera.lookAt(0, 0, 0);
-
     const scene = new THREE.Scene();
 
-    const material = new THREE.LineBasicMaterial({color: 0xEDFF9A});
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
 
-    const points = [];
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(200, 500, 300);
+    scene.add(directionalLight);
+
+    const fov = 75;
+    const windowInnerWidth = window.innerWidth;
+    const windowInnerHeight = window.innerHeight;
+    const near = 0.1;
+    const far = 5000;
+
+    const camera = new THREE.PerspectiveCamera(fov, windowInnerWidth / windowInnerHeight, near, far);
+    camera.position.set(150, 150, 150);
+    camera.lookAt(0, 10, 0);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+
+    let createPlane = () => {
+        const geometry = new THREE.PlaneGeometry(500, 500, 32);
+        const material = new THREE.MeshLambertMaterial({color: 0x6584b5, side: THREE.DoubleSide});
+        return new THREE.Mesh(geometry, material);
+    };
+
+    const plane = createPlane();
+    plane.rotation.x = 300;
+    scene.add(plane);
+
+    let createWheels = () => {
+        const geometry = new THREE.BoxBufferGeometry(12, 12, 33);
+        const material = new THREE.MeshLambertMaterial({color: 0x333333});
+        return new THREE.Mesh(geometry, material);
+    };
+
+    let createCar = () => {
+        const car = new THREE.Group();
+        car.position.y = 1;
+
+        const backWheel = createWheels();
+        backWheel.position.y = 6;
+        backWheel.position.x = -18;
+        car.add(backWheel);
+
+        const frontWheel = createWheels();
+        frontWheel.position.y = 6;
+        frontWheel.position.x = 18;
+        car.add(frontWheel);
+
+        const roof = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(60, 15, 30),
+            new THREE.MeshLambertMaterial({color: 0x78b14b})
+        );
+        roof.position.y = 12;
+        car.add(roof);
+
+        const cabin = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(33, 12, 24),
+            new THREE.MeshLambertMaterial({color: 0xffffff})
+        );
+        cabin.position.x = -5;
+        cabin.position.y = 25;
+        car.add(cabin);
+
+        return car;
+    };
+
+    const car = createCar();
+    scene.add(car);
+
+    let forward = true;
+
+    car.rotation.y += 1;
+
+    let animate = () => {
 
 
-    for (let x = 0; x < 100; x++) {
-        points.push(new THREE.Vector3(x, Math.random() * 10, Math.random() * 10));
-    }
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-    const line = new THREE.Line(geometry, material);
+        if(forward){
+            car.position.x += 1;
+            // car.position.z += 1;
 
-    scene.add(line);
-
-    const cameraControls = new OrbitControls(camera, renderer.domElement);
-    cameraControls.update();
-
-    function resizeRendererToDisplaySize(renderer) {
-        const canvas = renderer.domElement;
-        const width = canvas.clientWidth;
-        const height = canvas.clientHeight;
-        const needResize = canvas.width !== width || canvas.height !== height;
-        if (needResize) {
-            renderer.setSize(width, height, false);
+        }else{
+            car.position.x -= 1;
         }
-        return needResize;
-    }
 
 
-    function render(time) {
-        time *= 0.001;
-        if (resizeRendererToDisplaySize(renderer)) {
-            const canvas = renderer.domElement;
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            camera.updateProjectionMatrix();
+        if(car.position.x === (250 - 24)){
+            forward = false;
+        }else if(car.position.x === (-250 + 24)){
+            forward = true;
         }
-        line.rotation.x += 0.01;
-        // line.rotation.y += 0.01;
+
+
+        // car.rotation.y += .01;
+        // car.position.z += .1;
+        controls.update();
         renderer.render(scene, camera);
-        requestAnimationFrame(render);
-    }
+        requestAnimationFrame(animate);
+    };
 
-    requestAnimationFrame(render);
+    animate();
 }
 
 main();
