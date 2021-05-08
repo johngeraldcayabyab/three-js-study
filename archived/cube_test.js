@@ -126,9 +126,9 @@ function main() {
     }
 
 
-    animate();
+    animate(time);
 
-    function animate() {
+    function animate(time) {
         requestAnimationFrame(animate);
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.01;

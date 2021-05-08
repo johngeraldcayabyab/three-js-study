@@ -1,9 +1,12 @@
 import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {GUI} from "dat.gui";
+import {generateRandomNumberBetween, makeAxisGrid} from "./helpers";
 
 let main = () => {
 
     const renderer = new THREE.WebGLRenderer({antialias: true});
+    const gui = new GUI();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
@@ -53,6 +56,7 @@ let main = () => {
         backWheel.position.x = -18;
         car.add(backWheel);
 
+
         const frontWheel = createWheels();
         frontWheel.position.y = 6;
         frontWheel.position.x = 18;
@@ -66,12 +70,17 @@ let main = () => {
         car.add(roof);
 
         const cabin = new THREE.Mesh(
-            new THREE.BoxBufferGeometry(33, 12, 24),
+            new THREE.BoxBufferGeometry(33, 12, 30),
             new THREE.MeshLambertMaterial({color: 0xffffff})
         );
         cabin.position.x = -5;
         cabin.position.y = 25;
         car.add(cabin);
+
+        makeAxisGrid(gui, backWheel, 'backWheel');
+        makeAxisGrid(gui, roof, 'roof');
+        makeAxisGrid(gui, cabin, 'cabin');
+        makeAxisGrid(gui, frontWheel, 'frontWheel');
 
         return car;
     };
@@ -79,38 +88,75 @@ let main = () => {
     const car = createCar();
     scene.add(car);
 
-    let forward = true;
+    makeAxisGrid(gui, car, 'car');
+    makeAxisGrid(gui, plane, 'plane');
 
-    car.rotation.y += 1;
+    function goLeft() {
+        car.position.z -= 1;
+        car.rotation.y = 1.5;
+    }
 
-    let animate = () => {
+    function goRight() {
+        car.position.z += 1;
+        car.rotation.y = -1.5;
+    }
+
+    function goForward() {
+        car.position.x += 1;
+        car.rotation.y = 0;
+    }
+
+    function goBackward() {
+        car.position.x -= 1;
+        car.rotation.y = -3;
+    }
+
+    function gridNoise(x, z, seed) {
+        var n = (1619 * x + 31337 * z + 1013 * seed) & 0x7fffffff;
+        n = BigInt((n >> 13) ^ n);
+        n = n * (n * n * 60493n + 19990303n) + 1376312589n;
+        n = parseInt(n.toString(2).slice(-31), 2);
+        return 1 - n / 1073741824;
+    }
+
+    // function test() {
+    //     for (var i = 10000; i < 11000; i++) {
+    //         console.log(gridNoise(0, 0, i));
+    //     }
+    // }
+    // test();
 
 
+    let animate = (time) => {
 
-        if(forward){
-            car.position.x += 1;
-            // car.position.z += 1;
+        time *= 0.001;
 
-        }else{
-            car.position.x -= 1;
-        }
+        // goForward();
+        // console.log(time);
+
+        let randomNumber = gridNoise(car.position.x, car.position.y, time);
+
+        console.log(randomNumber);
+
+        // if(randomNumber === 1){
+        //     goForward();
+        // }else if(randomNumber === 2){
+        //     goRight();
+        // }else if(randomNumber === 3){
+        //     goBackward();
+        // }else if(randomNumber === 4){
+        //     goLeft();
+        // }
 
 
-        if(car.position.x === (250 - 24)){
-            forward = false;
-        }else if(car.position.x === (-250 + 24)){
-            forward = true;
-        }
-
-
-        // car.rotation.y += .01;
-        // car.position.z += .1;
         controls.update();
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
     };
 
-    animate();
+    requestAnimationFrame(animate)
+
+    // animate();
 }
 
 main();
