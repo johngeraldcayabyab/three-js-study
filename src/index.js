@@ -1,4 +1,7 @@
 import * as THREE from 'three';
+import {Lensflare, LensflareElement} from "three/examples/jsm/objects/Lensflare";
+import {FlyControls} from "three/examples/jsm/controls/FlyControls";
+import Stats from 'stats.js/src/Stats.js';
 
 function main() {
     let container, stats;
@@ -10,6 +13,7 @@ function main() {
     const clock = new THREE.Clock();
 
     init();
+    animate();
 
     function init() {
         container = document.createElement('div');
@@ -24,10 +28,12 @@ function main() {
 
         const s = 250;
 
-        const geometry = new THREE.BoxGeometry(s, s, s);
+        const geometry = new THREE.SphereGeometry(s, s, s);
+
+        // const geometry = new THREE.BoxGeometry(s, s, s);
         const material = new THREE.MeshPhongMaterial({color: 0xffffff, specular: 0xffffff, shininess: 50});
 
-        for (let i = 0; i < 3000; i++){
+        for (let i = 0; i < 3000; i++) {
             const mesh = new THREE.Mesh(geometry, material);
 
             mesh.position.x = 8000 * (2.0 * Math.random() - 1.0);
@@ -55,14 +61,62 @@ function main() {
         const textureFlare0 = new textureLoader.load('../textures/lensflare0.png');
         const textureFlare3 = new textureLoader.load('../textures/lensflare3.png');
 
+        addLight(0.55, 0.9, 0.5, 5000, 0, -1000);
+        addLight(0.08, 0.8, 0.5, 0, 0, -1000);
+        addLight(0.995, 0.5, 0.9, 5000, 5000, -1000);
 
+        function addLight(h, s, l, x, y, z) {
+            const light = new THREE.PointLight(0xffffff, 1.5, 2000);
+            light.color.setHSL(h, s, l);
+            light.position.set(x, y, z);
+            scene.add(light);
+
+            const lensflare = new Lensflare();
+            lensflare.addElement(new LensflareElement(textureFlare0, 700, 0, light.color));
+            lensflare.addElement(new LensflareElement(textureFlare3, 60, 0.6));
+            lensflare.addElement(new LensflareElement(textureFlare3, 70, 0.7));
+            lensflare.addElement(new LensflareElement(textureFlare3, 120, 0.9));
+            lensflare.addElement(new LensflareElement(textureFlare3, 70, 1));
+            light.add(lensflare);
+        }
+
+        renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        container.appendChild(renderer.domElement);
+
+        controls = new FlyControls(camera, renderer.domElement);
+
+        controls.movementSpeed = 2500;
+        controls.domElement = container;
+        controls.rollSpeed = Math.PI / 6;
+        controls.autoForward = false;
+        controls.dragToLook = false;
+
+        stats = new Stats();
+        container.appendChild(stats.dom);
+
+        window.addEventListener('resize', onWindowResize);
     }
 
-    function addLight(){
-
+    function onWindowResize() {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
     }
 
+    function animate() {
+        requestAnimationFrame(animate);
+        render();
+        stats.update();
+    }
 
+    function render() {
+        const delta = clock.getDelta();
+        controls.update(delta);
+        renderer.render(scene, camera);
+    }
 }
 
 main();
