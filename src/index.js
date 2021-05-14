@@ -2,121 +2,102 @@ import * as THREE from 'three';
 import {Lensflare, LensflareElement} from "three/examples/jsm/objects/Lensflare";
 import {FlyControls} from "three/examples/jsm/controls/FlyControls";
 import Stats from 'stats.js/src/Stats.js';
+import {CinematicCamera} from "three/examples/jsm/cameras/CinematicCamera";
 
-function main() {
-    let container, stats;
+let camera, scene, raycaster, renderer, stats;
 
-    let camera, scene, renderer;
-    let controls;
+const mouse = new THREE.Vector2();
+let INTERSECTED;
+const radius = 100;
+let theta = 0;
 
+init();
+animate();
 
-    const clock = new THREE.Clock();
+function init(){
+    camera = new CinematicCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+    camera.setLens(5);
+    camera.position.set(2, 1, 500);
 
-    init();
-    animate();
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xf0f0f0);
 
-    function init() {
-        container = document.createElement('div');
-        document.body.appendChild(container);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.3));
 
-        camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 15000);
-        camera.position.z = 250;
+    const light = new THREE.DirectionalLight(0xffffff, 0.35);
+    light.position.set(1,1,1).normalize();
+    scene.add(light);
 
-        scene = new THREE.Scene();
-        scene.background = new THREE.Color().setHSL(0.51, 0.4, 0.01);
-        scene.fog = new THREE.Fog(scene.background, 3500, 15000);
+    const geometry = new THREE.BoxGeometry(20, 20 ,20);
 
-        const s = 250;
+    for(let i = 0; i < 100; i++){
+        const object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: Math.random() * 0xffffff}));
 
-        const geometry = new THREE.SphereGeometry(s, s, s);
+        object.position.x = Math.random() * 800 - 400;
+        object.position.y = Math.random() * 800 - 400;
+        object.position.z = Math.random() * 800 - 400;
 
-        // const geometry = new THREE.BoxGeometry(s, s, s);
-        const material = new THREE.MeshPhongMaterial({color: 0xffffff, specular: 0xffffff, shininess: 50});
+        scene.add(object);
+    }
 
-        for (let i = 0; i < 3000; i++) {
-            const mesh = new THREE.Mesh(geometry, material);
+    raycaster = new THREE.Raycaster();
 
-            mesh.position.x = 8000 * (2.0 * Math.random() - 1.0);
-            mesh.position.y = 8000 * (2.0 * Math.random() - 1.0);
-            mesh.position.z = 8000 * (2.0 * Math.random() - 1.0);
+    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
-            mesh.rotation.x = Math.random() * Math.PI;
-            mesh.rotation.y = Math.random() * Math.PI;
-            mesh.rotation.z = Math.random() * Math.PI;
+    stats = new Stats();
+    document.body.appendChild(stats.dom);
 
-            mesh.matrixAutoUpdate = false;
-            mesh.updateMatrix();
+    document.addEventListener('mousemove', onDocumentMouseMove);
 
-            scene.add(mesh);
+    window.addEventListener('resize', onWindowResize);
+
+    const effectController = {
+        focalLength: 15,
+        fstop: 2.8,
+        showFocus: false,
+        focalDepth: 3,
+    };
+
+    const matChanger = function (){
+        for (const e in effectController){
+            if(e in camera.postprocessing.bokeh_uniforms){
+                camera.postprocessing.bokeh_uniforms[e].value = effectController[e];
+            }
         }
 
+        camera.postprocessing.bokeh_uniforms['znear'].value = camera.near;
+        camera.postprocessing.bokeh_uniforms['zfar'].value = camera.far;
+        camera.setLens(effectController.focalLength, camera.frameHeight, effectController.fstop, camera.coc);
+        effectController['focalDepth'] = camera.postprocessing.bokeh_uniforms['focalDepth'].value;
+    };
 
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.05);
-        dirLight.position.set(0, -1, 0).normalize();
-        dirLight.color.setHSL(0.1, 0.7, 0.5);
-        scene.add(dirLight);
+    const gui = new GUI;
 
-        const textureLoader = new THREE.TextureLoader();
+    gui.add(effectController, 'focalLength', 1, 135, 0.01).onChange(matChanger);
+    gui.add(effectController, 'fstop', 1.8, 22, 0.01).onChange(matChanger);
+    gui.add(effectController, 'focalDepth', 0.1, 100, 0.001).onChange(matChanger);
+    gui.add(effectController, 'showFocus', true).onChange(matChanger);
 
-        const textureFlare0 = new textureLoader.load('../textures/lensflare0.png');
-        const textureFlare3 = new textureLoader.load('../textures/lensflare3.png');
+    matChanger();
 
-        addLight(0.55, 0.9, 0.5, 5000, 0, -1000);
-        addLight(0.08, 0.8, 0.5, 0, 0, -1000);
-        addLight(0.995, 0.5, 0.9, 5000, 5000, -1000);
+    window.addEventListener('resize', onWindowResize);
 
-        function addLight(h, s, l, x, y, z) {
-            const light = new THREE.PointLight(0xffffff, 1.5, 2000);
-            light.color.setHSL(h, s, l);
-            light.position.set(x, y, z);
-            scene.add(light);
+    function onWindowResize(){
 
-            const lensflare = new Lensflare();
-            lensflare.addElement(new LensflareElement(textureFlare0, 700, 0, light.color));
-            lensflare.addElement(new LensflareElement(textureFlare3, 60, 0.6));
-            lensflare.addElement(new LensflareElement(textureFlare3, 70, 0.7));
-            lensflare.addElement(new LensflareElement(textureFlare3, 120, 0.9));
-            lensflare.addElement(new LensflareElement(textureFlare3, 70, 1));
-            light.add(lensflare);
-        }
-
-        renderer = new THREE.WebGLRenderer({antialias: true});
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.outputEncoding = THREE.sRGBEncoding;
-        container.appendChild(renderer.domElement);
-
-        controls = new FlyControls(camera, renderer.domElement);
-
-        controls.movementSpeed = 2500;
-        controls.domElement = container;
-        controls.rollSpeed = Math.PI / 6;
-        controls.autoForward = false;
-        controls.dragToLook = false;
-
-        stats = new Stats();
-        container.appendChild(stats.dom);
-
-        window.addEventListener('resize', onWindowResize);
     }
 
-    function onWindowResize() {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
+    function onDocumentMouseMove(){
+
     }
 
-    function animate() {
-        requestAnimationFrame(animate);
-        render();
-        stats.update();
+    function animate(){
+
     }
 
-    function render() {
-        const delta = clock.getDelta();
-        controls.update(delta);
-        renderer.render(scene, camera);
+    function render(){
+
     }
 }
-
-main();
