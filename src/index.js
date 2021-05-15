@@ -3,6 +3,7 @@ import {Lensflare, LensflareElement} from "three/examples/jsm/objects/Lensflare"
 import {FlyControls} from "three/examples/jsm/controls/FlyControls";
 import Stats from 'stats.js/src/Stats.js';
 import {CinematicCamera} from "three/examples/jsm/cameras/CinematicCamera";
+import {GUI} from "dat.gui";
 
 let camera, scene, raycaster, renderer, stats;
 
@@ -14,7 +15,7 @@ let theta = 0;
 init();
 animate();
 
-function init(){
+function init() {
     camera = new CinematicCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
     camera.setLens(5);
     camera.position.set(2, 1, 500);
@@ -25,12 +26,12 @@ function init(){
     scene.add(new THREE.AmbientLight(0xffffff, 0.3));
 
     const light = new THREE.DirectionalLight(0xffffff, 0.35);
-    light.position.set(1,1,1).normalize();
+    light.position.set(1, 1, 1).normalize();
     scene.add(light);
 
-    const geometry = new THREE.BoxGeometry(20, 20 ,20);
+    const geometry = new THREE.BoxGeometry(20, 20, 20);
 
-    for(let i = 0; i < 100; i++){
+    for (let i = 0; i < 100; i++) {
         const object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: Math.random() * 0xffffff}));
 
         object.position.x = Math.random() * 800 - 400;
@@ -61,9 +62,9 @@ function init(){
         focalDepth: 3,
     };
 
-    const matChanger = function (){
-        for (const e in effectController){
-            if(e in camera.postprocessing.bokeh_uniforms){
+    const matChanger = function () {
+        for (const e in effectController) {
+            if (e in camera.postprocessing.bokeh_uniforms) {
                 camera.postprocessing.bokeh_uniforms[e].value = effectController[e];
             }
         }
@@ -84,20 +85,65 @@ function init(){
     matChanger();
 
     window.addEventListener('resize', onWindowResize);
+}
 
-    function onWindowResize(){
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
 
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function onDocumentMouseMove() {
+    event.preventDefault();
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+}
+
+function animate() {
+    requestAnimationFrame(animate, renderer.domElement);
+
+    render();
+    stats.update();
+}
+
+function render() {
+    theta += 0.1;
+
+    camera.position.x = radius * Math.sin(THREE.MathUtils.degToRad(theta));
+    camera.position.y = radius * Math.sin(THREE.MathUtils.degToRad(theta));
+    camera.position.z = radius * Math.cos(THREE.MathUtils.degToRad(theta));
+
+    camera.updateMatrixWorld();
+
+    raycaster.setFromCamera(mouse, camera);
+
+    const intersects = raycaster.intersectObjects(scene.children);
+
+    if (intersects.length > 0) {
+        const targetDistance = intersects[0].distance;
+
+        camera.focusAt(targetDistance);
+
+        if (INTERSECTED != intersects[0].object) {
+            if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+
+            INTERSECTED = intersects[0].object;
+            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+            INTERSECTED.material.emissive.setHex(0xff0000);
+        }
+    } else {
+        if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+        INTERSECTED = null;
     }
 
-    function onDocumentMouseMove(){
+    if (camera.postprocessing.enabled) {
+        camera.renderCinematic(scene, renderer);
+    } else {
+        scene.overrideMaterial = null;
 
-    }
-
-    function animate(){
-
-    }
-
-    function render(){
-
+        renderer.clear();
+        renderer.render(scene, camera);
     }
 }
