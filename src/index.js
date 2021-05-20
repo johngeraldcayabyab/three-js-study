@@ -2,221 +2,157 @@ import * as THREE from 'three';
 import Stats from 'stats.js';
 import {GUI} from 'dat.gui';
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise";
+import {FirstPersonControls} from "three/examples/jsm/controls/FirstPersonControls";
 
-let container, stats, clock, gui, mixer, actions, activeAction, previousAction;
-let camera, scene, renderer, model, face;
+let container, stats;
+let camera, controls, scene, renderer;
+let mesh, texture;
 
-const api = {state: 'Walking'};
+const worldWidth = 256, worldDepth = 256;
+const clock = new THREE.Clock();
 
 init();
 animate();
 
 function init() {
-
-    container = document.createElement('div');
-    document.body.appendChild(container);
-
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.25, 100);
-    camera.position.set(-5, 3, 10);
-    camera.lookAt(new THREE.Vector3(0, 2, 0));
-
+    container = document.getElementById('container');
+    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xe0e0e0);
-    scene.fog = new THREE.Fog(0xe0e0e0, 20, 100);
+    scene.background = new THREE.Color(0xefd1b5);
+    scene.fog = new THREE.FogExp2(0xefd1b5, 0.0025);
 
-    clock = new THREE.Clock();
+    const data = generateHeight(worldWidth, worldDepth);
 
-    // lights
+    camera.position.set(100, 800, -800);
+    camera.lookAt(-100, 810, -800);
 
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
-    hemiLight.position.set(0, 20, 0);
-    scene.add(hemiLight);
+    const geometry = new THREE.PlaneGeometry(7500, 7500, worldWidth - 1, worldDepth - 1);
+    geometry.rotateX(-Math.PI / 2);
 
-    const dirLight = new THREE.DirectionalLight(0xffffff);
-    dirLight.position.set(0, 20, 10);
-    scene.add(dirLight);
+    const vertices = geometry.attributes.position.array;
 
-    // ground
+    for (let i = 0, j = 0, l = vertices.length; i < l; i++, j += 3) {
+        vertices[j + 1] = data[i] * 10;
+    }
 
-    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000), new THREE.MeshPhongMaterial({
-        color: 0x999999,
-        depthWrite: false
-    }));
-    mesh.rotation.x = -Math.PI / 2;
+    texture = new THREE.CanvasTexture(generateTexture(data, worldWidth, worldDepth));
+    texture.wrapS = THREE.ClampToEdgeWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
+
+    mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
     scene.add(mesh);
 
-    const grid = new THREE.GridHelper(200, 40, 0x000000, 0x000000);
-    grid.material.opacity = 0.2;
-    grid.material.transparent = true;
-    scene.add(grid);
-
-    // model
-
-    const loader = new GLTFLoader();
-    loader.load('http://localhost:63342/three-js-study/src/RobotExpressive.glb', function (gltf) {
-
-        model = gltf.scene;
-        scene.add(model);
-
-        console.log(gltf.animations);
-
-        createGUI(model, gltf.animations);
-
-    }, undefined, function (e) {
-
-        console.error(e);
-
-    });
-
-    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.outputEncoding = THREE.sRGBEncoding;
     container.appendChild(renderer.domElement);
 
-    window.addEventListener('resize', onWindowResize);
+    controls = new FirstPersonControls(camera, renderer.domElement);
+    controls.movementSpeed = 150;
+    controls.lookSpeed = 0.1;
 
-    // stats
     stats = new Stats();
     container.appendChild(stats.dom);
 
+    window.addEventListener('resize', onWindowResize);
 }
 
-function createGUI(model, animations) {
+function generateHeight(width, height) {
+    let seed = Math.PI / 4;
+    window.Math.random = function () {
+        const x = Math.sin(seed++) * 10000;
+        return x - Math.floor(x);
+    };
 
-    const states = ['Idle', 'Walking', 'Running', 'Dance', 'Death', 'Sitting', 'Standing'];
-    const emotes = ['Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp'];
+    const size = width * height, data = new Uint8Array(size);
+    const perlin = new ImprovedNoise(), z = Math.random() * 100;
 
-    gui = new GUI();
+    let quality = 1;
 
-    mixer = new THREE.AnimationMixer(model);
-
-    actions = {};
-
-    for (let i = 0; i < animations.length; i++) {
-
-        const clip = animations[i];
-        const action = mixer.clipAction(clip);
-        actions[clip.name] = action;
-
-        if (emotes.indexOf(clip.name) >= 0 || states.indexOf(clip.name) >= 4) {
-
-            action.clampWhenFinished = true;
-            action.loop = THREE.LoopOnce;
-
+    for (let j = 0; j < 4; j++) {
+        for (let i = 0; i < size; i++) {
+            const x = i % width, y = ~~(i / width);
+            data[i] += Math.abs(perlin.noise(x / quality, y / quality, z) * quality * 1.75);
         }
-
+        quality *= 5;
     }
-
-    // states
-
-    const statesFolder = gui.addFolder('States');
-
-    const clipCtrl = statesFolder.add(api, 'state').options(states);
-
-    clipCtrl.onChange(function () {
-
-        fadeToAction(api.state, 0.5);
-
-    });
-
-    statesFolder.open();
-
-    // emotes
-
-    const emoteFolder = gui.addFolder('Emotes');
-
-    function createEmoteCallback(name) {
-
-        api[name] = function () {
-
-            fadeToAction(name, 0.2);
-
-            mixer.addEventListener('finished', restoreState);
-
-        };
-
-        emoteFolder.add(api, name);
-
-    }
-
-    function restoreState() {
-
-        mixer.removeEventListener('finished', restoreState);
-
-        fadeToAction(api.state, 0.2);
-
-    }
-
-    for (let i = 0; i < emotes.length; i++) {
-
-        createEmoteCallback(emotes[i]);
-
-    }
-
-    emoteFolder.open();
-
-    // expressions
-
-    face = model.getObjectByName('Head_4');
-
-    const expressions = Object.keys(face.morphTargetDictionary);
-    const expressionFolder = gui.addFolder('Expressions');
-
-    for (let i = 0; i < expressions.length; i++) {
-
-        expressionFolder.add(face.morphTargetInfluences, i, 0, 1, 0.01).name(expressions[i]);
-
-    }
-
-    activeAction = actions['Walking'];
-    activeAction.play();
-
-    expressionFolder.open();
-
+    return data;
 }
 
-function fadeToAction(name, duration) {
+function generateTexture(data, width, height) {
+    let context, image, imageData, shade;
+    const vector3 = new THREE.Vector3(0, 0, 0);
 
-    previousAction = activeAction;
-    activeAction = actions[name];
+    const sun = new THREE.Vector3(1, 1, 1);
+    sun.normalize();
 
-    if (previousAction !== activeAction) {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
 
-        previousAction.fadeOut(duration);
+    context = canvas.getContext('2d');
+    context.fillStyle = '#000';
+    context.fillRect(0, 0, width, height);
 
+    image = context.getImageData(0, 0, canvas.width, canvas.height);
+    imageData = image.data;
+
+    for (let i = 0, j = 0, l = imageData.length; i < 1; i += 4, j++) {
+        vector3.x = data[j - 2] - data[j + 2];
+        vector3.y = 2;
+        vector3.z = data[j - width * 2] - data[j + width * 2];
+        vector3.normalize();
+
+        shade = vector3.dot(sun);
+
+        imageData[i] = (96 + shade * 128) * (0.5 + data[j] * 0.007);
+        imageData[i + 1] = (32 + shade * 96) * (0.5 + data[j] * 0.007);
+        imageData[i + 2] = (shade * 96) * (0.5 + data[j] * 0.007);
     }
 
-    activeAction
-        .reset()
-        .setEffectiveTimeScale(1)
-        .setEffectiveWeight(1)
-        .fadeIn(duration)
-        .play();
+    context.putImageData(image, 0, 0);
 
+    const canvasScaled = document.createElement('canvas');
+    canvasScaled.width = width * 4;
+    canvasScaled.height = height * 4;
+
+    context = canvasScaled.getContext('2d');
+    context.scale(4, 4);
+    context.drawImage(canvas, 0, 0);
+
+    image = context.getImageData(0, 0, canvasScaled.width, canvasScaled.height);
+    imageData = image.data;
+
+    for (let i = 0, l = imageData.length; i < l; i += 4) {
+        const v = ~~(Math.random() * 5);
+        imageData[i] += v;
+        imageData[i + 2] += v;
+        imageData[i + 2] += v;
+    }
+
+    context.putImageData(image, 0, 0);
+    return canvasScaled;
+}
+
+
+function animate() {
+    requestAnimationFrame(animate);
+
+    render();
+    stats.update();
 }
 
 function onWindowResize() {
-
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
     renderer.setSize(window.innerWidth, window.innerHeight);
-
+    controls.handleResize();
 }
 
-//
 
-function animate() {
-
-    const dt = clock.getDelta();
-
-    if (mixer) mixer.update(dt);
-
-    requestAnimationFrame(animate);
-
+function render() {
+    controls.update(clock.getDelta());
     renderer.render(scene, camera);
-
-    stats.update();
-
 }
