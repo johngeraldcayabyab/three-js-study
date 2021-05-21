@@ -4,10 +4,11 @@ import {GUI} from 'dat.gui';
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise";
 import {FirstPersonControls} from "three/examples/jsm/controls/FirstPersonControls";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 let container, stats;
 let camera, controls, scene, renderer;
-let mesh, texture;
+let mesh, mesh2, texture;
 
 const worldWidth = 256, worldDepth = 256;
 const clock = new THREE.Clock();
@@ -17,10 +18,10 @@ animate();
 
 function init() {
     container = document.getElementById('container');
-    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
+    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 200000);
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xefd1b5);
-    scene.fog = new THREE.FogExp2(0xefd1b5, 0.0025);
+    // scene.fog = new THREE.FogExp2(0xefd1b5, 0.0025);
 
     const data = generateHeight(worldWidth, worldDepth);
 
@@ -40,17 +41,23 @@ function init() {
     texture.wrapS = THREE.ClampToEdgeWrapping;
     texture.wrapT = THREE.ClampToEdgeWrapping;
 
-    mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
+    mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
     scene.add(mesh);
+
+
+    mesh2 = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({color: 0xff0000, wireframe: true}));
+    scene.add(mesh2);
 
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     container.appendChild(renderer.domElement);
 
-    controls = new FirstPersonControls(camera, renderer.domElement);
-    controls.movementSpeed = 150;
-    controls.lookSpeed = 0.1;
+
+    controls = new OrbitControls(camera, renderer.domElement);
+    // controls = new FirstPersonControls(camera, renderer.domElement);
+    // controls.movementSpeed = 150;
+    // controls.lookSpeed = 0.1;
 
     stats = new Stats();
     container.appendChild(stats.dom);
@@ -137,6 +144,7 @@ function generateTexture(data, width, height) {
 
 
 function animate() {
+    controls.update();
     requestAnimationFrame(animate);
 
     render();
