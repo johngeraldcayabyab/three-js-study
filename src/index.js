@@ -29,7 +29,7 @@ function init() {
     hemiLight.position.set(0, 50, 0);
     scene.add(hemiLight);
 
-    const hemiLightHelper = new THREE.HemisphereLight(hemiLight, 10);
+    const hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 10);
     scene.add(hemiLightHelper);
 
     const dirLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -91,7 +91,7 @@ function init() {
 
     const loader = new GLTFLoader();
 
-    loader.load('file:///C:/Users/Roge/WebstormProjects/three-js-study/textures/Flamingo.glb', function (gltf) {
+    loader.load('http://localhost:63342/three-js-study/textures/Flamingo.glb', function (gltf) {
         const mesh = gltf.scene.children[0];
 
         const s = 0.35;
@@ -106,7 +106,7 @@ function init() {
 
         const mixer = new THREE.AnimationMixer(mesh);
         mixer.clipAction(gltf.animations[0]).setDuration(1).play();
-        mixer.push(mixer);
+        mixers.push(mixer);
     });
 
     renderer = new THREE.WebGLRenderer({antialias: true});
