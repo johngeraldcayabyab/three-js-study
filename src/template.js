@@ -4,7 +4,6 @@ import {desktopFOV} from "./FIeldOfViews";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 function main() {
-
     let container, stats, camera, scene, renderer, controls;
 
     const clock = new THREE.Clock();
