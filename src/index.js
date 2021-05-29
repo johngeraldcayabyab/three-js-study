@@ -31,16 +31,32 @@ const ctx = canvas.getContext('2d');
 // ctx.fillStyle = 'green';
 // ctx.fillRect(100, 100, 800, 800);
 
-ctx.fillStyle = 'red';
-ctx.fillRect(0, 0, 5, 5);
+// ctx.fillStyle = 'red';
+// ctx.fillRect(0, 0, 5, 5);
+//
+// ctx.fillStyle = 'blue';
+// ctx.fillRect(5, 0, 5, 5);
+//
+// ctx.fillStyle = 'red';
+// ctx.fillRect(10, 0, 5, 5);
 
-ctx.fillStyle = 'blue';
-ctx.fillRect(5, 0, 5, 5);
+for (let x = 0; x < 800; x++) {
 
-ctx.fillStyle = 'red';
-ctx.fillRect(10, 0, 5, 5);
+    // for(let )
+    for(let y = 0; y < 800; y++){
 
-for(let i = 0; i < 800; i++){
+        if(x % 2){
+            ctx.fillStyle = 'red';
+            ctx.fillRect(x, y, 1, 1);
+        }
+
+        if(y % 2){
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(x, y, 1, 1);
+        }
+
+    }
+
 
 }
 
