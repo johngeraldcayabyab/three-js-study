@@ -5,8 +5,9 @@ import {GUI} from "dat.gui";
 import {GPUComputationRenderer} from "three/examples/jsm/misc/GPUComputationRenderer";
 import {desktopFOV} from "./FIeldOfViews";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise";
 //
-// let simplex = new SimplexNoise();
+
 //
 // const waterMaxHeight = 10;
 //
@@ -25,6 +26,10 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 // console.log(noise.noise(20, 30));
 //
 
+const noiseScale = .025;
+const noise = new SimplexNoise();
+// const noise = new ImprovedNoise();
+
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
@@ -40,20 +45,29 @@ const ctx = canvas.getContext('2d');
 // ctx.fillStyle = 'red';
 // ctx.fillRect(10, 0, 5, 5);
 
-for (let x = 0; x < 800; x++) {
+for (let y = 0; y < 750; y++) {
 
     // for(let )
-    for(let y = 0; y < 800; y++){
+    for (let x = 0; x < 1000; x++) {
 
-        if(x % 2){
-            ctx.fillStyle = 'red';
-            ctx.fillRect(x, y, 1, 1);
-        }
+        // console.log(x, y);
 
-        if(y % 2){
-            ctx.fillStyle = 'blue';
-            ctx.fillRect(x, y, 1, 1);
-        }
+        // const rgb = 255.0 * simplex.noise(x * noiseScale, y * noiseScale);
+        // ctx.fillStyle = `rgba(${rgb}, ${rgb}, ${rgb}, 1)`;
+        // ctx.fillStyle = 'red';
+        const rgb = noise.noise(x * noiseScale, y * noiseScale);
+        ctx.fillStyle = `rgba(0, 0, 0, ${rgb})`;
+        ctx.fillRect(x, y, 1, 1);
+
+        // if(x % 2){
+        // ctx.fillStyle = 'red';
+        // ctx.fillRect(x, y, 1, 1);
+        // }
+        //
+        // if(y % 2){
+        //     ctx.fillStyle = 'blue';
+        //     ctx.fillRect(x, y, 1, 1);
+        // }
 
     }
 
