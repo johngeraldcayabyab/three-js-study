@@ -6,19 +6,40 @@
     <title>My first three.js app</title>
     <link type="text/css" rel="stylesheet" href="./styles/main.css">
     <style>
-        body {
-            background-color: #efd1b5;
-            color: #61443e;
+        #blocker {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
         }
-        a {
-            color: #a06851;
+
+        #instructions {
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-<div id="container"></div>
-<div id="info"><a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> - webgl terrain + fog demo <br />(left click: forward, right click: backward)</div>
 
+<div id="blocker">
+    <div id="instructions">
+        <p style="font-size:36px">Play</p>
+        <p>
+            Move: WASD<br/>
+            Jump: SPACE<br/>
+            Look: MOUSE
+        </p>
+    </div>
+</div>
 
 <script src="dist/index.js"></script>
 </body>

@@ -4,11 +4,13 @@ import {desktopFOV} from "./FIeldOfViews";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 
-let container, stats, camera, scene, renderer, controls;
+let container, stats, camera, scene, renderer;
+
 
 const clock = new THREE.Clock();
 const windowInnerWidth = window.innerWidth;
 const windowInnerHeight = window.innerHeight;
+
 
 init();
 animate();
@@ -31,7 +33,7 @@ function init() {
     renderer.outputEncoding = THREE.sRGBEncoding;
     container.appendChild(renderer.domElement);
 
-    controls = new OrbitControls(camera, renderer.domElement);
+
 
     stats = new Stats();
     container.appendChild(stats.dom);
@@ -52,7 +54,7 @@ function onWindowResize() {
 
 function render() {
     const delta = clock.getDelta();
-    controls.update(delta);
+
     renderer.render(scene, camera);
 }
 
