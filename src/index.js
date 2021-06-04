@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise";
 
 
 main();
@@ -47,7 +48,25 @@ function main() {
         controls.maxDistance = 10000;
         controls.maxPolarAngle = Math.PI / 2;
 
+        const data = generateHeight(worldWidth, worldDepth);
+    }
 
+    function generateHeight(width, height) {
+        const size = width * height, data = new Uint8Array(size),
+            perlin = new ImprovedNoise(), z = Math.random() * 100;
+
+        console.log(data);
+
+
+        let quality = 1;
+        for (let j = 0; j < 4; j++) {
+            for (let i = 0; i < size; i++) {
+                const x = i % width, y = ~~(i / width);
+                data[i] += Math.abs(perlin.noise(x / quality, y / quality, z) * quality * 1.75);
+            }
+            quality *= 5;
+        }
+        return data;
     }
 
     function animate() {
