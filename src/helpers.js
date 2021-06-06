@@ -29,6 +29,23 @@ class AxisGridHelper {
     }
 }
 
+export const createContainer = (container) => {
+    container = document.createElement('div');
+    document.body.appendChild(container);
+    container.setAttribute('id', 'container');
+    container = document.getElementById('container');
+    container.innerHTML = '';
+    return container;
+}
+
+export const createRenderer = (renderer, container) => {
+    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement);
+    return renderer;
+};
+
 
 export const makeAxisGrid = (gui, node, label, units) => {
     const helper = new AxisGridHelper(node, units);

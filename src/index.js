@@ -1,89 +1,69 @@
 import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {generateHeight, generateTexture} from "./helpers";
 import Stats from 'stats.js/src/Stats';
+import {createContainer, createRenderer} from "./helpers";
+import interpret from "dat.gui/src/dat/color/interpret";
 
 
 main();
 
 function main() {
-    let container, stats;
 
-    let camera, controls, scene, renderer;
-
-    let mesh, texture;
-
-    const worldWidth = 256, worldDepth = 256, worldHalfWidth = worldWidth / 2, worldHalfDepth = worldDepth / 2;
-
-    let helper;
+    let container, renderer, scene, camera, controls, stats;
 
     const raycaster = new THREE.Raycaster();
-    const pointer = new THREE.Vector2();
+    const mouse = new THREE.Vector2();
+
+    // window.addEventListener('mousemove', onMouseMove, false);
 
     init();
     animate();
 
     function init() {
-        container = document.createElement('div');
-        document.body.appendChild(container);
-        container.setAttribute('id', 'container');
-        container = document.getElementById('container');
-        container.innerHTML = '';
-
-        renderer = new THREE.WebGLRenderer({antialias: true});
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        container.appendChild(renderer.domElement);
+        container = createContainer(container);
+        renderer = createRenderer(renderer, container);
 
         scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xbfd1e5);
+        // scene.background = new THREE.Color(0xbfd1e5);
 
-        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 10, 20000);
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 20000);
+        camera.lookAt(0, 0, 0);
+        camera.position.y = 7000;
+        camera.position.z = 500;
+
 
         controls = new OrbitControls(camera, renderer.domElement);
-        controls.minDistance = 1000;
-        controls.maxDistance = 10000;
-        controls.maxPolarAngle = Math.PI / 2;
-
-        const data = generateHeight(worldWidth, worldDepth);
-
-        controls.target.y = data[worldHalfWidth + worldHalfDepth * worldWidth] + 500;
-        camera.position.y = controls.target.y + 2000;
-        camera.position.x = 2000;
         controls.update();
 
-        const geometry = new THREE.PlaneGeometry(7500, 7500, worldWidth - 1, worldDepth - 1);
-        geometry.rotateX(-Math.PI / 2);
 
-        const vertices = geometry.attributes.position.array;
+        scene.add(createPlane());
+        scene.add(createBox());
 
-        for (let i = 0, j = 0, l = vertices.length; i < l; i++, j += 3) {
-            vertices[j + 1] = data[i] * 10;
-        }
 
-        geometry.computeFaceNormals();
-
-        texture = new THREE.CanvasTexture(generateTexture((data, worldWidth, worldDepth)));
-        texture.wrapS = THREE.ClampToEdgeWrapping;
-        texture.wrapT = THREE.ClampToEdgeWrapping;
-
-        mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
-        scene.add(mesh);
-
-        const geometryHelper = new THREE.ConeGeometry(20, 100, 3);
-        geometryHelper.translate(0, 50, 0);
-        geometryHelper.rotateX(Math.PI / 2);
-        helper = new THREE.Mesh(geometryHelper, new THREE.MeshNormalMaterial());
-        scene.add(helper);
-
+        // raycaster.setFromCamera(mouse, camera);
+        // const intersects = raycaster.intersectObjects(scene.children);
+        // for (let i = 0; i < intersects.length; i++) {
+        //     console.log(intersects[i].object.material);
+        //     // intersects[i].object.material.color.set(0xff0000);
+        // }
         container.addEventListener('pointermove', onPointerMove);
-
         stats = new Stats();
         container.appendChild(stats.dom);
 
-        window.addEventListener('resize', onWindowResize);
     }
 
+    function createPlane() {
+        const geometry = new THREE.PlaneGeometry(7500, 7500, 256 - 1, 256 - 1);
+        geometry.rotateX(-Math.PI / 2);
+        const material = new THREE.MeshBasicMaterial({color: 0xbfd1e5, side: THREE.DoubleSide});
+        return new THREE.Mesh(geometry, material);
+    }
+
+    function createBox() {
+        const geometry = new THREE.BoxGeometry(50, 50, 50);
+        const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+        return new THREE.Mesh(geometry, material);
+    }
 
     function animate() {
         requestAnimationFrame(animate);
@@ -91,30 +71,22 @@ function main() {
         stats.update();
     }
 
-    function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(window.innerWidth, window.innerHeight);
+    function onPointerMove(event) {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = (event.clientY / window.innerHeight) * 2 + 1;
+        raycaster.setFromCamera( mouse, camera );
+        const intersects = raycaster.intersectObjects(scene.children);
+        for (let i = 0; i < intersects.length; i++) {
+            console.log(intersects[i].object.material);
+            // intersects[i].object.material.color.set(0xff0000);
+        }
     }
-
 
     function render() {
         renderer.render(scene, camera);
     }
 
-    function onPointerMove(event) {
-        pointer.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
-        pointer.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
-        raycaster.setFromCamera(pointer, camera);
 
-        const intersects = raycaster.intersectObject(mesh);
-
-        if (intersects.length > 0) {
-            helper.position.set(0, 0, 0);
-            helper.lookAt(intersects[0].face.normal);
-            helper.position.copy(intersects[0].point);
-        }
-    }
 }
+
 
