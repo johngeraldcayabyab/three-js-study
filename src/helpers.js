@@ -46,7 +46,6 @@ export const createRenderer = (renderer, container) => {
     return renderer;
 };
 
-
 export const makeAxisGrid = (gui, node, label, units) => {
     const helper = new AxisGridHelper(node, units);
     gui.add(helper, 'visible').name(label);
