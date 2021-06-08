@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from 'stats.js/src/Stats';
-import {createContainer, createRenderer} from "./helpers";
+import {createContainer, createRenderer} from "./helpers.js";
 
 main();
 

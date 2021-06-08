@@ -1,5 +1,6 @@
-import * as THREE from "three";
-import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise";
+// import * as THREE from "three";
+import * as THREE from '../node_modules/three/build/three.module.js';
+import {ImprovedNoise} from "../node_modules/three/examples/jsm/math/ImprovedNoise.js";
 
 class AxisGridHelper {
     constructor(node, units = 10) {
