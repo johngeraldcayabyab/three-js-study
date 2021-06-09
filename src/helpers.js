@@ -2,6 +2,32 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
 import {ImprovedNoise} from "../node_modules/three/examples/jsm/math/ImprovedNoise.js";
 
+
+export const createContainer = (container) => {
+    container = document.createElement('div');
+    document.body.appendChild(container);
+    container.setAttribute('id', 'container');
+    container = document.getElementById('container');
+    container.innerHTML = '';
+    return container;
+}
+
+export const createRenderer = (renderer, container) => {
+    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement);
+    return renderer;
+};
+
+export const onWindowResize = (renderer, camera) => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+};
+
+
 class AxisGridHelper {
     constructor(node, units = 10) {
         const axes = new THREE.AxesHelper();
@@ -29,23 +55,6 @@ class AxisGridHelper {
         this.axes.visible = v;
     }
 }
-
-export const createContainer = (container) => {
-    container = document.createElement('div');
-    document.body.appendChild(container);
-    container.setAttribute('id', 'container');
-    container = document.getElementById('container');
-    container.innerHTML = '';
-    return container;
-}
-
-export const createRenderer = (renderer, container) => {
-    renderer = new THREE.WebGLRenderer({antialias: true});
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    container.appendChild(renderer.domElement);
-    return renderer;
-};
 
 export const makeAxisGrid = (gui, node, label, units) => {
     const helper = new AxisGridHelper(node, units);
