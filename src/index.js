@@ -10,61 +10,82 @@ function main() {
 
     let container, camera, scene, renderer, stats;
 
-    let mesh;
-    const amount = 20;
-    const count = Math.pow(amount, 3);
-
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2(1, 1);
+    const gui = new GUI();
 
-    const color = new THREE.Color();
+
+
+    const x = 1;
 
     init();
     animate();
+
+
 
     function init() {
 
         container = createContainer(container);
         renderer = createRenderer(renderer, container);
 
-        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(amount, amount, amount);
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 10000);
+        camera.position.y = 200;
+        camera.position.z = 200
         camera.lookAt(0, 0, 0);
 
         scene = new THREE.Scene();
 
-        const light1 = new THREE.HemisphereLight(0xffffff, 0x000088);
-        light1.position.set(-1, 1.5, 1);
-        scene.add(light1);
+        const ambientLight = new THREE.AmbientLight(0x4040440);
+        scene.add(ambientLight);
 
-        const light2 = new THREE.HemisphereLight(0xffffff, 0x880000, 0.5);
-        light2.position.set(-1, -1.5, -1);
-        scene.add(light2);
+        const pointLight = new THREE.PointLight(0xffffff, 1);
+        pointLight.position.set(25, 50, 25);
+        pointLight.castShadow = true;
+        // pointLight.shadow.mapSize.width = 1024;
+        // pointLight.shadow.mapSize.height = 1024;
+        scene.add(pointLight);
 
-        const geometry = new THREE.IcosahedronGeometry(0.5, 3);
-        const material = new THREE.MeshPhongMaterial();
+        // const spotLight = new THREE.SpotLight( 0xffffff );
+        // spotLight.position.set( 10, 10, 10 );
+        // scene.add( spotLight );
 
-        mesh = new THREE.InstancedMesh(geometry, material, count);
+        // const pointLight = new THREE.PointLight(0x4040440);
+        // scene.add(pointLight);
 
-        let i = 0;
-        const offset = (amount - 1) / 2;
+        const width = 50;
+        const height = 50;
+        const depth = 50;
 
-        const matrix = new THREE.Matrix4();
-        for (let x = 0; x < amount; x++) {
-            for (let y = 0; y < amount; y++) {
-                for (let z = 0; z < amount; z++) {
-                    matrix.setPosition(offset - x, offset - y, offset - z);
-                    mesh.setMatrixAt(i, matrix);
-                    mesh.setColorAt(i, color);
-                    i++;
-                }
-            }
-        }
+        const geometry = new THREE.BoxGeometry(width, height, depth);
+        const material = new THREE.MeshPhongMaterial({color: 0xCC8866, emissive: 0xCC8866});
 
-        scene.add(mesh);
+        // material.color = '0x00ff00';
+        const cube = new THREE.Mesh(geometry, material);
+        cube.castShadow = true;
+        cube.receiveShadow = true;
+        // cube.position.x = x;
 
-        const gui = new GUI();
-        gui.add(mesh, 'count', 0, count);
+        scene.add(cube);
+
+        // console.log(cube);
+
+        // cube.geometry.parameters.width = 300;
+        console.log(width);
+        // gui.add(cube.geometry.parameters, 'width', width, 5000);
+        gui.add(cube.rotation, 'x', 0, 60).name('X Rotation');
+        gui.add(cube.rotation, 'y', 0, 60).name('Y Rotation');
+        gui.add(cube.rotation, 'z', 0, 60).name('Z Rotation');
+
+        gui.add(cube.position, 'x', 0, 60).name('X Position');
+        gui.add(cube.position, 'y', 0, 60).name('Y Position');
+        gui.add(cube.position, 'z', 0, 60).name('Z Position');
+
+        gui.add(cube.scale, 'x', 1, 100).name('Width');
+        gui.add(cube.scale, 'y', 1, 100).name('Height');
+        gui.add(cube.scale, 'z', 1, 100).name('Depth');
+        // gui.add(cube.position, 'y', 0, 60).name('Y Position');
+        // gui.add(cube.position, 'z', 0, 60).name('Z Position');
+
 
         new OrbitControls(camera, renderer.domElement);
 
@@ -74,6 +95,10 @@ function main() {
         window.addEventListener('resize', onWindowResize(renderer, camera));
         document.addEventListener('mousemove', onMouseMove);
     }
+
+    // function updateCubeProperties(cube){
+    //     cube.
+    // }
 
     function onMouseMove(event) {
         event.preventDefault();
@@ -88,12 +113,12 @@ function main() {
 
     function render() {
         raycaster.setFromCamera(mouse, camera);
-        const intersection = raycaster.intersectObject(mesh);
-        if (intersection.length > 0) {
-            const instanceId = intersection[0].instanceId;
-            mesh.setColorAt(instanceId, color.setHex(Math.random() * 0xffffff));
-            mesh.instanceColor.needsUpdate = true;
-        }
+        // const intersection = raycaster.intersectObject(mesh);
+        // if (intersection.length > 0) {
+        //     const instanceId = intersection[0].instanceId;
+        //     mesh.setColorAt(instanceId, color.setHex(Math.random() * 0xffffff));
+        //     mesh.instanceColor.needsUpdate = true;
+        // }
         renderer.render(scene, camera);
         stats.update();
     }
