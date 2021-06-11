@@ -83,9 +83,6 @@ function main() {
         gui.add(cube.scale, 'x', 1, 100).name('Width');
         gui.add(cube.scale, 'y', 1, 100).name('Height');
         gui.add(cube.scale, 'z', 1, 100).name('Depth');
-        // gui.add(cube.position, 'y', 0, 60).name('Y Position');
-        // gui.add(cube.position, 'z', 0, 60).name('Z Position');
-
 
         new OrbitControls(camera, renderer.domElement);
 
