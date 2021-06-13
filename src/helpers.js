@@ -20,10 +20,14 @@ export const createRenderer = (renderer, container) => {
     return renderer;
 };
 
-export const onWindowResize = (renderer, camera) => {
+export const onWindowResize = (renderer, camera, callback = null) => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
+
+    if (callback) {
+        callback();
+    }
 };
 
 

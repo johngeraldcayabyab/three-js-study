@@ -5,9 +5,33 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>My first three.js app</title>
     <link type="text/css" rel="stylesheet" href="./styles/main.css">
+
+    <style>
+        #selection {
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            z-index: 999;
+        }
+
+        #selection > div {
+            height: 128px;
+            width: 128px;
+            border: 1px solid white;
+        }
+    </style>
 </head>
 <body>
 
+
+<div id="selection">
+    <div></div>
+</div>
 
 <script src="dist/index.js"></script>
 </body>

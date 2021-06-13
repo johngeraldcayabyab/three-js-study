@@ -2,9 +2,9 @@ const path = require('path');
 
 module.exports = {
     mode: 'development',
-    entry: './src/index_cube_brb.js',
+    entry: './src/index.js',
     output: {
-        filename: 'index_cube_brb.js',
+        filename: 'index.js',
         path: path.resolve(__dirname, 'dist'),
     },
     watch: true,
