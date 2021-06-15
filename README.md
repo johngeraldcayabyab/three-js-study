@@ -1,6 +1,6 @@
 # three-js-study
 
-To understand the basics of computer graphics through javascript
+To understand the basics of computer graphics through javascript by copying and modifying the source code from three js examples.
 
 References:
 <br>
