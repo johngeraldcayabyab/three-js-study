@@ -13,7 +13,7 @@ function main() {
 
     let cameraOrtho, sceneOrtho;
 
-    let offset = 0;
+    let offset = 1;
 
     const dpr = window.devicePixelRatio;
 
@@ -41,9 +41,7 @@ function main() {
         scene = new THREE.Scene();
         sceneOrtho = new THREE.Scene();
 
-        //
-
-        const points = GeometryUtils.gosper(8);
+        const points = GeometryUtils.gosper(7);
 
         const geometry = new THREE.BufferGeometry();
         const positionAttribute = new THREE.Float32BufferAttribute(points, 3);
@@ -77,10 +75,6 @@ function main() {
 
         updateSpritePosition();
 
-        // renderer = createRenderer(renderer, container);
-
-        //
-        //
         renderer = new THREE.WebGLRenderer({antialias: true});
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -88,18 +82,11 @@ function main() {
         console.log(renderer.domElement);
         document.body.appendChild(renderer.domElement);
 
-        //
-
         const selection = document.getElementById('selection');
         const controls = new OrbitControls(camera, selection);
         controls.enablePan = false;
 
-
-
-        //
-
         window.addEventListener('resize', onWindowResize);
-
     }
 
     function onWindowResize() {
@@ -119,11 +106,9 @@ function main() {
         renderer.setSize(window.innerWidth, window.innerHeight);
 
         updateSpritePosition();
-
     }
 
     function updateSpritePosition() {
-
         const halfWidth = window.innerWidth / 2;
         const halfHeight = window.innerHeight / 2;
 
@@ -131,7 +116,6 @@ function main() {
         const halfImageHeight = textureSize / 2;
 
         sprite.position.set(-halfWidth + halfImageWidth, halfHeight - halfImageHeight, 1);
-
     }
 
     function animate() {
@@ -141,42 +125,28 @@ function main() {
         const colorAttribute = line.geometry.getAttribute('color');
         updateColors(colorAttribute);
 
-        // scene rendering
-
         renderer.clear();
         renderer.render(scene, camera);
-
-        // calculate start position for copying data
 
         vector.x = (window.innerWidth * dpr / 2) - (textureSize / 2);
         vector.y = (window.innerHeight * dpr / 2) - (textureSize / 2);
 
         renderer.copyFramebufferToTexture(vector, texture);
-
         renderer.clearDepth();
         renderer.render(sceneOrtho, cameraOrtho);
-
     }
 
     function updateColors(colorAttribute) {
-
         const l = colorAttribute.count;
-
         for (let i = 0; i < l; i++) {
-
             const h = ((offset + i) % l) / l;
-
             color.setHSL(h, 1, 0.5);
             colorAttribute.setX(i, color.r);
             colorAttribute.setY(i, color.g);
             colorAttribute.setZ(i, color.b);
-
         }
-
         colorAttribute.needsUpdate = true;
-
         offset -= 25;
-
     }
 }
 
