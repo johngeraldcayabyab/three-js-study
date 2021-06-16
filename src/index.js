@@ -8,10 +8,7 @@ import Stats from '../node_modules/stats.js/src/Stats.js';
 main();
 
 function main() {
-
-    let container, renderer, scene, camera, controls, stats, INTERSECTED, line;
-    const raycaster = new THREE.Raycaster();
-    const pointer = new THREE.Vector2();
+    let container, renderer, scene, camera, controls, stats, line;
 
     init();
     animate();
@@ -35,7 +32,6 @@ function main() {
         controls = new OrbitControls(camera, renderer.domElement);
         controls.update();
 
-
         const points = GeometryUtils.gosper(7);
         const geometry = new THREE.BufferGeometry();
         const positionAttribute = new THREE.Float32BufferAttribute(points, 3);
@@ -52,7 +48,6 @@ function main() {
         line.scale.setScalar(0.05);
         scene.add(line);
 
-        container.addEventListener('pointermove', onPointerMove);
         stats = new Stats();
         container.appendChild(stats.dom);
     }
@@ -63,37 +58,8 @@ function main() {
         stats.update();
     }
 
-    function onPointerMove(event) {
-        pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-        pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    }
-
-    function createPlane() {
-        const geometry = new THREE.PlaneGeometry(7500, 7500, 256 - 1, 256 - 1);
-        geometry.rotateX(-Math.PI / 2);
-        const material = new THREE.MeshPhongMaterial({color: 0xbfd1e5, side: THREE.DoubleSide});
-        return new THREE.Mesh(geometry, material);
-    }
-
-    function findIntersections() {
-        raycaster.setFromCamera(pointer, camera);
-        const intersects = raycaster.intersectObjects(scene.children);
-        if (intersects.length > 0) {
-            // if (INTERSECTED !== intersects[0].object) {
-            //     if (INTERSECTED) {
-            //         INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex)
-            //     }
-            //     INTERSECTED = intersects[0].object;
-            //     INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-            //     INTERSECTED.material.emissive.setHex(0xff0000);
-            // }
-        }
-    }
-
     function render() {
-        findIntersections();
         renderer.render(scene, camera);
     }
-
 }
 
