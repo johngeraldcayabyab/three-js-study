@@ -1,6 +1,7 @@
 // import * as THREE from "three";
 import * as THREE from '../node_modules/three/build/three.module.js';
 import {ImprovedNoise} from "../node_modules/three/examples/jsm/math/ImprovedNoise.js";
+import Stats from '../node_modules/stats.js/src/Stats.js';
 
 
 export const createContainer = (container) => {
@@ -10,7 +11,13 @@ export const createContainer = (container) => {
     container = document.getElementById('container');
     container.innerHTML = '';
     return container;
-}
+};
+
+export const createStats = (stats, container) => {
+    stats = new Stats();
+    container.appendChild(stats.dom);
+    return stats;
+};
 
 export const createRenderer = (renderer, container) => {
     renderer = new THREE.WebGLRenderer({antialias: true});

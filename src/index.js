@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import {createContainer, createRenderer} from "./helpers";
-import Stats from 'stats.js';
+import {createContainer, createRenderer, createStats} from "./helpers";
 import GUI from 'dat.gui';
+import {GPUComputationRenderer} from "three/examples/jsm/misc/GPUComputationRenderer";
 
 main();
 
@@ -104,9 +104,88 @@ function main() {
     function init() {
         container = createContainer(container);
         renderer = createRenderer(renderer, container);
+        stats = createStats(stats, container);
 
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
+        camera.position.z = 350;
 
-        stats = new Stats();
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff);
+        scene.fog = new THREE.Fog(0xffffff, 100, 1000);
+
+        initComputeRenderer();
+
+        container.style.touchAction = 'none';
+        container.addEventListener('pointermove', onPointerMove);
+
+        window.addEventListener('resize', onWindowResize);
+
+        const gui = new GUI();
+
+        const effectController = {
+            separation: 20.0,
+            alignment: 20.0,
+            cohesion: 20.0,
+            freedom: 0.75
+        };
+
+        const valuesChanger = function () {
+            velocityUniforms['separationDistance'].value = effectController.separation;
+            velocityUniforms['alignmentDistance'].value = effectController.alignment;
+            velocityUniforms['cohesionDistance'].value = effectController.cohesion;
+            velocityUniforms['freedomFactor'].value = effectController.freedom;
+        };
+
+        valuesChanger();
+
+        gui.add(effectController, 'separation', 0.0, 100.0, 1.0).onChange(valuesChanger);
+        gui.add(effectController, 'alignment', 0.0, 100, 0.001).onChange(valuesChanger);
+        gui.add(effectController, 'cohesion', 0.0, 100.0, 0.025).onChange(valuesChanger);
+        gui.close();
+
+        initBirds();
+    }
+
+    function onPointerMove() {
+
+    }
+
+    function onWindowResize() {
+
+    }
+
+    function initBirds() {
+
+    }
+
+    function initComputeRenderer() {
+        gpuCompute = new GPUComputationRenderer(WIDTH, WIDTH, renderer);
+        if (isSafari()) {
+            gpuCompute.setDataType(THREE.HalfFloatType);
+        }
+
+        const dtPosition = gpuCompute.createTexture();
+        const dtVelocity = gpuCompute.createTexture();
+        fillPositionTexture(dtPosition);
+        fillPositionTexture(dtVelocity);
+
+        velocityVariable = gpuCompute.addVariable('textureVelocity', document.getElementById('fragmentShaderVelocity').textContent, dtVelocity);
+        positionVariable = gpuCompute.addVariable('texturePosition', document.getElementById('fragmentShaderPosition').textContent, dtPosition);
+
+        gpuCompute.setVariableDependencies(velocityVariable, [positionVariable, velocityVariable]);
+        gpuCompute.setVariableDependencies(positionVariable, [positionVariable, velocityVariable]);
+
+        positionUniforms = positionVariable.material.uniforms;
+        velocityUniforms = velocityVariable.material.uniforms;
+
+    }
+
+    function fillPositionTexture(texture) {
+
+    }
+
+    function isSafari() {
+
     }
 
     function animate() {
