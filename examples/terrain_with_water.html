@@ -28,6 +28,7 @@
     import {OrbitControls} from "../node_modules/three/examples/jsm/controls/OrbitControls.js";
     import {ImprovedNoise} from "../node_modules/three/examples/jsm/math/ImprovedNoise.js";
     import {Water} from "../node_modules/three/examples/jsm/objects/Water.js";
+    import {GUI} from "../node_modules/three/examples/jsm/libs/dat.gui.module.js";
 
     main();
 
@@ -106,7 +107,7 @@
                 {
                     textureWidth: 512,
                     textureHeight: 512,
-                    waterNormals: new THREE.TextureLoader().load('../textures/waternormals.jpg', function (texture){
+                    waterNormals: new THREE.TextureLoader().load('../textures/waternormals.jpg', function (texture) {
                         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
                     }),
                     sunDirection: new THREE.Vector3(),
@@ -119,7 +120,7 @@
 
             scene.add(water);
 
-            water.rotation.x = - Math.PI / 2;
+            water.rotation.x = -Math.PI / 2;
             water.position.y = 250;
 
             container.addEventListener('pointermove', onPointerMove);
