@@ -28,6 +28,7 @@
     import {OrbitControls} from "../node_modules/three/examples/jsm/controls/OrbitControls.js";
     import {ImprovedNoise} from "../node_modules/three/examples/jsm/math/ImprovedNoise.js";
     import {Water} from "../node_modules/three/examples/jsm/objects/Water.js";
+    import { Sky } from '../node_modules/three/examples/jsm/objects/Sky.js';
     import {GUI} from "../node_modules/three/examples/jsm/libs/dat.gui.module.js";
 
     main();
@@ -36,7 +37,7 @@
 
         let container, renderer, camera, scene, controls, stats;
 
-        let terrainMesh, terrainTexture;
+        let terrainMesh, terrainTexture, waterMesh, sunMesh;
 
         const worldWidth = 256, worldDepth = 256, worldHalfWidth = worldWidth / 2, worldHalfDepth = worldDepth / 2;
 
@@ -46,8 +47,6 @@
 
         const raycaster = new THREE.Raycaster();
         const pointer = new THREE.Vector2();
-
-        let water;
 
         init();
         animate();
@@ -74,23 +73,25 @@
             camera.position.x = 2000;
             controls.update();
 
-            const geometry = new THREE.PlaneGeometry(mapWidthHeight, mapWidthHeight, worldWidth - 1, worldDepth - 1);
-            geometry.rotateX(-Math.PI / 2);
+            sunMesh = new THREE.Vector3();
 
-            const vertices = geometry.attributes.position.array;
+            const terrainGeometry = new THREE.PlaneGeometry(mapWidthHeight, mapWidthHeight, worldWidth - 1, worldDepth - 1);
+            terrainGeometry.rotateX(-Math.PI / 2);
+
+            const vertices = terrainGeometry.attributes.position.array;
 
             for (let i = 0, j = 0, l = vertices.length; i < l; i++, j += 3) {
                 vertices[j + 1] = data[i] * 10;
             }
 
-            geometry.computeFaceNormals(); // needed for helper
+            terrainGeometry.computeFaceNormals(); // needed for helper
 
 
             terrainTexture = new THREE.CanvasTexture(generateTexture(data, worldWidth, worldDepth));
             terrainTexture.wrapS = THREE.ClampToEdgeWrapping;
             terrainTexture.wrapT = THREE.ClampToEdgeWrapping;
 
-            terrainMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: terrainTexture}));
+            terrainMesh = new THREE.Mesh(terrainGeometry, new THREE.MeshBasicMaterial({map: terrainTexture}));
             scene.add(terrainMesh);
 
             const geometryHelper = new THREE.ConeGeometry(20, 100, 3);
@@ -102,7 +103,7 @@
 
             const waterGeometry = new THREE.PlaneGeometry(mapWidthHeight, mapWidthHeight);
 
-            water = new Water(
+            waterMesh = new Water(
                 waterGeometry,
                 {
                     textureWidth: 512,
@@ -118,15 +119,62 @@
                 }
             );
 
-            scene.add(water);
+            waterMesh.rotation.x = -Math.PI / 2;
+            waterMesh.position.y = 250;
 
-            water.rotation.x = -Math.PI / 2;
-            water.position.y = 250;
+            scene.add(waterMesh);
+
+
+            const skyMesh = new Sky();
+            skyMesh.scale.setScalar( mapWidthHeight );
+            scene.add( skyMesh );
+
+            const skyUniforms = skyMesh.material.uniforms;
+
+            skyUniforms[ 'turbidity' ].value = 10;
+            skyUniforms[ 'rayleigh' ].value = 2;
+            skyUniforms[ 'mieCoefficient' ].value = 0.005;
+            skyUniforms[ 'mieDirectionalG' ].value = 0.8;
+
+            const parameters = {
+                elevation: 2,
+                azimuth: 180
+            };
+
+            const pmremGenerator = new THREE.PMREMGenerator( renderer );
+
+            function updateSun() {
+
+                const phi = THREE.MathUtils.degToRad( 90 - parameters.elevation );
+                const theta = THREE.MathUtils.degToRad( parameters.azimuth );
+
+                sunMesh.setFromSphericalCoords( 1, phi, theta );
+
+                skyMesh.material.uniforms[ 'sunPosition' ].value.copy( sunMesh );
+                waterMesh.material.uniforms[ 'sunDirection' ].value.copy( sunMesh ).normalize();
+
+                scene.environment = pmremGenerator.fromScene( skyMesh ).texture;
+            }
+
+            updateSun();
+
+            const gui = new GUI();
+
+            const folderSky = gui.addFolder( 'Sky' );
+            folderSky.add( parameters, 'elevation', 0, 90, 0.1 ).onChange( updateSun );
+            folderSky.add( parameters, 'azimuth', - 180, 180, 0.1 ).onChange( updateSun );
+            folderSky.open();
+
+            const waterUniforms = waterMesh.material.uniforms;
+
+            const folderWater = gui.addFolder( 'Water' );
+            folderWater.add( waterUniforms.distortionScale, 'value', 0, 8, 0.1 ).name( 'distortionScale' );
+            folderWater.add( waterUniforms.size, 'value', 0.1, 10, 0.1 ).name( 'size' );
+            folderWater.open();
+
 
             container.addEventListener('pointermove', onPointerMove);
-
             window.addEventListener('resize', onWindowResize);
-
         }
 
         function onWindowResize() {
@@ -139,27 +187,18 @@
         }
 
         function generateHeight(width, height) {
-
-            const size = width * height, data = new Uint8Array(size),
-                perlin = new ImprovedNoise(), z = Math.random() * 100;
-
+            const size = width * height, data = new Uint8Array(size), perlin = new ImprovedNoise(), z = Math.random() * 100;
             let quality = 1;
 
             for (let j = 0; j < 4; j++) {
-
                 for (let i = 0; i < size; i++) {
-
                     const x = i % width, y = ~~(i / width);
                     data[i] += Math.abs(perlin.noise(x / quality, y / quality, z) * quality * 1.75);
-
                 }
-
                 quality *= 5;
-
             }
 
             return data;
-
         }
 
         function generateTexture(data, width, height) {
@@ -242,6 +281,8 @@
         }
 
         function render() {
+
+            waterMesh.material.uniforms[ 'time' ].value += 1.0 / 60.0;
 
             renderer.render(scene, camera);
 
