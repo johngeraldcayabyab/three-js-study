@@ -70,68 +70,68 @@
 
             controls.update();
 
-            // terrainMesh = createTerrain();
-            // scene.add(terrainMesh);
+            terrainMesh = createTerrain();
+            scene.add(terrainMesh);
 
-            // helper = createGeometryHelper();
-            // scene.add(helper);
-            //
-            // waterMesh = createWater();
-            // scene.add(waterMesh);
+            helper = createGeometryHelper();
+            scene.add(helper);
 
-            cloudMesh = createCloud();
-            scene.add(cloudMesh);
+            waterMesh = createWater();
+            scene.add(waterMesh);
 
-            // sunMesh = new THREE.Vector3();
-            //
-            // scene.add(waterMesh);
-            //
-            // const skyMesh = new Sky();
-            // skyMesh.scale.setScalar(mapWidthHeight);
-            // scene.add(skyMesh);
+            // cloudMesh = createCloud();
+            // scene.add(cloudMesh);
 
-            // const skyUniforms = skyMesh.material.uniforms;
-            //
-            // skyUniforms['turbidity'].value = 10;
-            // skyUniforms['rayleigh'].value = 2;
-            // skyUniforms['mieCoefficient'].value = 0.005;
-            // skyUniforms['mieDirectionalG'].value = 0.8;
-            //
-            // const parameters = {
-            //     elevation: 2,
-            //     azimuth: 180
-            // };
-            //
-            // const pmremGenerator = new THREE.PMREMGenerator(renderer);
-            //
-            // function updateSun() {
-            //     const phi = THREE.MathUtils.degToRad(90 - parameters.elevation);
-            //     const theta = THREE.MathUtils.degToRad(parameters.azimuth);
-            //     sunMesh.setFromSphericalCoords(1, phi, theta);
-            //     skyMesh.material.uniforms['sunPosition'].value.copy(sunMesh);
-            //     waterMesh.material.uniforms['sunDirection'].value.copy(sunMesh).normalize();
-            //     scene.environment = pmremGenerator.fromScene(skyMesh).texture;
-            // }
-            //
-            // updateSun();
+            sunMesh = new THREE.Vector3();
+
+            scene.add(waterMesh);
+
+            const skyMesh = new Sky();
+            skyMesh.scale.setScalar(mapWidthHeight);
+            scene.add(skyMesh);
+
+            const skyUniforms = skyMesh.material.uniforms;
+
+            skyUniforms['turbidity'].value = 10;
+            skyUniforms['rayleigh'].value = 2;
+            skyUniforms['mieCoefficient'].value = 0.005;
+            skyUniforms['mieDirectionalG'].value = 0.8;
+
+            const parameters = {
+                elevation: 2,
+                azimuth: 180
+            };
+
+            const pmremGenerator = new THREE.PMREMGenerator(renderer);
+
+            function updateSun() {
+                const phi = THREE.MathUtils.degToRad(90 - parameters.elevation);
+                const theta = THREE.MathUtils.degToRad(parameters.azimuth);
+                sunMesh.setFromSphericalCoords(1, phi, theta);
+                skyMesh.material.uniforms['sunPosition'].value.copy(sunMesh);
+                waterMesh.material.uniforms['sunDirection'].value.copy(sunMesh).normalize();
+                scene.environment = pmremGenerator.fromScene(skyMesh).texture;
+            }
+
+            updateSun();
 
 
-            // const gui = new GUI();
-            //
-            // const folderSky = gui.addFolder('Sky');
-            // folderSky.add(parameters, 'elevation', 0, 90, 0.1).onChange(updateSun);
-            // folderSky.add(parameters, 'azimuth', -180, 180, 0.1).onChange(updateSun);
-            // folderSky.open();
-            //
-            // const waterUniforms = waterMesh.material.uniforms;
-            //
-            // const folderWater = gui.addFolder('Water');
-            // folderWater.add(waterUniforms.distortionScale, 'value', 0, 8, 0.1).name('distortionScale');
-            // folderWater.add(waterUniforms.size, 'value', 0.1, 10, 0.1).name('size');
-            // folderWater.open();
-            //
-            // container.addEventListener('pointermove', onPointerMove);
-            // window.addEventListener('resize', onWindowResize);
+            const gui = new GUI();
+
+            const folderSky = gui.addFolder('Sky');
+            folderSky.add(parameters, 'elevation', 0, 90, 0.1).onChange(updateSun);
+            folderSky.add(parameters, 'azimuth', -180, 180, 0.1).onChange(updateSun);
+            folderSky.open();
+
+            const waterUniforms = waterMesh.material.uniforms;
+
+            const folderWater = gui.addFolder('Water');
+            folderWater.add(waterUniforms.distortionScale, 'value', 0, 8, 0.1).name('distortionScale');
+            folderWater.add(waterUniforms.size, 'value', 0.1, 10, 0.1).name('size');
+            folderWater.open();
+
+            container.addEventListener('pointermove', onPointerMove);
+            window.addEventListener('resize', onWindowResize);
         }
 
         function createTerrain() {
@@ -414,13 +414,13 @@
         }
 
         function render() {
-            // waterMesh.material.uniforms['time'].value += 1.0 / 60.0;
+            waterMesh.material.uniforms['time'].value += 1.0 / 60.0;
 
 
-            cloudMesh.material.uniforms.cameraPos.value.copy( camera.position );
-            cloudMesh.rotation.y = - performance.now() / 7500;
-
-            cloudMesh.material.uniforms.frame.value ++;
+            // cloudMesh.material.uniforms.cameraPos.value.copy( camera.position );
+            // cloudMesh.rotation.y = - performance.now() / 7500;
+            //
+            // cloudMesh.material.uniforms.frame.value ++;
 
             renderer.render(scene, camera);
         }
@@ -430,13 +430,13 @@
             pointer.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
             raycaster.setFromCamera(pointer, camera);
 
-            // const intersects = raycaster.intersectObject(terrainMesh);
-            //
-            // if (intersects.length > 0) {
-            //     helper.position.set(0, 0, 0);
-            //     helper.lookAt(intersects[0].face.normal);
-            //     helper.position.copy(intersects[0].point);
-            // }
+            const intersects = raycaster.intersectObject(terrainMesh);
+
+            if (intersects.length > 0) {
+                helper.position.set(0, 0, 0);
+                helper.lookAt(intersects[0].face.normal);
+                helper.position.copy(intersects[0].point);
+            }
         }
     }
 </script>

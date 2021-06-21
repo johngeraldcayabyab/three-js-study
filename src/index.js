@@ -178,6 +178,28 @@ function main() {
         positionUniforms = positionVariable.material.uniforms;
         velocityUniforms = velocityVariable.material.uniforms;
 
+        positionUniforms['time'] = {value: 0.0};
+        positionUniforms['delta'] = {value: 0.0};
+        velocityUniforms['time'] = {value: 1.0};
+        velocityUniforms['delta'] = {value: 0.0};
+        velocityUniforms['testing'] = {value: 1.0};
+        velocityUniforms['separationDistance'] = {value: 1.0};
+        velocityUniforms['alignmentDistance'] = {value: 1.0};
+        velocityUniforms['cohesionDistance'] = {value: 1.0};
+        velocityUniforms['freedomFactor'] = {value: 1.0};
+        velocityUniforms['predator'] = {value: new THREE.Vector3()};
+        velocityVariable.material.defines.BOUNDS = BOUNDS.toFixed(2);
+
+        velocityVariable.wrapS = THREE.RepeatWrapping;
+        velocityVariable.wrapT = THREE.RepeatWrapping;
+        positionVariable.wrapS = THREE.RepeatWrapping;
+        positionVariable.wrapT = THREE.RepeatWrapping;
+
+        const error = gpuCompute.init();
+
+        if(error !== null){
+            console.log(error);
+        }
     }
 
     function fillPositionTexture(texture) {
