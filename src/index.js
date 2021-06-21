@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {createContainer, createRenderer, createStats} from "./helpers";
-import GUI from 'dat.gui';
+import {GUI} from "dat.gui";
 import {GPUComputationRenderer} from "three/examples/jsm/misc/GPUComputationRenderer";
 
 main();
@@ -147,15 +147,46 @@ function main() {
     }
 
     function onPointerMove() {
+        if (event.isPrimary === false) return;
 
+        mouseX = event.clientX - windowHalfX;
+        mouseY = event.clientY - windowHalfY;
     }
 
     function onWindowResize() {
+        windowHalfX = window.innerWidth / 2;
+        windowHalfY = window.innerHeight / 2;
 
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
     function initBirds() {
+        const geometry = new BirdGeometry();
 
+        birdUniforms = {
+            'color': {value: new THREE.Color(0xff2200)},
+            'texturePosition': {value: null},
+            'textureVelocity': {value: null},
+            'time': {value: 1.0},
+            'delta': {value: 0.0}
+        };
+
+        const material = new THREE.ShaderMaterial({
+            uniforms: birdUniforms,
+            vertexShader: document.getElementById('birdVS').textContent,
+            fragmentShader: document.getElementById('birdFS').textContent,
+            side: THREE.DoubleSide
+        });
+
+        const birdMesh = new THREE.Mesh(geometry, material);
+        birdMesh.rotation.y = Math.PI / 2;
+        birdMesh.matrixAutoUpdate = false;
+        birdMesh.updateMatrix();
+
+        scene.add(birdMesh);
     }
 
     function initComputeRenderer() {
@@ -197,20 +228,61 @@ function main() {
 
         const error = gpuCompute.init();
 
-        if(error !== null){
+        if (error !== null) {
             console.log(error);
         }
     }
 
     function fillPositionTexture(texture) {
+        const theArray = texture.image.data;
 
+        for (let k = 0, kl = theArray.length; k < kl; k += 4) {
+            const x = Math.random() * BOUNDS - BOUNDS_HALF;
+            const y = Math.random() * BOUNDS - BOUNDS_HALF;
+            const z = Math.random() * BOUNDS - BOUNDS_HALF;
+
+            theArray[k + 0] = x;
+            theArray[k + 1] = y;
+            theArray[k + 2] = z;
+            theArray[k + 3] = 1;
+        }
     }
 
     function isSafari() {
-
+        return !!navigator.userAgent.match(/Safari/i) && !navigator.userAgent.match(/Chrome/i);
     }
 
     function animate() {
+        requestAnimationFrame(animate);
 
+        render();
+        stats.update();
+    }
+
+    function render() {
+        const now = performance.now();
+        let delta = (now - last) / 1000;
+
+        if (delta > 1) delta = 1;
+        last = now;
+
+        positionUniforms['time'].value = now;
+        positionUniforms['delta'].value = delta;
+        velocityUniforms['time'].value = now;
+        velocityUniforms['delta'].value = delta;
+        birdUniforms['time'].value = now
+        birdUniforms['delta'].valuje = delta;
+
+        velocityUniforms['predator'].value.set(0.5 * mouseX / windowHalfX, -0.5 * mouseY / windowHalfY, 0);
+
+        mouseX = 10000;
+        mouseY = 10000;
+
+        gpuCompute.compute();
+
+        birdUniforms['texturePosition'].value = gpuCompute.getCurrentRenderTarget(positionVariable).texture;
+        birdUniforms['textureVelocity'].value = gpuCompute.getCurrentRenderTarget(velocityVariable).texture;
+
+        renderer.render(scene, camera);
     }
 }
