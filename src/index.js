@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {createContainer, createRenderer, createStats} from "./helpers";
 import {GUI} from "dat.gui";
 import {GPUComputationRenderer} from "three/examples/jsm/misc/GPUComputationRenderer";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 main();
 
@@ -80,7 +81,7 @@ function main() {
         }
     }
 
-    let container, renderer, scene, camera, stats, gui;
+    let container, renderer, scene, camera, stats, controls;
 
     let mouseX = 0, mouseY = 0;
 
@@ -109,13 +110,17 @@ function main() {
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
         camera.position.z = 350;
 
+
+
+
+
         scene = new THREE.Scene();
         scene.background = new THREE.Color(0xffffff);
         scene.fog = new THREE.Fog(0xffffff, 100, 1000);
 
         initComputeRenderer();
 
-        container.style.touchAction = 'none';
+        // container.style.touchAction = 'none';
         container.addEventListener('pointermove', onPointerMove);
 
         window.addEventListener('resize', onWindowResize);
@@ -143,6 +148,7 @@ function main() {
         gui.add(effectController, 'cohesion', 0.0, 100.0, 0.025).onChange(valuesChanger);
         gui.close();
 
+        controls = new OrbitControls(camera, renderer.domElement);
         initBirds();
     }
 
@@ -253,6 +259,7 @@ function main() {
     }
 
     function animate() {
+        controls.update();
         requestAnimationFrame(animate);
 
         render();
