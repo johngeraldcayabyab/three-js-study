@@ -463,6 +463,8 @@
             birdMesh.matrixAutoUpdate = false;
             birdMesh.updateMatrix();
 
+            birdMesh.geometry.scale(5, 5, 5);
+
             scene.add(birdMesh);
         }
 
@@ -640,7 +642,7 @@
 
 
             // Attract flocks to the center
-            vec3 central = vec3( 0., 0., 0. );
+            vec3 central = vec3( 0., 1500., 0. );
             dir = selfPosition - central;
             dist = length( dir );
 
