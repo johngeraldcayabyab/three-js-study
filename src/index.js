@@ -49,7 +49,7 @@ function main() {
             position.setY(i, y);
         }
 
-        const texture = new THREE.TextureLoader().load('textures/realisticwater.jpg');
+        const texture = new THREE.TextureLoader().load('textures/waternormals.jpg');
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(5, 5);
 
