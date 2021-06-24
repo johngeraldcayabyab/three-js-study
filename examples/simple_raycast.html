@@ -51,13 +51,13 @@
 
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 20000);
             camera.lookAt(0, 0, 0);
-            camera.position.y = 7000;
+            camera.position.y = 500;
             camera.position.z = 500;
 
             controls = new OrbitControls(camera, renderer.domElement);
             controls.update();
 
-            scene.add(createPlane());
+            // scene.add(createPlane());
             scene.add(createBox());
 
             container.addEventListener('pointermove', onPointerMove);
@@ -74,8 +74,15 @@
 
         function createBox() {
             const geometry = new THREE.BoxGeometry(50, 50, 50);
-            const material = new THREE.MeshPhongMaterial({color: 0x00ff00});
-            return new THREE.Mesh(geometry, material);
+            const material = new THREE.MeshPhongMaterial({color: 0x13FF14});
+            const box = new THREE.Mesh(geometry, material);
+            // box.geometry.faces[0].color.setHex( 0xFF4A35);
+            // box.geometry.faces[1].color.setHex( 0x2846FF);
+            // object.geometry.colorsNeedUpdate = true;
+            console.log(box);
+            // box.geometry.colorsNeedUpdate = true;
+            box.position.y = 50;
+            return box;
         }
 
         function animate() {
@@ -95,11 +102,11 @@
             if (intersects.length > 0) {
                 if (INTERSECTED !== intersects[0].object) {
                     if (INTERSECTED) {
-                        INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex)
+                        // INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex)
                     }
-                    INTERSECTED = intersects[0].object;
-                    INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-                    INTERSECTED.material.emissive.setHex(0xff0000);
+                    // INTERSECTED = intersects[0].object;
+                    // INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+                    // INTERSECTED.material.emissive.setHex(0xff0000);
                 }
             }
         }
