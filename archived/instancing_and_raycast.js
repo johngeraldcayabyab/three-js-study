@@ -82,8 +82,8 @@ function main() {
     }
 
     function animate() {
-        requestAnimationFrame(animate);
         render();
+        requestAnimationFrame(animate);
     }
 
     function render() {

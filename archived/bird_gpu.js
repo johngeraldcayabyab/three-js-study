@@ -260,10 +260,11 @@ function main() {
 
     function animate() {
         controls.update();
-        requestAnimationFrame(animate);
+
 
         render();
         stats.update();
+        requestAnimationFrame(animate);
     }
 
     function render() {

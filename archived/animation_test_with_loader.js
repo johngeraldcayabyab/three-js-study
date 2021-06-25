@@ -213,10 +213,10 @@ function animate() {
 
     if (mixer) mixer.update(dt);
 
-    requestAnimationFrame(animate);
+
 
     renderer.render(scene, camera);
 
     stats.update();
-
+    requestAnimationFrame(animate);
 }
