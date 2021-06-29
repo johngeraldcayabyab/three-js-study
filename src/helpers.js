@@ -2,8 +2,8 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
 import {ImprovedNoise} from "../node_modules/three/examples/jsm/math/ImprovedNoise.js";
 import Stats from '../node_modules/stats.js/src/Stats.js';
-import {desktopFOV, desktopLargeFOV} from "./FIeldOfViews";
-import {OrbitControls} from "../node_modules/three/examples/jsm/controls/OrbitControls";
+import {desktopFOV, desktopLargeFOV} from "./FIeldOfViews.js";
+import {OrbitControls} from "../node_modules/three/examples/jsm/controls/OrbitControls.js";
 
 
 export const createContainer = (container) => {
@@ -21,13 +21,14 @@ export const createRenderer = (renderer, container) => {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.setClearColor( 0x20252f );
     container.appendChild(renderer.domElement);
     return renderer;
 };
 
 export const createScene = (scene) => {
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000);
+    // scene.background = new THREE.Color(0x000000);
     return scene;
 };
 
