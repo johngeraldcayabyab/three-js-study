@@ -16,7 +16,7 @@ function main() {
 
     let container, renderer, scene, camera, controls, stats;
 
-    let waterMesh, waterGeometry, waterMaterial, clock, planeRefractor;
+    let waterMesh, waterGeometry, waterMaterial, clock, planeRefractor, waterRefractor;
 
     const worldWidth = 128, worldDepth = 128;
 
@@ -50,35 +50,50 @@ function main() {
             position.setY(i, y);
         }
 
-        const texture = new THREE.TextureLoader().load('textures/waternormals.jpg');
-        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(5, 5);
-
-        waterMaterial = new THREE.MeshBasicMaterial({color: 0x0044ff, map: texture});
-
-        waterMesh = new THREE.Mesh(waterGeometry, waterMaterial);
-        scene.add(waterMesh);
-
-
-
-        const planeRefractorGeometry = new THREE.PlaneGeometry(1000, 1000);
-
-        planeRefractor = new Refractor(planeRefractorGeometry, {
+        waterRefractor = new Refractor(waterGeometry, {
             color: 0x999999,
             textureWidth: 1024,
             textureHeight: 1024,
             shader: WaterRefractionShader
         });
 
-        planeRefractor.position.set(0, 0, 5);
-        scene.add(planeRefractor);
-
-        const dudvMap = new THREE.TextureLoader().load('textures/waterdudv.jpg', function () {
+        const dudvMap = new THREE.TextureLoader().load('textures/waternormals.jpg', function () {
             animate();
         });
 
+
+
         dudvMap.wrapS = dudvMap.wrapT = THREE.RepeatWrapping;
-        planeRefractor.material.uniforms["tDudv"].value = dudvMap;
+        dudvMap.repeat.set(5, 5);
+        waterRefractor.material.uniforms["tDudv"].value = dudvMap;
+
+        waterMaterial = new THREE.MeshBasicMaterial({color: 0x0044ff, map: dudvMap});
+
+        // waterMesh = new THREE.Mesh(waterGeometry, waterMaterial);
+        // scene.add(waterMesh);
+
+        scene.add(waterRefractor);
+
+        // const position = waterGeometry.attributes.position;
+        // position.usage = THREE.DynamicDrawUsage;
+        //
+        // for (let i = 0; i < position.count; i++) {
+        //     const y = 100 * Math.sin(i / 2);
+        //     position.setY(i, y);
+        // }
+        //
+        // const texture = new THREE.TextureLoader().load('textures/waternormals.jpg');
+        // texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        // texture.repeat.set(5, 5);
+        //
+        // waterMaterial = new THREE.MeshBasicMaterial({color: 0x0044ff, map: texture});
+        //
+        // waterMesh = new THREE.Mesh(waterGeometry, waterMaterial);
+        // scene.add(waterMesh);
+
+
+
+
 
 
 
@@ -104,7 +119,6 @@ function main() {
         const waterPosition = waterGeometry.attributes.position;
 
 
-        // planeRefractor.material.uniforms['time'].value += clock.getDelta();
 
         for (let i = 0; i < waterPosition.count; i++) {
             const y = 100 * Math.sin(i / 5 + (time + i) / 7);
