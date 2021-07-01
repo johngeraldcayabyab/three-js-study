@@ -8,7 +8,7 @@ import {
 } from "./helpers";
 
 import * as THREE from 'three';
-import {createPineTree, createPlane} from "./object_generator";
+import {createCloud, createPineTree, createPlane} from "./object_generator";
 
 main();
 
@@ -35,6 +35,9 @@ function main() {
 
         const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
         scene.add(ambientLight);
+
+        const cloud = createCloud();
+        scene.add(cloud);
 
         const pointLight = new THREE.PointLight(0xffffff, 0.8);
         camera.add(pointLight);

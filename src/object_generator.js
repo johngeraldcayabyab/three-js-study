@@ -41,3 +41,39 @@ export const createPineTree = () => {
 
     return group;
 };
+
+export const createCloud = () => {
+    const group = new THREE.Group();
+
+    const tuft1 = new THREE.Mesh(
+        new THREE.SphereBufferGeometry(1.5, 7, 8),
+        new THREE.MeshLambertMaterial({color: 0xffffff})
+    );
+
+    console.log(tuft1);
+
+    tuft1.position.x = -2;
+    tuft1.position.y = 20;
+    group.add(tuft1);
+
+    const tuft2 = new THREE.Mesh(
+        new THREE.SphereBufferGeometry(1.5, 7, 8),
+        new THREE.MeshLambertMaterial({color: 0xffffff})
+    );
+    tuft2.position.x = 2;
+    tuft2.position.y = 20;
+    group.add(tuft2);
+
+
+    const tuft3 = new THREE.Mesh(
+        new THREE.SphereBufferGeometry(2.0, 7, 8),
+        new THREE.MeshLambertMaterial({color: 0xffffff})
+    );
+    tuft3.position.x = 0;
+    tuft3.position.y = 20;
+    group.add(tuft3);
+
+    // group.position
+
+    return group;
+};
