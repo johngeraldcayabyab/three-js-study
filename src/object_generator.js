@@ -1,4 +1,5 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
+import {BufferGeometryUtils} from "three/examples/jsm/utils/BufferGeometryUtils";
 import {jitter} from "./helpers";
 
 export const createPlane = () => {
@@ -44,36 +45,69 @@ export const createPineTree = () => {
 };
 
 export const createCloud = () => {
-    const group = new THREE.Group();
 
-    const tuft1 = new THREE.Mesh(
-        new THREE.SphereGeometry(1.5, 7, 8),
-        new THREE.MeshLambertMaterial({color: 0xffffff})
+
+    // const buffer = new THREE.BufferGeometry();
+
+    const test1 = new THREE.SphereBufferGeometry(1.5,7,8);
+    test1.translate(-2, 10, 0);
+
+    const test2 = new THREE.SphereBufferGeometry(1.5, 7, 8);
+    test2.translate(2, 10, 0);
+
+    const test3 = new THREE.SphereBufferGeometry(2.0, 7, 8);
+    test3.translate(0, 10, 0);
+
+
+
+    const geo = BufferGeometryUtils.mergeBufferGeometries([test1, test2, test3]);
+    // geo.toNonIndexed();
+    // geo.computeVertexNormals();
+
+
+
+    const cloudMesh = new THREE.Mesh(
+        geo,
+        new THREE.MeshPhongMaterial({color: 0xffffff, flatShading: true})
     );
 
-    tuft1.position.x = -2;
-    tuft1.position.y = 20;
-    group.add(tuft1);
+    jitter(geo, 0.2);
 
-    const tuft2 = new THREE.Mesh(
-        new THREE.SphereGeometry(1.5, 7, 8),
-        new THREE.MeshLambertMaterial({color: 0xffffff})
-    );
-    tuft2.position.x = 2;
-    tuft2.position.y = 20;
-    group.add(tuft2);
+    return cloudMesh;
 
+    // console.log(BufferGeometryUtils.mergeBufferGeometries([test1, test2, test3]));
+    // buffer.mergeBufferGeometries([test]);
 
-    const tuft3 = new THREE.Mesh(
-        new THREE.SphereGeometry(2.0, 7, 8),
-        new THREE.MeshLambertMaterial({color: 0xffffff})
-    );
-    tuft3.position.x = 0;
-    tuft3.position.y = 20;
-    group.add(tuft3);
-
-
-    // group.position
-
-    return group;
+    // const group = new THREE.Group();
+    //
+    // const tuft1 = new THREE.Mesh(
+    //     new THREE.SphereBufferGeometry(1.5, 7, 8),
+    //     new THREE.MeshLambertMaterial({color: 0xffffff})
+    // );
+    //
+    // tuft1.position.x = -2;
+    // tuft1.position.y = 20;
+    // group.add(tuft1);
+    //
+    // const tuft2 = new THREE.Mesh(
+    //     new THREE.SphereBufferGeometry(1.5, 7, 8),
+    //     new THREE.MeshLambertMaterial({color: 0xffffff})
+    // );
+    // tuft2.position.x = 2;
+    // tuft2.position.y = 20;
+    // group.add(tuft2);
+    //
+    //
+    // const tuft3 = new THREE.Mesh(
+    //     new THREE.SphereBufferGeometry(2.0, 7, 8),
+    //     new THREE.MeshLambertMaterial({color: 0xffffff})
+    // );
+    // tuft3.position.x = 0;
+    // tuft3.position.y = 20;
+    // group.add(tuft3);
+    //
+    //
+    // // group.position
+    //
+    // return group;
 };

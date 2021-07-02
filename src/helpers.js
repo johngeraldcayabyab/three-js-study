@@ -65,7 +65,7 @@ export const reMap = (val, smin, smax, emin, emax) => {
 };
 
 export const jitter = (geo, per) => {
-    let positionAttribute = geo.geometry.attributes.position;
+    let positionAttribute = geo.attributes.position;
     for (let i = 0; i < positionAttribute.count; i++) {
         let x = positionAttribute.getX(i);
         let y = positionAttribute.getY(i);
