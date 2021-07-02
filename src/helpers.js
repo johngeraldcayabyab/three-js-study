@@ -60,14 +60,23 @@ export const onWindowResize = (renderer, camera) => {
     return true;
 };
 
-export const map = (val, smin, smax, emin, emax) => {
+export const reMap = (val, smin, smax, emin, emax) => {
     return (emax - emin) * (val - smin) / (smax - smin) + emin;
 };
 
 export const jitter = (geo, per) => {
-    geo.geometry.attributes.position.array.forEach(v => {
-       // v.x
-    });
+    let positionAttribute = geo.geometry.attributes.position;
+    for (let i = 0; i < positionAttribute.count; i++) {
+        let x = positionAttribute.getX(i);
+        let y = positionAttribute.getY(i);
+        let z = positionAttribute.getZ(i);
+
+        x += reMap(Math.random(), 0, 1, -per, per);
+        y += reMap(Math.random(), 0, 1, -per, per);
+        z += reMap(Math.random(), 0, 1, -per, per);
+
+        positionAttribute.setXYZ(i, x, y, z);
+    }
 };
 
 

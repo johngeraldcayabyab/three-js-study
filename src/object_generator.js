@@ -1,4 +1,5 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
+import {jitter} from "./helpers";
 
 export const createPlane = () => {
     const geometry = new THREE.PlaneGeometry(500, 500, 32);
@@ -46,19 +47,16 @@ export const createCloud = () => {
     const group = new THREE.Group();
 
     const tuft1 = new THREE.Mesh(
-        new THREE.SphereBufferGeometry(1.5, 7, 8),
+        new THREE.SphereGeometry(1.5, 7, 8),
         new THREE.MeshLambertMaterial({color: 0xffffff})
     );
-
-
-    console.log( tuft1.geometry.attributes.position.array);
 
     tuft1.position.x = -2;
     tuft1.position.y = 20;
     group.add(tuft1);
 
     const tuft2 = new THREE.Mesh(
-        new THREE.SphereBufferGeometry(1.5, 7, 8),
+        new THREE.SphereGeometry(1.5, 7, 8),
         new THREE.MeshLambertMaterial({color: 0xffffff})
     );
     tuft2.position.x = 2;
@@ -67,7 +65,7 @@ export const createCloud = () => {
 
 
     const tuft3 = new THREE.Mesh(
-        new THREE.SphereBufferGeometry(2.0, 7, 8),
+        new THREE.SphereGeometry(2.0, 7, 8),
         new THREE.MeshLambertMaterial({color: 0xffffff})
     );
     tuft3.position.x = 0;
