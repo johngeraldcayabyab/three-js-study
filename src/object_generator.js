@@ -50,7 +50,8 @@ export const createCloud = () => {
         new THREE.MeshLambertMaterial({color: 0xffffff})
     );
 
-    console.log(tuft1);
+
+    console.log( tuft1.geometry.attributes.position.array);
 
     tuft1.position.x = -2;
     tuft1.position.y = 20;
@@ -72,6 +73,7 @@ export const createCloud = () => {
     tuft3.position.x = 0;
     tuft3.position.y = 20;
     group.add(tuft3);
+
 
     // group.position
 

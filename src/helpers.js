@@ -21,7 +21,7 @@ export const createRenderer = (renderer, container) => {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.setClearColor( 0x20252f );
+    renderer.setClearColor(0x20252f);
     container.appendChild(renderer.domElement);
     return renderer;
 };
@@ -32,7 +32,7 @@ export const createScene = (scene) => {
     return scene;
 };
 
-export const createPerspectiveCamera = (camera, position = {x: 0, y : 200, z: 200}) => {
+export const createPerspectiveCamera = (camera, position = {x: 0, y: 200, z: 200}) => {
     camera = new THREE.PerspectiveCamera(desktopFOV(), window.innerWidth / window.innerHeight, 0.1, 20000);
     camera.position.y = position.y;
     camera.position.z = position.z;
@@ -58,6 +58,16 @@ export const onWindowResize = (renderer, camera) => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     return true;
+};
+
+export const map = (val, smin, smax, emin, emax) => {
+    return (emax - emin) * (val - smin) / (smax - smin) + emin;
+};
+
+export const jitter = (geo, per) => {
+    geo.geometry.attributes.position.array.forEach(v => {
+       // v.x
+    });
 };
 
 

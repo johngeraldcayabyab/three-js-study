@@ -22,7 +22,7 @@ function main() {
         container = createContainer(container);
         renderer = createRenderer(renderer, container);
         scene = createScene(scene);
-        camera = createPerspectiveCamera(camera, {x: 10, y: 5, z: 10});
+        camera = createPerspectiveCamera(camera, {x: 10, y: 7, z: 10});
         controls = createControls(controls, camera, renderer);
         stats = createStats(stats, container);
 
@@ -42,6 +42,23 @@ function main() {
         const pointLight = new THREE.PointLight(0xffffff, 0.8);
         camera.add(pointLight);
         scene.add(camera);
+
+
+        // const bufferGeometry = new THREE.BufferGeometry();
+        // const vertices = new Float32Array([
+        //     -1.0, -1.0,  1.0,
+        //     1.0, -1.0,  1.0,
+        //     1.0,  1.0,  1.0,
+        //
+        //     1.0,  1.0,  1.0,
+        //     -1.0,  1.0,  1.0,
+        //     -1.0, -1.0,  1.0
+        // ]);
+        //
+        // bufferGeometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        // const bufferMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+        // const bufferMesh = new THREE.Mesh(bufferGeometry, bufferMaterial);
+        // scene.add(bufferMesh);
 
 
         container.addEventListener('resize', onWindowResize);
