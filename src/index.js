@@ -33,16 +33,24 @@ function main() {
         scene.add(pineTree);
 
 
-        const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
-        scene.add(ambientLight);
+        // const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
+        // scene.add(ambientLight);
 
         const cloud = createCloud();
         scene.add(cloud);
 
-        const pointLight = new THREE.PointLight(0xffffff, 0.8);
-        camera.add(pointLight);
-        scene.add(camera);
+        // const pointLight = new THREE.PointLight(0xffffff, 0.8);
+        // camera.add(pointLight);
+        // scene.add(camera);
 
+        const light2 = new THREE.DirectionalLight( 0xff5566, 0.7 );
+        light2.position.set( -3, -1, 0 ).normalize();
+        scene.add( light2 );
+
+        const light3 = new THREE.DirectionalLight( 0xffffff, 0.7 );
+        light3.position.set( 1, 1, 0 ).normalize();
+        scene.add( light3 );
+        scene.add(new THREE.AmbientLight(0xffffff,0.3))
 
         // const bufferGeometry = new THREE.BufferGeometry();
         // const vertices = new Float32Array([

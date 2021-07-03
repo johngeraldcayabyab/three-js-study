@@ -45,7 +45,6 @@ export const createPineTree = () => {
 };
 
 export const createCloud = () => {
-
     const test1 = new THREE.SphereBufferGeometry(1.5,7,8);
     test1.translate(-2, 10, 0);
 
@@ -60,6 +59,7 @@ export const createCloud = () => {
     jitter(geo, 0.2);
     geo.toNonIndexed();
     geo.computeVertexNormals();
+    geo.computeFaceNormals();
 
 
     return new THREE.Mesh(

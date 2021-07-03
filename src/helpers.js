@@ -65,38 +65,29 @@ export const reMap = (val, smin, smax, emin, emax) => {
 };
 
 export const jitter = (geo, per) => {
-
-    // const vertices = geo.attributes.position.array;
-    // console.log(vertices);
-
-    // for(let i = 0; i < vertices.length; i++){
-    //     let v = vertices[i];
-    //     v.x += reMap(Math.random(),0,1,-per,per);
-    //     // v.x += reMap(Math.random(),0,1,-per,per);
-    //     // v.y += reMap(Math.random(),0,1,-per,per);
-    //     // v.z += reMap(Math.random(),0,1,-per,per);
-    // }
-    // return geo;
-
-    // for (let i = 0, j = 0, l = vertices.length; i < l; i++, j += 3) {
-    //
-    //     // vertices[j + 1] = data[i] * 10;
-    // }
-
-    // console.log(geo.vertices);
-    let positionAttribute = geo.attributes.position;
-
-    for (let i = 0; i < positionAttribute.count; i++) {
-        let x = positionAttribute.getX(i);
-        let y = positionAttribute.getY(i);
-        let z = positionAttribute.getZ(i);
-
-        x += reMap(Math.random(), 0, 1, -per, per);
-        y += reMap(Math.random(), 0, 1, -per, per);
-        z += reMap(Math.random(), 0, 1, -per, per);
+    const vertex = new THREE.Vertex();
+    let position = geo.attributes.position;
 
 
-        positionAttribute.setXYZ(i, x, y, z);
+    for (let i = 0; i < position.count; i++) {
+
+        vertex.fromBufferAttribute(position, i);
+
+        vertex.x += reMap(Math.random(), 0, 1, -per, per);
+        vertex.y += reMap(Math.random(), 0, 1, -per, per);
+        vertex.z += reMap(Math.random(), 0, 1, -per, per);
+
+        position.setXYZ(i, vertex.x, vertex.y, vertex.z);
+
+        // let x = position.getX(i);
+        // let y = position.getY(i);
+        // let z = position.getZ(i);
+        //
+        // x += reMap(Math.random(), 0, 1, -per, per);
+        // y += reMap(Math.random(), 0, 1, -per, per);
+        // z += reMap(Math.random(), 0, 1, -per, per);
+        //
+        // position.setXYZ(i, x, y, z);
     }
 };
 
