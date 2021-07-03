@@ -65,7 +65,27 @@ export const reMap = (val, smin, smax, emin, emax) => {
 };
 
 export const jitter = (geo, per) => {
+
+    // const vertices = geo.attributes.position.array;
+    // console.log(vertices);
+
+    // for(let i = 0; i < vertices.length; i++){
+    //     let v = vertices[i];
+    //     v.x += reMap(Math.random(),0,1,-per,per);
+    //     // v.x += reMap(Math.random(),0,1,-per,per);
+    //     // v.y += reMap(Math.random(),0,1,-per,per);
+    //     // v.z += reMap(Math.random(),0,1,-per,per);
+    // }
+    // return geo;
+
+    // for (let i = 0, j = 0, l = vertices.length; i < l; i++, j += 3) {
+    //
+    //     // vertices[j + 1] = data[i] * 10;
+    // }
+
+    // console.log(geo.vertices);
     let positionAttribute = geo.attributes.position;
+
     for (let i = 0; i < positionAttribute.count; i++) {
         let x = positionAttribute.getX(i);
         let y = positionAttribute.getY(i);
@@ -74,6 +94,7 @@ export const jitter = (geo, per) => {
         x += reMap(Math.random(), 0, 1, -per, per);
         y += reMap(Math.random(), 0, 1, -per, per);
         z += reMap(Math.random(), 0, 1, -per, per);
+
 
         positionAttribute.setXYZ(i, x, y, z);
     }
