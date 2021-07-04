@@ -34,6 +34,7 @@ export const createScene = (scene) => {
 
 export const createPerspectiveCamera = (camera, position = {x: 0, y: 200, z: 200}) => {
     camera = new THREE.PerspectiveCamera(desktopFOV(), window.innerWidth / window.innerHeight, 0.1, 20000);
+    camera.position.x = position.x;
     camera.position.y = position.y;
     camera.position.z = position.z;
     camera.lookAt(0, 0, 0);

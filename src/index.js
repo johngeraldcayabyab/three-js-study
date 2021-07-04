@@ -8,17 +8,21 @@ import {
 } from "./helpers";
 
 import * as THREE from 'three';
+import {createAirplane} from "./object_generator";
 
 main();
 
 function main() {
     let container, renderer, scene, camera, controls, stats;
 
+    init();
+    animate();
+
     function init() {
         container = createContainer(container);
         renderer = createRenderer(renderer, container);
         scene = createScene(scene);
-        camera = createPerspectiveCamera(camera, {x: 10, y: 7, z: 100});
+        camera = createPerspectiveCamera(camera, {x: 1100, y: 2000, z: 1100});
         controls = createControls(controls, camera, renderer);
         stats = createStats(stats, container);
 
@@ -26,7 +30,7 @@ function main() {
         directionalLight.position.set(0, 6, 6);
         scene.add(directionalLight);
 
-        const hlp = new THREE.GridHelper(2, 20);
+        const hlp = new THREE.GridHelper(2000, 20);
         scene.add(hlp);
 
         let t;
@@ -39,13 +43,13 @@ function main() {
         let p = new THREE.Vector3();
 
         const somePoints = [
-            new THREE.Vector3(-1, 0, -1),
+            new THREE.Vector3(-1000, 0, -1000),
             new THREE.Vector3(0, 0, -0.8),
 
-            new THREE.Vector3(1, 0.2, -1),
+            new THREE.Vector3(1000, 0.2, -1000),
             new THREE.Vector3(0.8, 0.1, 0),
 
-            new THREE.Vector3(-1, 0.4, 1),
+            new THREE.Vector3(-1000, 0.4, 1000),
             new THREE.Vector3(-0.8, 0.2, 0),
         ];
 
@@ -58,6 +62,10 @@ function main() {
         const points = curve.getPoints(80);
         const line = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(points), new THREE.LineBasicMaterial({color: 0xffffaa}));
         scene.add(line);
+
+        const airplane = createAirplane();
+
+        scene.add(airplane);
 
         container.addEventListener('resize', onWindowResize);
     }
@@ -76,6 +84,6 @@ function main() {
 
     function render() {
         controls.update();
-        renderer.renderer(scene, camera);
+        renderer.render(scene, camera);
     }
 }
