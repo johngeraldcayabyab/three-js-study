@@ -61,3 +61,30 @@ export const createCloud = () => {
         new THREE.MeshPhongMaterial({color: 0xffffff, flatShading: true})
     );
 };
+
+export const createPlane = () => {
+    const mesh = new THREE.Object3D();
+
+    let geomCockpit = new THREE.BoxGeometry(80, 50, 50, 1, 1, 1);
+    let matCockpit = new THREE.MeshPhongMaterial({color: 0xff0000, shading: THREE.FlatShading});
+    geomCockpit.vertices[4].y -= 10;
+    geomCockpit.vertices[4].z += 20;
+    geomCockpit.vertices[5].y -= 10;
+    geomCockpit.vertices[5].z -= 20;
+    geomCockpit.vertices[6].y += 30;
+    geomCockpit.vertices[6].z += 20;
+    geomCockpit.vertices[7].y += 30;
+    geomCockpit.vertices[7].z -= 20;
+    let cockpit = new THREE.Mesh(geomCockpit, matCockpit);
+    cockpit.castShadow = true;
+    cockpit.receiveShadow = true;
+    mesh.add(cockpit);
+
+    let geomEngine = new THREE.BoxGeometry(20, 50, 50, 1, 1, 1);
+    let matEngine = new THREE.MeshPhongMaterial({color: 0x000000, shading: THREE.FlatShading});
+    let engine = new THREE.Mesh(geomEngine, matEngine);
+    engine.position.x = 40;
+    engine.castShadow = true;
+    engine.receiveShadow = true;
+    mesh.add(engine);
+};

@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-import {ImprovedNoise} from "../node_modules/three/examples/jsm/math/ImprovedNoise";
 import {
     createContainer,
     createControls,
@@ -9,14 +7,12 @@ import {
     createStats
 } from "./helpers";
 
+import * as THREE from 'three';
+
 main();
 
 function main() {
     let container, renderer, scene, camera, controls, stats;
-    let blob;
-
-    init();
-    animate();
 
     function init() {
         container = createContainer(container);
@@ -24,66 +20,62 @@ function main() {
         scene = createScene(scene);
         camera = createPerspectiveCamera(camera, {x: 10, y: 7, z: 100});
         controls = createControls(controls, camera, renderer);
-        stats = createStats(stats, container);;
+        stats = createStats(stats, container);
 
-        let blobGeometry = new THREE.IcosahedronGeometry(50, 10);
-        blobGeometry.setAttribute('basePosition', new THREE.BufferAttribute().copy(blobGeometry.attributes.position));
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
+        directionalLight.position.set(0, 6, 6);
+        scene.add(directionalLight);
 
-        let blobMaterial = new THREE.MeshPhongMaterial({
-            emissive: 0x00ff00,
-            emissiveIntensity: 0.5,
-            shininess: 0,
-            wireframe: true
-        });
+        const hlp = new THREE.GridHelper(2, 20);
+        scene.add(hlp);
 
-        blob = new THREE.Mesh(blobGeometry, blobMaterial);
-        scene.add(blob);
+        let t;
+        const n0 = new THREE.Vector3(0, 1, 0);
+        const n = new THREE.Vector3();
+        const b = new THREE.Vector3();
+        const M3 = new THREE.Matrix3();
+        const M4 = new THREE.Matrix4();
+        let f = 0;
+        let p = new THREE.Vector3();
+
+        const somePoints = [
+            new THREE.Vector3(-1, 0, -1),
+            new THREE.Vector3(0, 0, -0.8),
+
+            new THREE.Vector3(1, 0.2, -1),
+            new THREE.Vector3(0.8, 0.1, 0),
+
+            new THREE.Vector3(-1, 0.4, 1),
+            new THREE.Vector3(-0.8, 0.2, 0),
+        ];
+
+        const pts = new THREE.Points(new THREE.BufferGeometry().setFromPoints(somePoints), new THREE.PointsMaterial({color: "white", size: 0.04}));
+        scene.add(pts);
+
+        const curve = new THREE.CatmullRomCurve3(somePoints);
+        curve.closed = true;
+
+        const points = curve.getPoints(80);
+        const line = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(points), new THREE.LineBasicMaterial({color: 0xffffaa}));
+        scene.add(line);
 
         container.addEventListener('resize', onWindowResize);
-    }
-
-    function setPoints(a = .001) {
-        const basePositionAttribute = blob.geometry.getAttribute("basePosition");
-        const positionAttribute = blob.geometry.getAttribute( 'position' );
-        const vertex = new THREE.Vector3();
-
-        for (let vertexIndex = 0; vertexIndex < positionAttribute.count; vertexIndex++) {
-            vertex.fromBufferAttribute(basePositionAttribute, vertexIndex);
-
-            let improvedNoise = new ImprovedNoise();
-
-            let perlin = improvedNoise.noise(
-                vertex.x * 0.006 + a * 0.0002,
-                vertex.y * 0.006 + a * 0.0003,
-                vertex.z * 0.006
-            );
-
-            let ratio = perlin * 0.9 + 0.8;
-            vertex.multiplyScalar(ratio);
-
-
-            positionAttribute.setXYZ(vertexIndex, vertex.x, vertex.y, vertex.z);
-        }
-
-        blob.geometry.attributes.position.needsUpdate = true;
-        blob.geometry.computeBoundingSphere();
-    }
-
-    function render(time) {
-        setPoints(time);
-        controls.update();
-        renderer.render(scene, camera);
-    }
-
-    function animate(time) {
-        render(time);
-        stats.update();
-        requestAnimationFrame(animate);
     }
 
     function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function animate() {
+        render();
+        stats.update();
+        requestAnimationFrame(animate);
+    }
+
+    function render() {
+        controls.update();
+        renderer.renderer(scene, camera);
     }
 }
