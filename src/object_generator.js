@@ -76,41 +76,27 @@ export const createAirplane = () => {
         lightgreen:0x629265,
     };
 
-
     const mesh = new THREE.Object3D();
 
-    let geomCockpit = new THREE.BoxGeometry(80, 50, 50, 1, 1, 1);
-    let matCockpit = new THREE.MeshPhongMaterial({color: Colors.red, flatShading: true});
+    let geomCockpit1 = new THREE.BoxGeometry(60, 50, 50, 1, 1, 1);
+    let matCockpit1 = new THREE.MeshPhongMaterial({color: Colors.red, flatShading: true});
 
-    const cockpitVertex = new THREE.Vector3();
-    let cockpitPosition = geomCockpit.attributes.position;
+    let cockpit1 = new THREE.Mesh(geomCockpit1, matCockpit1);
+    cockpit1.castShadow = true;
+    cockpit1.receiveShadow = true;
+    mesh.add(cockpit1);
 
-    cockpitVertex.fromBufferAttribute(cockpitPosition, 4);
-    cockpitVertex.y -= 10;
-    cockpitVertex.z += 20;
-    cockpitPosition.setY(4, cockpitVertex.y);
-    cockpitPosition.setZ(4, cockpitVertex.z);
+    let geomCockpit2 = new THREE.BoxGeometry(50, 30, 30, 1, 1, 1);
+    let matCockpit2 = new THREE.MeshPhongMaterial({color: Colors.red, flatShading: true});
+
+    let cockpit2 = new THREE.Mesh(geomCockpit2, matCockpit2);
+    cockpit2.castShadow = true;
+    cockpit2.receiveShadow = true;
+    cockpit2.position.x = -21;
+    cockpit2.position.y = 10;
+    mesh.add(cockpit2);
 
 
-    cockpitVertex.fromBufferAttribute(cockpitPosition, 5);
-    cockpitVertex.y -= 10;
-    cockpitVertex.z -= 20;
-    cockpitPosition.setXYZ(5, cockpitVertex.x, cockpitVertex.y, cockpitVertex.z);
-
-    cockpitVertex.fromBufferAttribute(cockpitPosition, 6);
-    cockpitVertex.y += 30;
-    cockpitVertex.z += 20;
-    cockpitPosition.setXYZ(6, cockpitVertex.x, cockpitVertex.y, cockpitVertex.z);
-
-    cockpitVertex.fromBufferAttribute(cockpitPosition, 7);
-    cockpitVertex.y += 30;
-    cockpitVertex.z -= 20;
-    cockpitPosition.setXYZ(7, cockpitVertex.x, cockpitVertex.y, cockpitVertex.z);
-
-    let cockpit = new THREE.Mesh(geomCockpit, matCockpit);
-    cockpit.castShadow = true;
-    cockpit.receiveShadow = true;
-    mesh.add(cockpit);
 
 
     let geomEngine = new THREE.BoxGeometry(20, 50, 50, 1, 1, 1);
@@ -121,11 +107,10 @@ export const createAirplane = () => {
     engine.receiveShadow = true;
     mesh.add(engine);
 
-
     let geomTailPlane = new THREE.BoxGeometry(15, 20, 5, 1, 1, 1);
     let matTailPlane = new THREE.MeshPhongMaterial({color: Colors.red, flatShading: true});
     let tailPlane = new THREE.Mesh(geomTailPlane, matTailPlane);
-    tailPlane.position.set(-35, 25, 0);
+    tailPlane.position.set(-50, 25, 0);
     tailPlane.castShadow = true;
     tailPlane.receiveShadow = true;
     mesh.add(tailPlane);
@@ -164,7 +149,6 @@ export const createAirplane = () => {
     let propeller = new THREE.Mesh(geomPropeller, matPropeller);
     propeller.castShadow = true;
     propeller.receiveShadow = true;
-
 
     let geomBlade1 = new THREE.BoxGeometry(1, 100, 10, 1, 1, 1);
     let geomBlade2 = new THREE.BoxGeometry(1, 10, 100, 1, 1, 1);
@@ -211,18 +195,27 @@ export const createAirplane = () => {
     wheelTireL.position.z = -wheelTireR.position.z;
     mesh.add(wheelTireL);
 
-    let wheelTireB = wheelTireR.clone();
-    wheelTireB.scale.set(.5,.5,.5);
-    wheelTireB.position.set(-35,-5,0);
-    mesh.add(wheelTireB);
+
+
+
+
+
+
 
     let suspensionGeom = new THREE.BoxGeometry(4,20,4);
     suspensionGeom.applyMatrix4(new THREE.Matrix4().makeTranslation(0,10,0));
     let suspensionMat = new THREE.MeshPhongMaterial({color:Colors.red, flatShading:true});
     let suspension = new THREE.Mesh(suspensionGeom,suspensionMat);
-    suspension.position.set(-35,-5,0);
-    suspension.rotation.z = -.3;
+    suspension.position.set(-55,-5,0);
+    suspension.rotation.z = -.6;
     mesh.add(suspension);
+
+    let wheelTireB = wheelTireR.clone();
+    wheelTireB.scale.set(.5,.5,.5);
+    wheelTireB.position.set(-55,-5,0);
+    mesh.add(wheelTireB);
+
+
 
     return mesh;
 };
