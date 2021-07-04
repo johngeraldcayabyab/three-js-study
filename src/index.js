@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+import {ImprovedNoise} from "../node_modules/three/examples/jsm/math/ImprovedNoise";
 import {
     createContainer,
     createControls,
@@ -7,13 +9,11 @@ import {
     createStats
 } from "./helpers";
 
-import * as THREE from 'three';
-import {createCloud, createPineTree, createPlane} from "./object_generator";
-
 main();
 
 function main() {
     let container, renderer, scene, camera, controls, stats;
+    let blob;
 
     init();
     animate();
@@ -22,65 +22,63 @@ function main() {
         container = createContainer(container);
         renderer = createRenderer(renderer, container);
         scene = createScene(scene);
-        camera = createPerspectiveCamera(camera, {x: 10, y: 7, z: 10});
+        camera = createPerspectiveCamera(camera, {x: 10, y: 7, z: 100});
         controls = createControls(controls, camera, renderer);
-        stats = createStats(stats, container);
+        stats = createStats(stats, container);;
 
-        const plane = createPlane();
-        scene.add(plane);
+        let blobGeometry = new THREE.IcosahedronGeometry(50, 10);
+        blobGeometry.setAttribute('basePosition', new THREE.BufferAttribute().copy(blobGeometry.attributes.position));
 
-        const pineTree = createPineTree();
-        scene.add(pineTree);
+        let blobMaterial = new THREE.MeshPhongMaterial({
+            emissive: 0x00ff00,
+            emissiveIntensity: 0.5,
+            shininess: 0,
+            wireframe: true
+        });
 
-
-        // const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
-        // scene.add(ambientLight);
-
-        const cloud = createCloud();
-        scene.add(cloud);
-
-        // const pointLight = new THREE.PointLight(0xffffff, 0.8);
-        // camera.add(pointLight);
-        // scene.add(camera);
-
-        const light2 = new THREE.DirectionalLight( 0xff5566, 0.7 );
-        light2.position.set( -3, -1, 0 ).normalize();
-        scene.add( light2 );
-
-        const light3 = new THREE.DirectionalLight( 0xffffff, 0.7 );
-        light3.position.set( 1, 1, 0 ).normalize();
-        scene.add( light3 );
-        scene.add(new THREE.AmbientLight(0xffffff,0.3))
-
-        // const bufferGeometry = new THREE.BufferGeometry();
-        // const vertices = new Float32Array([
-        //     -1.0, -1.0,  1.0,
-        //     1.0, -1.0,  1.0,
-        //     1.0,  1.0,  1.0,
-        //
-        //     1.0,  1.0,  1.0,
-        //     -1.0,  1.0,  1.0,
-        //     -1.0, -1.0,  1.0
-        // ]);
-        //
-        // bufferGeometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-        // const bufferMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
-        // const bufferMesh = new THREE.Mesh(bufferGeometry, bufferMaterial);
-        // scene.add(bufferMesh);
-
+        blob = new THREE.Mesh(blobGeometry, blobMaterial);
+        scene.add(blob);
 
         container.addEventListener('resize', onWindowResize);
     }
 
-    function animate() {
-        render();
-        stats.update();
-        requestAnimationFrame(animate);
+    function setPoints(a = .001) {
+        const basePositionAttribute = blob.geometry.getAttribute("basePosition");
+        const positionAttribute = blob.geometry.getAttribute( 'position' );
+        const vertex = new THREE.Vector3();
+
+        for (let vertexIndex = 0; vertexIndex < positionAttribute.count; vertexIndex++) {
+            vertex.fromBufferAttribute(basePositionAttribute, vertexIndex);
+
+            let improvedNoise = new ImprovedNoise();
+
+            let perlin = improvedNoise.noise(
+                vertex.x * 0.006 + a * 0.0002,
+                vertex.y * 0.006 + a * 0.0003,
+                vertex.z * 0.006
+            );
+
+            let ratio = perlin * 0.9 + 0.8;
+            vertex.multiplyScalar(ratio);
+
+
+            positionAttribute.setXYZ(vertexIndex, vertex.x, vertex.y, vertex.z);
+        }
+
+        blob.geometry.attributes.position.needsUpdate = true;
+        blob.geometry.computeBoundingSphere();
     }
 
-    function render() {
+    function render(time) {
+        setPoints(time);
         controls.update();
         renderer.render(scene, camera);
+    }
+
+    function animate(time) {
+        render(time);
+        stats.update();
+        requestAnimationFrame(animate);
     }
 
     function onWindowResize() {
