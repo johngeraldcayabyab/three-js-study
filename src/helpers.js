@@ -65,7 +65,7 @@ export const reMap = (val, smin, smax, emin, emax) => {
 };
 
 export const jitter = (geo, per) => {
-    const vertex = new THREE.Vertex();
+    const vertex = new THREE.Vector3();
     let position = geo.attributes.position;
 
 
@@ -79,16 +79,10 @@ export const jitter = (geo, per) => {
 
         position.setXYZ(i, vertex.x, vertex.y, vertex.z);
 
-        // let x = position.getX(i);
-        // let y = position.getY(i);
-        // let z = position.getZ(i);
-        //
-        // x += reMap(Math.random(), 0, 1, -per, per);
-        // y += reMap(Math.random(), 0, 1, -per, per);
-        // z += reMap(Math.random(), 0, 1, -per, per);
-        //
-        // position.setXYZ(i, x, y, z);
     }
+
+    geo.attributes.position.needsUpdate = true;
+    geo.computeBoundingSphere();
 };
 
 

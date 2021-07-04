@@ -45,26 +45,19 @@ export const createPineTree = () => {
 };
 
 export const createCloud = () => {
-    const test1 = new THREE.SphereBufferGeometry(1.5,7,8);
+    const test1 = new THREE.TetrahedronBufferGeometry(1.5, 3);
     test1.translate(-2, 10, 0);
 
-    const test2 = new THREE.SphereBufferGeometry(1.5, 7, 8);
+    const test2 = new THREE.TetrahedronBufferGeometry(1.5, 3);
     test2.translate(2, 10, 0);
 
-    const test3 = new THREE.SphereBufferGeometry(2.0, 7, 8);
+    const test3 = new THREE.TetrahedronBufferGeometry(2.0, 3);
     test3.translate(0, 10, 0);
 
-
     const geo = BufferGeometryUtils.mergeBufferGeometries([test1, test2, test3]);
-    jitter(geo, 0.2);
-    geo.toNonIndexed();
-    geo.computeVertexNormals();
-    geo.computeFaceNormals();
-
 
     return new THREE.Mesh(
         geo,
         new THREE.MeshPhongMaterial({color: 0xffffff, flatShading: true})
     );
-
 };
