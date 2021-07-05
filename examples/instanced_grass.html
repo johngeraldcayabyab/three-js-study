@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>Instanced Grass</title>
+  <style>
+    html, body {
+      margin: 0;
+      overscroll-behavior: none;
+      height: 100%;
+      width: 100%;
+      font-family: Monaco, monospace;
+      font-size: 13px;
+    }
+
+    canvas {
+      height: 100% !important;
+      width: 100% !important;
+    }
+  </style>
+
+
+</head>
+<body>
+
+
+
+<script type="module">
+  import * as THREE from '../node_modules/three/build/three.module.js';
+  import {PointerLockControls} from "../node_modules/three/examples/jsm/controls/PointerLockControls.js";
+  import {
+    createContainer,
+    createControls,
+    createPerspectiveCamera,
+    createRenderer,
+    createScene,
+    createStats
+  } from "../src/helpers.js";
+
+  main();
+
+  function main(){
+
+    let container, renderer, scene, camera, controls, stats;
+
+    function render(){
+      container = createContainer(container);
+      renderer = createRenderer(renderer, container);
+      scene = createScene(scene);
+      camera = createPerspectiveCamera(camera, {x: 10, y: 7, z: 10});
+      controls = createControls(controls, camera, renderer);
+      stats = createStats(stats, container);
+
+    }
+
+    function animate(){
+
+    }
+
+    function onWindowResize(){
+      camera.aspect = window.innerWidth / window.innerHeight;
+    }
+  }
+</script>
+
+</body>
+</html>
