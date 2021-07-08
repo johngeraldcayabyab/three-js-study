@@ -134,6 +134,8 @@
                 dummy.updateMatrix();
                 instancedMesh.setMatrixAt(i, dummy.matrix);
             }
+
+            window.addEventListener('resize', onWindowResize);
         }
 
         function render() {
