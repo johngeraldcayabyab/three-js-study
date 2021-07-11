@@ -118,6 +118,13 @@ function main() {
         scene.add(mesh);
 
 
+        mesh = new THREE.Mesh(geometry3, material);
+        wireframe = new THREE.Mesh(geometry3, wireframeMaterial);
+        mesh.position.x = 400;
+        mesh.add(wireframe);
+        scene.add(mesh);
+
+
 
         container.addEventListener('resize', onWindowResize);
     }
