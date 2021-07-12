@@ -124,8 +124,6 @@ function main() {
         mesh.add(wireframe);
         scene.add(mesh);
 
-
-
         container.addEventListener('resize', onWindowResize);
     }
 
