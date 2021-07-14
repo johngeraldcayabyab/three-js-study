@@ -1,0 +1,13 @@
+html, body {
+    margin: 0;
+    overscroll-behavior: none;
+    height: 100%;
+    width: 100%;
+    font-family: Monaco, monospace;
+    font-size: 13px;
+}
+
+canvas {
+    height: 100% !important;
+    width: 100% !important;
+}
