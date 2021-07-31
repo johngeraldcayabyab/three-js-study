@@ -1,7 +1,7 @@
 import './App.css';
 import {BoxBufferGeometry, Group, Mesh, MeshStandardMaterial} from "three";
 
-function App() {
+const App = () => {
 
     const group = new Group();
     const geo = new BoxBufferGeometry(2, 2, 2);
