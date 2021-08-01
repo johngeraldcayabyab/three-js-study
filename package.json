@@ -46,7 +46,9 @@
       "patterns": [
         "src"
       ],
-      "extensions": "js,jsx"
+      "extensions": "js,jsx",
+      "ignore": ["node_modules"],
+      "delay": 1000
     }
   }
 }

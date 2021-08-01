@@ -1,45 +1,55 @@
 import './App.css';
 import {BoxBufferGeometry, Group, Mesh, MeshStandardMaterial} from "three";
 
+
+import ReactDOM from 'react-dom'
+import React, { useRef, useState } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+
+function Box(props) {
+  // This reference will give us direct access to the THREE.Mesh object
+  const mesh = useRef()
+  // Set up state for the hovered and active state
+  const [hovered, setHover] = useState(false)
+  const [active, setActive] = useState(false)
+  // Subscribe this component to the render-loop, rotate the mesh every frame
+  useFrame((state, delta) => (mesh.current.rotation.x += 0.01))
+  // Return the view, these are regular Threejs elements expressed in JSX
+  return (
+    <mesh
+      {...props}
+      ref={mesh}
+      scale={active ? 1.5 : 1}
+      onClick={(event) => setActive(!active)}
+      onPointerOver={(event) => setHover(true)}
+      onPointerOut={(event) => setHover(false)}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
+    </mesh>
+  )
+}
+
+ReactDOM.render(
+  <Canvas>
+    <ambientLight />
+    <pointLight position={[10, 10, 10]} />
+    <Box position={[-1.2, 0, 0]} />
+    <Box position={[1.2, 0, 0]} />
+  </Canvas>,
+  document.getElementById('root'),
+)
+
+
+
 const App = () => {
-
-    const group = new Group();
-    const geo = new BoxBufferGeometry(2, 2, 2);
-    const mat = new MeshStandardMaterial({color: 0x1fbeca});
-    const mesh = new Mesh(geo, mat);
-    group.add(mesh);
-    scene.add(group);
-
     return (
-        <div className="App">
-
-            <Canvas>
-                <PointLight></PointLight>
-            </Canvas>
-
-            {/*<group>*/}
-            {/*    <mesh>*/}
-            {/*        <boxBufferGeometry attach="geometry" args={[0.047, 0.5, 0.29]}/>*/}
-            {/*        <meshStandardMaterial attach="material" color={0xf95b3c}/>*/}
-            {/*    </mesh>*/}
-            {/*</group>*/}
-
-            {/*<header className="App-header">*/}
-            {/*  /!*<img src={logo} className="App-logo" alt="logo" />*!/*/}
-            {/*  /!*<p>*!/*/}
-            {/*  /!*  Edit <code>src/App.js</code> and save to reload.*!/*/}
-            {/*  /!*</p>*!/*/}
-            {/*  /!*<a*!/*/}
-            {/*  /!*  className="App-link"*!/*/}
-            {/*  /!*  href="https://reactjs.org"*!/*/}
-            {/*  /!*  target="_blank"*!/*/}
-            {/*  /!*  rel="noopener noreferrer"*!/*/}
-            {/*  /!*>*!/*/}
-            {/*  /!*  Learn React*!/*/}
-            {/*  /!*</a>*!/*/}
-            {/*</header>*/}
-        </div>
-    );
+        <Canvas>
+            <ambientLight />
+            <pointLight position={[10, 10, 10]} />
+            <Box position={[-1.2, 0, 0]} />
+            <Box position={[1.2, 0, 0]} />
+        </Canvas>
+    )
 }
 
 export default App;
