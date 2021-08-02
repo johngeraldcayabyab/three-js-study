@@ -1,55 +1,91 @@
-import './App.css';
-import {BoxBufferGeometry, Group, Mesh, MeshStandardMaterial} from "three";
+import React from "react";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
+import InstancedGrass from "./Examples/InstancedGrass";
 
+// This site has 3 pages, all of which are rendered
+// dynamically in the browser (not server rendered).
+//
+// Although the page does not ever refresh, notice how
+// React Router keeps the URL up to date as you navigate
+// through the site. This preserves the browser history,
+// making sure things like the back button and bookmarks
+// work properly.
 
-import ReactDOM from 'react-dom'
-import React, { useRef, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-
-function Box(props) {
-  // This reference will give us direct access to the THREE.Mesh object
-  const mesh = useRef()
-  // Set up state for the hovered and active state
-  const [hovered, setHover] = useState(false)
-  const [active, setActive] = useState(false)
-  // Subscribe this component to the render-loop, rotate the mesh every frame
-  useFrame((state, delta) => (mesh.current.rotation.x += 0.01))
-  // Return the view, these are regular Threejs elements expressed in JSX
-  return (
-    <mesh
-      {...props}
-      ref={mesh}
-      scale={active ? 1.5 : 1}
-      onClick={(event) => setActive(!active)}
-      onPointerOver={(event) => setHover(true)}
-      onPointerOut={(event) => setHover(false)}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
-    </mesh>
-  )
-}
-
-ReactDOM.render(
-  <Canvas>
-    <ambientLight />
-    <pointLight position={[10, 10, 10]} />
-    <Box position={[-1.2, 0, 0]} />
-    <Box position={[1.2, 0, 0]} />
-  </Canvas>,
-  document.getElementById('root'),
-)
-
-
-
-const App = () => {
+export default function BasicExample() {
     return (
-        <Canvas>
-            <ambientLight />
-            <pointLight position={[10, 10, 10]} />
-            <Box position={[-1.2, 0, 0]} />
-            <Box position={[1.2, 0, 0]} />
-        </Canvas>
-    )
+        <Router>
+            <div>
+                <ul>
+                    <li>
+                        <Link to="/">Home</Link>
+                    </li>
+                    <li>
+                        <Link to="/about">About</Link>
+                    </li>
+                    <li>
+                        <Link to="/dashboard">Dashboard</Link>
+                    </li>
+                    <li>
+                        <Link to="/instanced-grass">Instanced Grass</Link>
+                    </li>
+                </ul>
+
+                <hr/>
+
+                {/*
+          A <Switch> looks through all its children <Route>
+          elements and renders the first one whose path
+          matches the current URL. Use a <Switch> any time
+          you have multiple routes, but you want only one
+          of them to render at a time
+        */}
+                <Switch>
+                    <Route exact path="/">
+                        <Home/>
+                    </Route>
+                    <Route path="/about">
+                        <About/>
+                    </Route>
+                    <Route path="/dashboard">
+                        <Dashboard/>
+                    </Route>
+                    <Route path="/instanced-grass">
+                        <InstancedGrass/>
+                    </Route>
+                </Switch>
+            </div>
+        </Router>
+    );
 }
 
-export default App;
+// You can think of these Components as "pages"
+// in your app.
+
+function Home() {
+    return (
+        <div>
+            <h2>Home</h2>
+        </div>
+    );
+}
+
+function About() {
+    return (
+        <div>
+            <h2>About</h2>
+        </div>
+    );
+}
+
+function Dashboard() {
+    return (
+        <div>
+            <h2>Dashboard</h2>
+        </div>
+    );
+}
