@@ -51,7 +51,7 @@
       "ignore": [
         "node_modules"
       ],
-      "delay": 1000
+      "delay": 2000
     }
   }
 }
