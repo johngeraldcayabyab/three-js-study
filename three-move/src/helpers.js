@@ -1,10 +1,8 @@
-// import * as THREE from "three";
-import * as THREE from 'three';
+import * as THREE from "three";
+import {desktopFOV} from "./FIeldOfViews";
+import Stats from "three/examples/jsm/libs/stats.module";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise.js";
-import Stats from 'stats.js/src/Stats.js';
-import {desktopFOV, desktopLargeFOV} from "./FIeldOfViews.js";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
-
 
 export const createContainer = (container) => {
     container = document.createElement('div');

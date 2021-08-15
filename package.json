@@ -2,5 +2,8 @@
   "devDependencies": {
     "nodemon": "^2.0.12"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "three": "^0.131.3"
+  }
 }
