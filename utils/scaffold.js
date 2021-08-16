@@ -1,7 +1,8 @@
-import * as THREE from "three";
-import {desktopFOV} from "../three-move/src/FIeldOfViews";
-import Stats from "three/examples/jsm/libs/stats.module";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import * as THREE from "../node_modules/three/build/three.module.js";
+import {desktopFOV} from "./fieldOfViews.js";
+import {OrbitControls} from "../node_modules/three/examples/jsm/controls/experimental/CameraControls.js";
+// import {OrbitControls} from "../node_modules/three/examples/jsm/controls/OrbitControls.js";
+// import Stats from "../node_modules/three/examples/jsm/libs/stats.module.js";
 
 export const createContainer = (container) => {
     container = document.createElement('div');
@@ -37,23 +38,23 @@ export const createPerspectiveCamera = (camera, position = {x: 0, y: 200, z: 200
     camera.lookAt(0, 0, 0);
     return camera;
 };
-
-export const createStats = (stats, container) => {
-    stats = new Stats();
-    container.appendChild(stats.dom);
-    return stats;
-};
+//
+// export const createStats = (stats, container) => {
+//     stats = new Stats();
+//     container.appendChild(stats.dom);
+//     return stats;
+// };
 
 export const createControls = (controls, camera, renderer) => {
     controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
     return controls;
 };
-
-
-export const onWindowResize = (renderer, camera) => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    return true;
-};
+//
+//
+// export const onWindowResize = (renderer, camera) => {
+//     renderer.setSize(window.innerWidth, window.innerHeight);
+//     camera.aspect = window.innerWidth / window.innerHeight;
+//     camera.updateProjectionMatrix();
+//     return true;
+// };
