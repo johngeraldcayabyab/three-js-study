@@ -1,6 +1,9 @@
 import http from "http";
 import fs from "fs";
 import url from "url";
+import {add} from './data.js';
+
+console.log(add(2, 3));
 
 http.createServer((req, res) => {
     let q = url.parse(req.url, true);
