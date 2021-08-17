@@ -9,25 +9,30 @@ let multipleHtmlPlugins = htmlPageNames.map(name => {
     })
 });
 
+
 module.exports = {
-    mode: 'development',
     entry: {
-        'index': './src/index.js',
-        'test': './src/test.js'
+        'main': './src/main.js',
+        'kindex': './src/kindex.js',
     },
+    mode: 'development',
     output: {
-        // filename: 'index.js',
         path: path.resolve(__dirname, 'dist'),
+        filename: '[name].js'
     },
     plugins: [
         new HtmlWebpackPlugin({
-            chunks: [0],
-            filename: 'index.html'
+            title: 'Main Management',
+            chunks: ['main'],
+            filename: "main.html"
         }),
         new HtmlWebpackPlugin({
-            chunks: [0],
-            filename: 'test.html'
-        })
+            title: 'Kindex Management',
+            chunks: ['kindex'],
+            filename: "kindex.html"
+        }),
     ],
 };
+
+
 
