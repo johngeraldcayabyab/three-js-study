@@ -1,35 +1,29 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import path from 'path';
+const __dirname = path.resolve();
 
-let htmlPageNames = ['example1', 'example2', 'example3', 'example4'];
-let multipleHtmlPlugins = htmlPageNames.map(name => {
-    return new HtmlWebpackPlugin({
-        filename: `${name}.html`, // output HTML files
-        chunks: [`index`] // respective JS files
-    })
-});
-
-
-module.exports = {
+export default {
     entry: {
-        'main': './src/main.js',
-        'kindex': './src/kindex.js',
+        'gosper_lines': './src/gosper_lines.js',
     },
     mode: 'development',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js'
     },
+    module: {
+        rules: [
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
+        ],
+    },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'Main Management',
-            chunks: ['main'],
-            filename: "main.html"
-        }),
-        new HtmlWebpackPlugin({
-            title: 'Kindex Management',
-            chunks: ['kindex'],
-            filename: "kindex.html"
+            title: 'Gosper Lines',
+            chunks: ['gosper_lines'],
+            filename: "gosper_lines.html"
         }),
     ],
 };
