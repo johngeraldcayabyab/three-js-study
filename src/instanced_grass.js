@@ -1,11 +1,11 @@
 import "../style.css";
 import * as THREE from 'three';
-import {createContainer} from "./scaffold.js";
-import {createRenderer} from "./scaffold.js";
-import {createScene} from "./scaffold.js";
-import {createPerspectiveCamera} from "./scaffold.js";
-import {createControls} from "./scaffold.js";
-import {createStats} from "./scaffold.js";
+import {createContainer} from "../utils/scaffold.js";
+import {createRenderer} from "../utils/scaffold.js";
+import {createScene} from "../utils/scaffold.js";
+import {createPerspectiveCamera} from "../utils/scaffold.js";
+import {createControls} from "../utils/scaffold.js";
+import {createStats} from "../utils/scaffold.js";
 
 main();
 

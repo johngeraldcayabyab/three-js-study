@@ -1,6 +1,6 @@
 import "../style.css";
 import * as THREE from 'three';
-import {createContainer} from "./scaffold.js";
+import {createContainer} from "../utils/scaffold.js";
 import {DragControls} from "three/examples/jsm/controls/DragControls.js";
 
 main();

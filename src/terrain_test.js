@@ -3,7 +3,7 @@ import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/experimental/CameraControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise.js";
-import {createContainer} from "./scaffold.js";
+import {createContainer} from "../utils/scaffold.js";
 
 let container, stats;
 let camera, controls, scene, renderer;
