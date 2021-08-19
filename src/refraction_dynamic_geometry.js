@@ -1,14 +1,13 @@
+import "../style.css";
 import * as THREE from 'three';
-import {
-    createContainer,
-    createControls,
-    createPerspectiveCamera,
-    createRenderer,
-    createScene,
-    createStats
-} from "./helpers";
-import {Refractor} from "three/examples/jsm/objects/Refractor";
-import {WaterRefractionShader} from "three/examples/jsm/shaders/WaterRefractionShader";
+import {createContainer} from "./scaffold.js";
+import {createRenderer} from "./scaffold.js";
+import {createScene} from "./scaffold.js";
+import {createPerspectiveCamera} from "./scaffold.js";
+import {createControls} from "./scaffold.js";
+import {createStats} from "./scaffold.js";
+import {Refractor} from "three/examples/jsm/objects/Refractor.js";
+import {WaterRefractionShader} from "three/examples/jsm/shaders/WaterRefractionShader.js";
 
 main();
 
@@ -57,45 +56,16 @@ function main() {
             shader: WaterRefractionShader
         });
 
-        const dudvMap = new THREE.TextureLoader().load('textures/waternormals.jpg', function () {
+        const dudvMap = new THREE.TextureLoader().load('./textures/waternormals.jpg', function () {
             animate();
         });
-
-
 
         dudvMap.wrapS = dudvMap.wrapT = THREE.RepeatWrapping;
         dudvMap.repeat.set(5, 5);
         waterRefractor.material.uniforms["tDudv"].value = dudvMap;
 
         waterMaterial = new THREE.MeshBasicMaterial({color: 0x0044ff, map: dudvMap});
-
-        // waterMesh = new THREE.Mesh(waterGeometry, waterMaterial);
-        // scene.add(waterMesh);
-
         scene.add(waterRefractor);
-
-        // const position = waterGeometry.attributes.position;
-        // position.usage = THREE.DynamicDrawUsage;
-        //
-        // for (let i = 0; i < position.count; i++) {
-        //     const y = 100 * Math.sin(i / 2);
-        //     position.setY(i, y);
-        // }
-        //
-        // const texture = new THREE.TextureLoader().load('textures/waternormals.jpg');
-        // texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        // texture.repeat.set(5, 5);
-        //
-        // waterMaterial = new THREE.MeshBasicMaterial({color: 0x0044ff, map: texture});
-        //
-        // waterMesh = new THREE.Mesh(waterGeometry, waterMaterial);
-        // scene.add(waterMesh);
-
-
-
-
-
-
 
         const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
         scene.add(ambientLight);

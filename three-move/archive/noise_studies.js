@@ -3,7 +3,7 @@ import Stats from 'stats.js';
 import {SimplexNoise} from "../src/SimplexNoise";
 import {GUI} from "dat.gui";
 import {GPUComputationRenderer} from "three/examples/jsm/misc/GPUComputationRenderer";
-import {desktopFOV} from "../../utils/fieldOfViews";
+import {desktopFOV} from "../../src/fieldOfViews.js";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise";
 //

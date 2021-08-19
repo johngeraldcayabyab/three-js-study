@@ -1,6 +1,7 @@
 import * as THREE from "three";
-import {desktopFOV} from "../utils/fieldOfViews.js";
+import {desktopFOV} from "./fieldOfViews.js";
 import {OrbitControls} from "three/examples/jsm/controls/experimental/CameraControls.js";
+import Stats from "three/examples/jsm/libs/stats.module.js";
 
 export const createContainer = (container) => {
     container = document.createElement('div');
@@ -40,4 +41,10 @@ export const createControls = (controls, camera, renderer) => {
     controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
     return controls;
+};
+
+export const createStats = (stats, container) => {
+    stats = new Stats();
+    container.appendChild(stats.dom);
+    return stats;
 };

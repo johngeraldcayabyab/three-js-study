@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import {desktopFOV} from "../../utils/fieldOfViews";
+import {desktopFOV} from "../../src/fieldOfViews.js";
 import Stats from "three/examples/jsm/libs/stats.module";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise.js";

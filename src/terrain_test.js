@@ -1,10 +1,9 @@
-import * as THREE from 'three';
-import Stats from 'stats.js';
-import {GUI} from 'dat.gui';
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise";
-import {FirstPersonControls} from "three/examples/jsm/controls/FirstPersonControls";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import "../style.css";
+import * as THREE from "three";
+import {OrbitControls} from "three/examples/jsm/controls/experimental/CameraControls.js";
+import Stats from "three/examples/jsm/libs/stats.module.js";
+import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise.js";
+import {createContainer} from "./scaffold.js";
 
 let container, stats;
 let camera, controls, scene, renderer;
@@ -17,10 +16,10 @@ init();
 animate();
 
 function init() {
-    container = document.getElementById('container');
+    container = createContainer(container);
     camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 200000);
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xefd1b5);
+    scene.background = new THREE.Color(0x20252f);
     // scene.fog = new THREE.FogExp2(0xefd1b5, 0.0025);
 
     const data = generateHeight(worldWidth, worldDepth);

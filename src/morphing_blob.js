@@ -1,13 +1,12 @@
+import "../style.css";
 import * as THREE from 'three';
-import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise";
-import {
-    createContainer,
-    createControls,
-    createPerspectiveCamera,
-    createRenderer,
-    createScene,
-    createStats
-} from "./helpers";
+import {createContainer} from "./scaffold.js";
+import {createRenderer} from "./scaffold.js";
+import {createScene} from "./scaffold.js";
+import {createPerspectiveCamera} from "./scaffold.js";
+import {createControls} from "./scaffold.js";
+import {createStats} from "./scaffold.js";
+import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise.js";
 
 main();
 
@@ -44,7 +43,7 @@ function main() {
 
     function setPoints(a = .001) {
         const basePositionAttribute = blob.geometry.getAttribute("basePosition");
-        const positionAttribute = blob.geometry.getAttribute( 'position' );
+        const positionAttribute = blob.geometry.getAttribute('position');
         const vertex = new THREE.Vector3();
 
         for (let vertexIndex = 0; vertexIndex < positionAttribute.count; vertexIndex++) {
