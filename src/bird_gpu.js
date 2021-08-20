@@ -1,8 +1,11 @@
-import * as THREE from 'three';
-import {createContainer, createRenderer, createStats} from "./helpers";
-import {GUI} from "dat.gui";
-import {GPUComputationRenderer} from "three/examples/jsm/misc/GPUComputationRenderer";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import "../style.css";
+import * as THREE from "three";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
+import {GPUComputationRenderer} from "three/examples/jsm/misc/GPUComputationRenderer.js";
+import {createContainer} from "../utils/scaffold.js";
+import {createRenderer} from "../utils/scaffold.js";
+import {createStats} from "../utils/scaffold.js";
+import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
 
 main();
 

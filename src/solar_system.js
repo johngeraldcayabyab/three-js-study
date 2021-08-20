@@ -1,8 +1,11 @@
-import * as THREE from 'three';
-import {GUI} from 'dat.gui';
+import "../style.css";
+import * as THREE from "three";
+import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
 
 function main() {
-
+    let container = document.createElement('div');
+    document.body.appendChild(container);
+    container.setAttribute('id', 'c');
     const canvas = document.querySelector('#c');
     const renderer = new THREE.WebGLRenderer({canvas});
     const gui = new GUI();

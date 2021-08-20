@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+import "../style.css";
+import * as THREE from "three";
 
 function main() {
     const canvas = document.querySelector('#c');

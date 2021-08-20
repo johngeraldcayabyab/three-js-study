@@ -1,9 +1,8 @@
-import * as THREE from 'three';
-import {Lensflare, LensflareElement} from "three/examples/jsm/objects/Lensflare";
-import {FlyControls} from "three/examples/jsm/controls/FlyControls";
-import Stats from 'stats.js/src/Stats.js';
-import {CinematicCamera} from "three/examples/jsm/cameras/CinematicCamera";
-import {GUI} from "dat.gui";
+import "../style.css";
+import * as THREE from "three";
+import {CinematicCamera} from "three/examples/jsm/cameras/CinematicCamera.js";
+import Stats from "three/examples/jsm/libs/stats.module.js";
+import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
 
 let camera, scene, raycaster, renderer, stats;
 

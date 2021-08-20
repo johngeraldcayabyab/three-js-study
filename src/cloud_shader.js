@@ -1,14 +1,13 @@
-import {
-    createContainer, createControls,
-    createPerspectiveCamera,
-    createRenderer,
-    createScene,
-    createStats,
-} from "./helpers";
-
-import * as THREE from 'three';
-import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise";
-import {GUI} from "three/examples/jsm/libs/dat.gui.module";
+import "../style.css";
+import * as THREE from "three";
+import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise.js";
+import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
+import {createContainer} from "../utils/scaffold.js";
+import {createRenderer} from "../utils/scaffold.js";
+import {createStats} from "../utils/scaffold.js";
+import {createScene} from "../utils/scaffold.js";
+import {createPerspectiveCamera} from "../utils/scaffold.js";
+import {createControls} from "../utils/scaffold.js";
 
 main();
 

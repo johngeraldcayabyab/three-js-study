@@ -1,8 +1,11 @@
-import * as THREE from 'three/src/Three';
-import {GUI} from "dat.gui";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import Stats from 'stats.js';
-import {createContainer, createRenderer, onWindowResize} from "./helpers";
+import "../style.css";
+import * as THREE from "three";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
+import {createContainer} from "../utils/scaffold.js";
+import {createRenderer} from "../utils/scaffold.js";
+import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
+import Stats from "three/examples/jsm/libs/stats.module.js";
+import {onWindowResize} from "../utils/scaffold.js";
 
 main();
 
@@ -98,5 +101,3 @@ function main() {
         stats.update();
     }
 }
-
-

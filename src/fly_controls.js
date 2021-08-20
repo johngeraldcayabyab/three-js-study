@@ -1,7 +1,10 @@
+import "../style.css";
 import * as THREE from "three";
-import {Lensflare, LensflareElement} from "three/examples/jsm/objects/Lensflare";
-import {FlyControls} from "three/examples/jsm/controls/FlyControls";
-import Stats from "stats.js/src/Stats";
+import {Lensflare} from "three/examples/jsm/objects/Lensflare.js";
+import {LensflareElement} from "three/examples/jsm/objects/Lensflare.js";
+import {FlyControls} from "three/examples/jsm/controls/FlyControls.js";
+
+main();
 
 function main() {
     let container, stats;
@@ -58,8 +61,8 @@ function main() {
 
         const textureLoader = new THREE.TextureLoader();
 
-        const textureFlare0 = new textureLoader.load('../textures/lensflare0.png');
-        const textureFlare3 = new textureLoader.load('../textures/lensflare3.png');
+        const textureFlare0 = new textureLoader.load('../src/textures/lensflare0.png');
+        const textureFlare3 = new textureLoader.load('../src/textures/lensflare3.png');
 
         addLight(0.55, 0.9, 0.5, 5000, 0, -1000);
         addLight(0.08, 0.8, 0.5, 0, 0, -1000);
@@ -119,4 +122,3 @@ function main() {
     }
 }
 
-main();

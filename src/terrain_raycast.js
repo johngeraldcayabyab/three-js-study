@@ -1,8 +1,7 @@
-import * as THREE from 'three';
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {generateHeight, generateTexture} from "./helpers";
-import Stats from 'stats.js/src/Stats';
-
+import "../style.css";
+import * as THREE from "three";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
+import {generateHeight, generateTexture} from "../utils/scaffold.js";
 
 main();
 
@@ -117,4 +116,3 @@ function main() {
         }
     }
 }
-

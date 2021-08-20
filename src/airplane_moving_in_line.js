@@ -1,14 +1,12 @@
-import {
-    createContainer,
-    createControls,
-    createPerspectiveCamera,
-    createRenderer,
-    createScene,
-    createStats
-} from "./helpers";
-
-import * as THREE from 'three';
-import {createAirplane} from "./object_generator";
+import "../style.css";
+import * as THREE from "three";
+import {createContainer} from "../utils/scaffold.js";
+import {createRenderer} from "../utils/scaffold.js";
+import {createScene} from "../utils/scaffold.js";
+import {createPerspectiveCamera} from "../utils/scaffold.js";
+import {createControls} from "../utils/scaffold.js";
+import {createStats} from "../utils/scaffold.js";
+import {createAirplane} from "../utils/object_generator.js";
 
 main();
 

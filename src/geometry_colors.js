@@ -1,13 +1,11 @@
-import {
-    createContainer,
-    createControls,
-    createPerspectiveCamera,
-    createRenderer,
-    createScene,
-    createStats
-} from "./helpers";
-
-import * as THREE from 'three';
+import "../style.css";
+import * as THREE from "three";
+import {createContainer} from "../utils/scaffold.js";
+import {createRenderer} from "../utils/scaffold.js";
+import {createScene} from "../utils/scaffold.js";
+import {createPerspectiveCamera} from "../utils/scaffold.js";
+import {createControls} from "../utils/scaffold.js";
+import {createStats} from "../utils/scaffold.js";
 
 main();
 
@@ -55,23 +53,23 @@ function main() {
         scene.add(shadowMesh);
 
         shadowMesh = new THREE.Mesh(shadowGeo, shadowMaterial);
-        shadowMesh.position.y = - 250;
-        shadowMesh.position.x =  - 400;
-        shadowMesh.rotation.x = - Math.PI / 2;
+        shadowMesh.position.y = -250;
+        shadowMesh.position.x = -400;
+        shadowMesh.rotation.x = -Math.PI / 2;
         scene.add(shadowMesh);
 
 
         shadowMesh = new THREE.Mesh(shadowGeo, shadowMaterial);
-        shadowMesh.position.y = - 250;
-        shadowMesh.position.x =  400;
-        shadowMesh.rotation.x = - Math.PI / 2;
+        shadowMesh.position.y = -250;
+        shadowMesh.position.x = 400;
+        shadowMesh.rotation.x = -Math.PI / 2;
         scene.add(shadowMesh);
 
         const radius = 200;
 
         const geometry1 = new THREE.IcosahedronGeometry(radius, 1);
 
-        const count =  geometry1.attributes.position.count;
+        const count = geometry1.attributes.position.count;
         geometry1.setAttribute('color', new THREE.BufferAttribute(new Float32Array(count * 3), 3));
 
         const geometry2 = geometry1.clone();
@@ -85,15 +83,15 @@ function main() {
         const colors2 = geometry2.attributes.color;
         const colors3 = geometry3.attributes.color;
 
-        for(let i = 0; i < count; i++){
+        for (let i = 0; i < count; i++) {
             color.setHSL((position1.getY(i) / radius + 1) / 2, 1.0, 0.5);
             colors1.setXYZ(i, color.r, color.g, color.b);
 
             color.setHSL(0, (position2.getY(i) / radius + 1) / 2, 0.5);
             colors2.setXYZ(i, color.r, color.g, color.b);
 
-            color.setRGB(1, 1.08 - (position3.getY(i) / radius + 1) /2, 0);
-            colors3.setXYZ(i ,color.r, color.g, color.b);
+            color.setRGB(1, 1.08 - (position3.getY(i) / radius + 1) / 2, 0);
+            colors3.setXYZ(i, color.r, color.g, color.b);
         }
 
         const material = new THREE.MeshPhongMaterial({
@@ -103,13 +101,17 @@ function main() {
             shininess: 0
         });
 
-        const wireframeMaterial = new THREE.MeshBasicMaterial({color: 0x000000, wireframe: true, transparent: true});
+        const wireframeMaterial = new THREE.MeshBasicMaterial({
+            color: 0x000000,
+            wireframe: true,
+            transparent: true
+        });
 
         let mesh = new THREE.Mesh(geometry1, material);
         let wireframe = new THREE.Mesh(geometry1, wireframeMaterial);
         mesh.add(wireframe);
         mesh.position.x = -400;
-        mesh.rotation.x = - 1.87;
+        mesh.rotation.x = -1.87;
         scene.add(mesh);
 
         mesh = new THREE.Mesh(geometry2, material);

@@ -1,10 +1,8 @@
-import * as THREE from 'three';
-import Stats from 'stats.js';
-import {SimplexNoise} from "./SimplexNoise";
-import {GUI} from "dat.gui";
-import {GPUComputationRenderer} from "three/examples/jsm/misc/GPUComputationRenderer";
+import * as THREE from "three";
+import {GPUComputationRenderer} from "three/examples/jsm/misc/GPUComputationRenderer.js";
+import Stats from "three/examples/jsm/libs/stats.module";
+import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
 
-// Texture width for simulation
 const WIDTH = 128;
 
 // Water size in system units

@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import {BufferGeometryUtils} from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import {jitter} from "./helpers.js";
 
 export const createPlane = () => {
     const geometry = new THREE.PlaneGeometry(500, 500, 32);

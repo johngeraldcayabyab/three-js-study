@@ -1,7 +1,8 @@
-import * as THREE from 'three';
-import Stats from 'stats.js';
-import {GUI} from 'dat.gui';
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+import "../style.css";
+import * as THREE from "three";
+import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
+import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
+import Stats from "three/examples/jsm/libs/stats.module.js";
 
 let container, stats, clock, gui, mixer, actions, activeAction, previousAction;
 let camera, scene, renderer, model, face;
@@ -53,7 +54,7 @@ function init() {
     // model
 
     const loader = new GLTFLoader();
-    loader.load('http://localhost:63342/three-js-study/src/RobotExpressive.glb', function (gltf) {
+    loader.load('../src/textures/RobotExpressive.glb', function (gltf) {
 
         model = gltf.scene;
         scene.add(model);

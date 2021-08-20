@@ -56,7 +56,7 @@ function main() {
             shader: WaterRefractionShader
         });
 
-        const dudvMap = new THREE.TextureLoader().load('./textures/waternormals.jpg', function () {
+        const dudvMap = new THREE.TextureLoader().load('../src/textures/waternormals.jpg', function () {
             animate();
         });
 

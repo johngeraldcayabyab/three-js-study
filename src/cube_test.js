@@ -1,7 +1,7 @@
-import * as THREE from 'THREE';
-import {GUI} from "dat.gui";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {DragControls} from "three/examples/jsm/controls/DragControls";
+import "../style.css";
+import * as THREE from "three";
+import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
+import {DragControls} from "three/examples/jsm/controls/DragControls.js";
 
 function main() {
     const scene = new THREE.Scene();

@@ -1,14 +1,13 @@
-import * as THREE from 'three';
-import {
-    createContainer,
-    createControls,
-    createPerspectiveCamera,
-    createRenderer,
-    createScene,
-    createStats
-} from "./helpers";
-import {Refractor} from "three/examples/jsm/objects/Refractor";
-import {WaterRefractionShader} from "three/examples/jsm/shaders/WaterRefractionShader";
+import "../style.css";
+import * as THREE from "three";
+import {Refractor} from "three/examples/jsm/objects/Refractor.js";
+import {WaterRefractionShader} from "three/examples/jsm/shaders/WaterRefractionShader.js";
+import {createContainer} from "../utils/scaffold.js";
+import {createRenderer} from "../utils/scaffold.js";
+import {createPerspectiveCamera} from "../utils/scaffold.js";
+import {createScene} from "../utils/scaffold.js";
+import {createControls} from "../utils/scaffold.js";
+import {createStats} from "../utils/scaffold.js";
 
 main();
 
@@ -58,8 +57,6 @@ function main() {
         dudvMap.wrapS = dudvMap.wrapT = THREE.RepeatWrapping;
         planeRefractor.material.uniforms["tDudv"].value = dudvMap;
 
-
-        // alert('chimay');
 
         const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
         scene.add(ambientLight);
