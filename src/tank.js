@@ -1,6 +1,8 @@
 import "../style.css";
 import * as THREE from "three";
 
+main();
+
 function main() {
     const canvas = document.querySelector('#c');
     const renderer = new THREE.WebGLRenderer({canvas: canvas});
@@ -250,5 +252,3 @@ function main() {
 
     requestAnimationFrame(render);
 }
-
-main();

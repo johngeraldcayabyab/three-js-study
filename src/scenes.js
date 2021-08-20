@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+import "../style.css";
+import * as THREE from "three";
 
 let windowInnerWidth = window.innerWidth;
 let windowInnerHeight = window.innerHeight;

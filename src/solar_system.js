@@ -2,6 +2,8 @@ import "../style.css";
 import * as THREE from "three";
 import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
 
+main();
+
 function main() {
     let container = document.createElement('div');
     document.body.appendChild(container);
@@ -138,5 +140,3 @@ function main() {
 
     requestAnimationFrame(render);
 }
-
-main();

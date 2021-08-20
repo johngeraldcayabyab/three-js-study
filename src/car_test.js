@@ -3,6 +3,8 @@ import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
 
+main();
+
 let main = () => {
 
     const renderer = new THREE.WebGLRenderer({antialias: true});
@@ -158,5 +160,3 @@ let main = () => {
 
     // animate();
 }
-
-main();

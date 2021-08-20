@@ -1,10 +1,10 @@
 import "../style.css";
+import * as THREE from "three";
 import {createContainer} from "../utils/scaffold.js";
 import {createRenderer} from "../utils/scaffold.js";
 import {createScene} from "../utils/scaffold.js";
 import {createPerspectiveCamera} from "../utils/scaffold.js";
 import {createControls} from "../utils/scaffold.js";
-import * as THREE from "three";
 import {createStats} from "../utils/scaffold.js";
 
 main();

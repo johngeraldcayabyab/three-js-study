@@ -5,7 +5,6 @@ import {DragControls} from "three/examples/jsm/controls/DragControls.js";
 
 main();
 
-
 function main() {
     let container;
     let camera, scene, renderer;
