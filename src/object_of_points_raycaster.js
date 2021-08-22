@@ -13,6 +13,16 @@ function main(){
 		off: new THREE.Color(0x403030)
 	};
 
+	let geometry;
+	let counter = 5000;
+	let pickingTexture;
+	const pickingData = [];
+	let pickingUniforms = {
+		picking: {value: 0},
+		pickingIdx: {value: counter + 1},
+		time: {value: 0}
+	};
+
 	init();
 	animate();
 
