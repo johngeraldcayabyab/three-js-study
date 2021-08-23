@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import {GPUComputationRenderer} from "three/examples/jsm/misc/GPUComputationRenderer.js";
-import Stats from "three/examples/jsm/libs/stats.module";
+import Stats from "three/examples/jsm/libs/stats.module.js";
 import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
 
 const WIDTH = 128;
