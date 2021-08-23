@@ -1,5 +1,6 @@
 import "../style.css";
 import * as THREE from "three";
+import {createContainer} from "../utils/scaffold.js";
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
