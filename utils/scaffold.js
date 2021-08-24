@@ -17,7 +17,6 @@ export const createRenderer = (renderer) => {
     renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.setClearColor(0x20252f);
     document.body.appendChild(renderer.domElement);
     return renderer;

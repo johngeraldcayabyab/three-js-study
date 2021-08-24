@@ -32,20 +32,20 @@ function main() {
 
     function init() {
         // container = createContainer(container);
-        // renderer = createRenderer(renderer);
+        //
         scene = createScene(scene);
         camera = createPerspectiveCamera(camera, {x: 5, y: 5, z: 20});
-
-        // stats = createStats(stats);
-
+        stats = createStats(stats);
 
 
-        renderer = new THREE.WebGLRenderer({
-            antialias: true
-        });
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+
+        // renderer = new THREE.WebGLRenderer({
+        //     antialias: true
+        // });
+        // renderer.setPixelRatio(window.devicePixelRatio);
+        // renderer.setSize(window.innerWidth, window.innerHeight);
+        // document.body.appendChild(renderer.domElement);
+        renderer = createRenderer(renderer);
         renderer.domElement.addEventListener('pointermove', onPointerMove);
         controls = createControls(controls, camera, renderer);
         // container.addEventListener('pointermove', onPointerMove);
@@ -154,7 +154,7 @@ function main() {
     function animate() {
         pickingUniforms.time.value = clock.getElapsedTime();
         render();
-        // stats.update();
+        stats.update();
         requestAnimationFrame(animate);
     }
 
