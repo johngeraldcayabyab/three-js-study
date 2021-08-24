@@ -30,8 +30,7 @@ function main() {
     animate();
 
     function init() {
-        container = createContainer(container);
-        renderer = createRenderer(renderer, container);
+        renderer = createRenderer(renderer);
         scene = createScene(scene);
         camera = createPerspectiveCamera(camera, {x: 120, y: 100, z: 400});
         controls = createControls(controls, camera, renderer);

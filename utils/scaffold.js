@@ -13,15 +13,6 @@ export const createContainer = (container) => {
     return container;
 };
 
-export const createRenderer = (renderer) => {
-    renderer = new THREE.WebGLRenderer({antialias: true});
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x20252f);
-    document.body.appendChild(renderer.domElement);
-    return renderer;
-};
-
 export const createScene = (scene) => {
     scene = new THREE.Scene();
     // scene.background = new THREE.Color(0x000000);
@@ -37,17 +28,27 @@ export const createPerspectiveCamera = (camera, position = {x: 0, y: 200, z: 200
     return camera;
 };
 
+export const createStats = (stats) => {
+    stats = new Stats();
+    document.body.appendChild(stats.dom);
+    return stats;
+};
+
+export const createRenderer = (renderer) => {
+    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x20252f);
+    document.body.appendChild(renderer.domElement);
+    return renderer;
+};
+
 export const createControls = (controls, camera, renderer) => {
     controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
     return controls;
 };
 
-export const createStats = (stats) => {
-    stats = new Stats();
-    document.body.appendChild(stats.dom);
-    return stats;
-};
 
 export const onWindowResize = (renderer, camera) => {
     renderer.setSize(window.innerWidth, window.innerHeight);

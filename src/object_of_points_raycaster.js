@@ -1,7 +1,6 @@
-// import "../style.css";
+import "../style.css";
 import * as THREE from "three";
 import {createStats} from "../utils/scaffold.js";
-import {createContainer} from "../utils/scaffold.js";
 import {createPerspectiveCamera} from "../utils/scaffold.js";
 import {createControls} from "../utils/scaffold.js";
 import {createScene} from "../utils/scaffold.js";
@@ -15,7 +14,7 @@ function main() {
         on: new THREE.Color(0xffffff),
         off: new THREE.Color(0x403030)
     }
-    let container, renderer, scene, camera, controls, stats, clock;
+    let renderer, scene, camera, controls, stats, clock;
     let geometry;
     let counter = 5000;
     let pickingTexture;
@@ -31,29 +30,9 @@ function main() {
     animate();
 
     function init() {
-        // container = createContainer(container);
-        //
         scene = createScene(scene);
         camera = createPerspectiveCamera(camera, {x: 5, y: 5, z: 20});
         stats = createStats(stats);
-
-
-
-        // renderer = new THREE.WebGLRenderer({
-        //     antialias: true
-        // });
-        // renderer.setPixelRatio(window.devicePixelRatio);
-        // renderer.setSize(window.innerWidth, window.innerHeight);
-        // document.body.appendChild(renderer.domElement);
-        renderer = createRenderer(renderer);
-        renderer.domElement.addEventListener('pointermove', onPointerMove);
-        controls = createControls(controls, camera, renderer);
-        // container.addEventListener('pointermove', onPointerMove);
-
-
-
-
-
 
         pickingTexture = new THREE.WebGLRenderTarget(1, 1);
 
@@ -141,17 +120,25 @@ function main() {
 
 
         clock = new THREE.Clock();
-
+        renderer = createRenderer(renderer);
+        renderer.domElement.addEventListener('pointermove', onPointerMove);
+        renderer.domElement.addEventListener('resize', onWindowResize);
+        controls = createControls(controls, camera, renderer);
     }
-
-//
 
     function onPointerMove(e) {
         pointer.x = e.clientX;
         pointer.y = e.clientY;
     }
 
-    function animate() {
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function animate(time) {
+        console.log(time);
         pickingUniforms.time.value = clock.getElapsedTime();
         render();
         stats.update();
@@ -159,7 +146,6 @@ function main() {
     }
 
     function pick() {
-
         //render the picking scene off-screen
 
         // set the view offset to represent just a single pixel under the mouse
@@ -185,19 +171,13 @@ function main() {
 
         pickingUniforms.picking.value = 0;
         scene.background = pickingBackground.off;
-
     }
 
     function render() {
-
         controls.update();
-
         pick();
-
         renderer.setRenderTarget(null);
         renderer.render(scene, camera);
-
-
     }
 }
 
