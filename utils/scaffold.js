@@ -13,13 +13,13 @@ export const createContainer = (container) => {
     return container;
 };
 
-export const createRenderer = (renderer, container) => {
+export const createRenderer = (renderer) => {
     renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.setClearColor(0x20252f);
-    container.appendChild(renderer.domElement);
+    document.body.appendChild(renderer.domElement);
     return renderer;
 };
 
@@ -44,9 +44,9 @@ export const createControls = (controls, camera, renderer) => {
     return controls;
 };
 
-export const createStats = (stats, container) => {
+export const createStats = (stats) => {
     stats = new Stats();
-    container.appendChild(stats.dom);
+    document.body.appendChild(stats.dom);
     return stats;
 };
 

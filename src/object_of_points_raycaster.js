@@ -1,11 +1,11 @@
 // import "../style.css";
 import * as THREE from "three";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import {createStats} from "../utils/scaffold.js";
 import {createContainer} from "../utils/scaffold.js";
 import {createPerspectiveCamera} from "../utils/scaffold.js";
 import {createControls} from "../utils/scaffold.js";
 import {createScene} from "../utils/scaffold.js";
+import {createRenderer} from "../utils/scaffold.js";
 
 
 main();
@@ -31,11 +31,14 @@ function main() {
     animate();
 
     function init() {
-        container = createContainer(container);
-
+        // container = createContainer(container);
+        // renderer = createRenderer(renderer);
+        scene = createScene(scene);
         camera = createPerspectiveCamera(camera, {x: 5, y: 5, z: 20});
 
-        stats = createStats(stats, container);
+        // stats = createStats(stats);
+
+
 
         renderer = new THREE.WebGLRenderer({
             antialias: true
@@ -43,11 +46,13 @@ function main() {
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
-
         renderer.domElement.addEventListener('pointermove', onPointerMove);
         controls = createControls(controls, camera, renderer);
+        // container.addEventListener('pointermove', onPointerMove);
 
-        scene = createScene(scene);
+
+
+
 
 
         pickingTexture = new THREE.WebGLRenderTarget(1, 1);
@@ -80,7 +85,6 @@ function main() {
           vHighlight = pickingIdx == idx ? 1. : 0.;
         `
                     );
-                console.log(shader.vertexShader);
                 shader.fragmentShader = `
       	uniform float time;
       	uniform float picking;
@@ -102,7 +106,6 @@ function main() {
           diffuseColor.rgb = (vHighlight > 0.5) ? col : diffuseColor.rgb; // highlight
         `
                 );
-                console.log(shader.fragmentShader)
             }
         });
 
@@ -132,7 +135,6 @@ function main() {
         geometry.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
         geometry.setAttribute("clrPick", new THREE.Float32BufferAttribute(colPick, 3));
         geometry.setAttribute("idx", new THREE.Float32BufferAttribute(idx, 1));
-        console.log(geometry)
 
         let points = new THREE.Points(geometry, pointsMaterial);
         scene.add(points);
@@ -145,16 +147,14 @@ function main() {
 //
 
     function onPointerMove(e) {
-
         pointer.x = e.clientX;
         pointer.y = e.clientY;
-
     }
 
     function animate() {
         pickingUniforms.time.value = clock.getElapsedTime();
         render();
-        stats.update();
+        // stats.update();
         requestAnimationFrame(animate);
     }
 
@@ -196,7 +196,7 @@ function main() {
 
         renderer.setRenderTarget(null);
         renderer.render(scene, camera);
-        //console.clear();
+
 
     }
 }
