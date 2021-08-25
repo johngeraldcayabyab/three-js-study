@@ -1,17 +1,15 @@
 import "../style.css";
 import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
-import {createContainer} from "../utils/scaffold.js";
 import {createRenderer} from "../utils/scaffold.js";
 import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import {onWindowResize} from "../utils/scaffold.js";
-
 main();
 
 function main() {
 
-    let container, camera, scene, renderer, stats;
+    let camera, scene, renderer, stats;
 
     let mesh;
     const amount = 20;
@@ -27,8 +25,8 @@ function main() {
 
     function init() {
 
-        container = createContainer(container);
-        renderer = createRenderer(renderer, container);
+        
+        renderer = createRenderer(renderer);
 
         camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
         camera.position.set(amount, amount, amount);

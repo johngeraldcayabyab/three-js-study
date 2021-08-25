@@ -1,6 +1,5 @@
 import "../style.css";
 import * as THREE from 'three';
-import {createContainer} from "../utils/scaffold.js";
 import {createRenderer} from "../utils/scaffold.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
@@ -8,7 +7,7 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 main();
 
 function main() {
-    let container, renderer, scene, camera, controls, stats, INTERSECTED;
+    let renderer, scene, camera, controls, stats, INTERSECTED;
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
 
@@ -16,8 +15,8 @@ function main() {
     animate();
 
     function init() {
-        container = createContainer(container);
-        renderer = createRenderer(renderer, container);
+        
+        renderer = createRenderer(renderer);
 
         scene = new THREE.Scene();
         scene.background = '#000';

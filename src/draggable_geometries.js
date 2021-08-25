@@ -1,6 +1,5 @@
 import "../style.css";
 import * as THREE from 'three';
-import {createContainer} from "../utils/scaffold.js";
 import {DragControls} from "three/examples/jsm/controls/DragControls.js";
 
 main();
@@ -20,7 +19,7 @@ function main() {
 
     function init() {
 
-        container = createContainer(container);
+        
 
         camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 5000);
         camera.position.z = 1000;

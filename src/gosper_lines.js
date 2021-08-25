@@ -47,14 +47,14 @@ const createControls = (controls, camera, renderer) => {
 main();
 
 function main() {
-    let container, renderer, scene, camera, controls, stats, line;
+    let renderer, scene, camera, controls, stats, line;
 
     init();
     animate();
 
     function init() {
-        container = createContainer(container);
-        renderer = createRenderer(renderer, container);
+        
+        renderer = createRenderer(renderer);
 
         scene = new THREE.Scene();
         scene.background = '#000';

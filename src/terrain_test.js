@@ -3,9 +3,9 @@ import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/experimental/CameraControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise.js";
-import {createContainer} from "../utils/scaffold.js";
 
-let container, stats;
+
+let stats;
 let camera, controls, scene, renderer;
 let mesh, mesh2, texture;
 
@@ -16,7 +16,7 @@ init();
 animate();
 
 function init() {
-    container = createContainer(container);
+    
     camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 200000);
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x20252f);

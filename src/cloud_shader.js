@@ -2,7 +2,6 @@ import "../style.css";
 import * as THREE from "three";
 import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise.js";
 import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
-import {createContainer} from "../utils/scaffold.js";
 import {createRenderer} from "../utils/scaffold.js";
 import {createStats} from "../utils/scaffold.js";
 import {createScene} from "../utils/scaffold.js";
@@ -12,7 +11,7 @@ import {createControls} from "../utils/scaffold.js";
 main();
 
 function main() {
-    let container, renderer, scene, camera, controls, stats;
+    let renderer, scene, camera, controls, stats;
 
     let mesh;
 
@@ -20,9 +19,9 @@ function main() {
     animate();
 
     function init() {
-        container = createContainer(container);
-        renderer = createRenderer(renderer, container);
-        stats = createStats(stats, container);
+        
+        renderer = createRenderer(renderer);
+        stats = createStats(stats);
         scene = createScene(scene);
         camera = createPerspectiveCamera(camera, {x: 0, y: 1, z: 1});
         controls = createControls(controls, camera, renderer);

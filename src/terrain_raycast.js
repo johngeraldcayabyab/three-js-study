@@ -6,7 +6,7 @@ import {generateHeight, generateTexture} from "../utils/scaffold.js";
 main();
 
 function main() {
-    let container, stats;
+    let stats;
 
     let camera, controls, scene, renderer;
 

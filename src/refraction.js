@@ -2,7 +2,6 @@ import "../style.css";
 import * as THREE from "three";
 import {Refractor} from "three/examples/jsm/objects/Refractor.js";
 import {WaterRefractionShader} from "three/examples/jsm/shaders/WaterRefractionShader.js";
-import {createContainer} from "../utils/scaffold.js";
 import {createRenderer} from "../utils/scaffold.js";
 import {createPerspectiveCamera} from "../utils/scaffold.js";
 import {createScene} from "../utils/scaffold.js";
@@ -12,7 +11,7 @@ import {createStats} from "../utils/scaffold.js";
 main();
 
 function main() {
-    let container, renderer, camera, scene, controls, stats;
+    let renderer, camera, scene, controls, stats;
 
     let clock, planeRefractor;
 
@@ -20,12 +19,12 @@ function main() {
     animate();
 
     function init() {
-        container = createContainer(container);
-        renderer = createRenderer(renderer, container);
+        
+        renderer = createRenderer(renderer);
         camera = createPerspectiveCamera(camera, {x: 10, y: 10, z : 10});
         scene = createScene(scene);
         controls = createControls(controls, camera, renderer);
-        stats = createStats(stats, container);
+        stats = createStats(stats);
 
         clock = new THREE.Clock();
 

@@ -7,7 +7,7 @@ import {FlyControls} from "three/examples/jsm/controls/FlyControls.js";
 main();
 
 function main() {
-    let container, stats;
+    let stats;
 
     let camera, scene, renderer;
     let controls;

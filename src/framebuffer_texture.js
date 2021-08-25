@@ -1,6 +1,5 @@
 import "../style.css";
 import * as THREE from "three";
-import {createContainer} from "../utils/scaffold.js";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import {GeometryUtils} from "three/examples/jsm/utils/GeometryUtils.js";
 
@@ -8,7 +7,7 @@ main();
 
 function main() {
 
-    let container, camera, scene, renderer;
+    let camera, scene, renderer;
     let line, sprite, texture;
 
     let cameraOrtho, sceneOrtho;
@@ -26,7 +25,7 @@ function main() {
 
     function init() {
 
-        container = createContainer(container);
+        
         //
 
         const width = window.innerWidth;

@@ -1,6 +1,5 @@
 import "../style.css";
 import * as THREE from 'three';
-import {createContainer} from "../utils/scaffold.js";
 import {createRenderer} from "../utils/scaffold.js";
 import {createStats} from "../utils/scaffold.js";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
@@ -89,7 +88,7 @@ function main() {
     }
 
 
-    let container, renderer, camera, scene, controls, stats;
+    let renderer, camera, scene, controls, stats;
 
     let terrainMesh, terrainTexture, waterMesh, sunMesh;
 
@@ -124,9 +123,9 @@ function main() {
     animate();
 
     function init() {
-        container = createContainer(container);
-        renderer = createRenderer(renderer, container);
-        stats = createStats(stats, container);
+        
+        renderer = createRenderer(renderer);
+        stats = createStats(stats);
 
         scene = new THREE.Scene();
         scene.background = new THREE.Color(0xbfd1e5);

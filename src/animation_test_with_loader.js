@@ -4,7 +4,7 @@ import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
 import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
-let container, stats, clock, gui, mixer, actions, activeAction, previousAction;
+let stats, clock, gui, mixer, actions, activeAction, previousAction;
 let camera, scene, renderer, model, face;
 
 const api = {state: 'Walking'};

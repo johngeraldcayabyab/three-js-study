@@ -1,6 +1,5 @@
 import "../style.css";
 import * as THREE from 'three';
-import {createContainer} from "../utils/scaffold.js";
 import {createRenderer} from "../utils/scaffold.js";
 import {createScene} from "../utils/scaffold.js";
 import {createPerspectiveCamera} from "../utils/scaffold.js";
@@ -13,7 +12,7 @@ main();
 
 function main() {
 
-    let container, renderer, scene, camera, controls, stats;
+    let renderer, scene, camera, controls, stats;
 
     let waterMesh, waterGeometry, waterMaterial, clock, planeRefractor, waterRefractor;
 
@@ -24,12 +23,12 @@ function main() {
     animate();
 
     function init() {
-        container = createContainer(container);
-        renderer = createRenderer(renderer, container);
+        
+        renderer = createRenderer(renderer);
         scene = createScene(scene);
         camera = createPerspectiveCamera(camera);
         controls = createControls(controls, camera, renderer);
-        stats = createStats(stats, container);
+        stats = createStats(stats);
         clock = new THREE.Clock();
 
         const torusKnotGeometry = new THREE.TorusKnotGeometry(300, 90, 256, 32);

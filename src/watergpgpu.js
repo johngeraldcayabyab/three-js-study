@@ -9,7 +9,7 @@ const WIDTH = 128;
 const BOUNDS = 512;
 const BOUNDS_HALF = BOUNDS * 0.5;
 
-let container, stats;
+let stats;
 let camera, scene, renderer;
 let mouseMoved = false;
 const mouseCoords = new THREE.Vector2();

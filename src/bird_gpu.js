@@ -2,7 +2,6 @@ import "../style.css";
 import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import {GPUComputationRenderer} from "three/examples/jsm/misc/GPUComputationRenderer.js";
-import {createContainer} from "../utils/scaffold.js";
 import {createRenderer} from "../utils/scaffold.js";
 import {createStats} from "../utils/scaffold.js";
 import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
@@ -84,7 +83,7 @@ function main() {
         }
     }
 
-    let container, renderer, scene, camera, stats, controls;
+    let renderer, scene, camera, stats, controls;
 
     let mouseX = 0, mouseY = 0;
 
@@ -106,9 +105,9 @@ function main() {
     animate();
 
     function init() {
-        container = createContainer(container);
-        renderer = createRenderer(renderer, container);
-        stats = createStats(stats, container);
+        
+        renderer = createRenderer(renderer);
+        stats = createStats(stats);
 
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
         camera.position.z = 350;

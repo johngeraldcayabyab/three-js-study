@@ -1,6 +1,5 @@
 import "../style.css";
 import * as THREE from "three";
-import {createContainer} from "../utils/scaffold.js";
 import {createRenderer} from "../utils/scaffold.js";
 import {createScene} from "../utils/scaffold.js";
 import {createPerspectiveCamera} from "../utils/scaffold.js";
@@ -11,8 +10,7 @@ import {createAirplane} from "../utils/object_generator.js";
 main();
 
 function main() {
-    let container, renderer, scene, camera, controls, stats;
-
+    let renderer, scene, camera, controls, stats;
     let t;
     const n0 = new THREE.Vector3(0, 1, 0);
     const n = new THREE.Vector3();
@@ -34,7 +32,7 @@ function main() {
         scene = createScene(scene);
         camera = createPerspectiveCamera(camera, {x: 120, y: 100, z: 400});
         controls = createControls(controls, camera, renderer);
-        stats = createStats(stats, container);
+        stats = createStats(stats);
 
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
         directionalLight.position.set(0, 6, 6);

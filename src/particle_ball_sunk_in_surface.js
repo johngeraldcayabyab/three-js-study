@@ -1,6 +1,5 @@
 import "../style.css";
 import * as THREE from "three";
-import {createContainer} from "../utils/scaffold.js";
 import {createRenderer} from "../utils/scaffold.js";
 import {createScene} from "../utils/scaffold.js";
 import {createPerspectiveCamera} from "../utils/scaffold.js";
@@ -10,7 +9,7 @@ import {createStats} from "../utils/scaffold.js";
 main();
 
 function main() {
-    let container, renderer, scene, camera, controls, stats;
+    let renderer, scene, camera, controls, stats;
 
     let gpl, pt;
 
@@ -18,12 +17,12 @@ function main() {
     animate();
 
     function init() {
-        container = createContainer(container);
-        renderer = createRenderer(renderer, container);
+        
+        renderer = createRenderer(renderer);
         scene = createScene(scene);
         camera = createPerspectiveCamera(camera, {x: 5, y: 5, z: 20});
         controls = createControls(controls, camera, renderer);
-        stats = createStats(stats, container);
+        stats = createStats(stats);
 
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
         directionalLight.position.set(0, 6, 6);
