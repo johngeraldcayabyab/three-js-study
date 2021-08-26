@@ -17,11 +17,8 @@ function main() {
     animate();
 
     function init() {
-        
-        renderer = createRenderer(renderer);
         scene = createScene(scene);
         camera = createPerspectiveCamera(camera, {x: 10, y: 7, z: 100});
-        controls = createControls(controls, camera, renderer);
         stats = createStats(stats);
 
         let blobGeometry = new THREE.IcosahedronGeometry(50, 10);
@@ -37,7 +34,9 @@ function main() {
         blob = new THREE.Mesh(blobGeometry, blobMaterial);
         scene.add(blob);
 
-        container.addEventListener('resize', onWindowResize);
+        renderer = createRenderer(renderer);
+        controls = createControls(controls, camera, renderer);
+        window.addEventListener('resize', onWindowResize);
     }
 
     function setPoints(a = .001) {

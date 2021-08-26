@@ -19,12 +19,10 @@ function main() {
     animate();
 
     function init() {
-        
-        renderer = createRenderer(renderer);
-        stats = createStats(stats);
         scene = createScene(scene);
+        stats = createStats(stats);
         camera = createPerspectiveCamera(camera, {x: 0, y: 1, z: 1});
-        controls = createControls(controls, camera, renderer);
+
 
         const canvas = document.createElement('canvas');
         canvas.width = 1;
@@ -205,6 +203,8 @@ function main() {
         gui.add(parameters, 'range', 0, 1, 0.01).onChange(update);
         gui.add(parameters, 'steps', 0, 200, 1).onChange(update);
 
+        renderer = createRenderer(renderer);
+        controls = createControls(controls, camera, renderer);
         window.addEventListener('resize', onWindowResize);
     }
 

@@ -227,7 +227,7 @@ function main() {
 
         initBirds();
 
-        container.addEventListener('pointermove', onPointerMove);
+        renderer.domElement.addEventListener('pointermove', onPointerMove);
         window.addEventListener('resize', onWindowResize);
     }
 

@@ -17,11 +17,8 @@ function main() {
     animate();
 
     function init() {
-        
-        renderer = createRenderer(renderer);
         scene = createScene(scene);
         camera = createPerspectiveCamera(camera, {x: 10, y: 7, z: 10});
-        controls = createControls(controls, camera, renderer);
         stats = createStats(stats);
 
         const vertexShader = `
@@ -101,6 +98,8 @@ function main() {
             instancedMesh.setMatrixAt(i, dummy.matrix);
         }
 
+        renderer = createRenderer(renderer);
+        controls = createControls(controls, camera, renderer);
         window.addEventListener('resize', onWindowResize);
     }
 
@@ -113,11 +112,9 @@ function main() {
     function animate() {
         leavesMaterial.uniforms.time.value = clock.getElapsedTime();
         leavesMaterial.uniformsNeedUpdate = true;
-
+        render();
         stats.update();
         requestAnimationFrame(animate);
-
-        render();
     }
 
     function onWindowResize() {

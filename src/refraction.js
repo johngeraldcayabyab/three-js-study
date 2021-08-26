@@ -19,11 +19,8 @@ function main() {
     animate();
 
     function init() {
-        
-        renderer = createRenderer(renderer);
         camera = createPerspectiveCamera(camera, {x: 10, y: 10, z : 10});
         scene = createScene(scene);
-        controls = createControls(controls, camera, renderer);
         stats = createStats(stats);
 
         clock = new THREE.Clock();
@@ -49,7 +46,7 @@ function main() {
         planeRefractor.position.set(0, 0, 5);
         scene.add(planeRefractor);
 
-        const dudvMap = new THREE.TextureLoader().load('textures/waterdudv.jpg', function () {
+        const dudvMap = new THREE.TextureLoader().load('../src/textures/waterdudv.jpg', function () {
             animate();
         });
 
@@ -64,6 +61,8 @@ function main() {
         camera.add(pointLight);
         scene.add(camera);
 
+        renderer = createRenderer(renderer);
+        controls = createControls(controls, camera, renderer);
         window.addEventListener('resize', onWindowResize)
     }
 

@@ -17,11 +17,8 @@ function main() {
     animate();
 
     function init() {
-        
-        renderer = createRenderer(renderer);
         scene = createScene(scene);
         camera = createPerspectiveCamera(camera, {x: 5, y: 5, z: 20});
-        controls = createControls(controls, camera, renderer);
         stats = createStats(stats);
 
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
@@ -42,8 +39,9 @@ function main() {
         let pl = new THREE.Points(gpl, mpl);
         scene.add(pl);
 
-
-        container.addEventListener('resize', onWindowResize);
+        renderer = createRenderer(renderer);
+        controls = createControls(controls, camera, renderer);
+        window.addEventListener('resize', onWindowResize);
     }
 
     function bendThePlane(radius, pHeight, smoothness) {
@@ -92,9 +90,6 @@ function main() {
 
     function render(time) {
         time *= 0.001;
-        // pt.position.x = time;
-        // console.log(pt);
-        // gpl.rotateX(pt);
         controls.update();
         renderer.render(scene, camera);
     }

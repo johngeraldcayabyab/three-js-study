@@ -28,10 +28,8 @@ function main() {
     animate();
 
     function init() {
-        renderer = createRenderer(renderer);
         scene = createScene(scene);
         camera = createPerspectiveCamera(camera, {x: 120, y: 100, z: 400});
-        controls = createControls(controls, camera, renderer);
         stats = createStats(stats);
 
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
@@ -73,7 +71,9 @@ function main() {
 
         scene.add(airplane);
 
-        container.addEventListener('resize', onWindowResize);
+        renderer = createRenderer(renderer);
+        controls = createControls(controls, camera, renderer);
+        window.addEventListener('resize', onWindowResize);
     }
 
     function onWindowResize() {

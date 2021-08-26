@@ -105,27 +105,15 @@ function main() {
     animate();
 
     function init() {
-        
-        renderer = createRenderer(renderer);
         stats = createStats(stats);
-
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
         camera.position.z = 350;
-
-
-
-
 
         scene = new THREE.Scene();
         scene.background = new THREE.Color(0xffffff);
         scene.fog = new THREE.Fog(0xffffff, 100, 1000);
 
         initComputeRenderer();
-
-        container.style.touchAction = 'none';
-        container.addEventListener('pointermove', onPointerMove);
-
-        window.addEventListener('resize', onWindowResize);
 
         const gui = new GUI();
 
@@ -150,6 +138,9 @@ function main() {
         gui.add(effectController, 'cohesion', 0.0, 100.0, 0.025).onChange(valuesChanger);
         gui.close();
 
+        renderer = createRenderer(renderer);
+        renderer.domElement.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('resize', onWindowResize);
         controls = new OrbitControls(camera, renderer.domElement);
         initBirds();
     }

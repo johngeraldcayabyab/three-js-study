@@ -15,11 +15,8 @@ function main() {
     animate();
 
     function init() {
-        
-        renderer = createRenderer(renderer);
         scene = createScene(scene);
         camera = createPerspectiveCamera(camera, {x: 5, y: 5, z: 20});
-        controls = createControls(controls, camera, renderer);
         stats = createStats(stats);
 
         const light = new THREE.DirectionalLight(0xffffff);
@@ -125,7 +122,9 @@ function main() {
         mesh.add(wireframe);
         scene.add(mesh);
 
-        container.addEventListener('resize', onWindowResize);
+        renderer = createRenderer(renderer);
+        controls = createControls(controls, camera, renderer);
+        window.addEventListener('resize', onWindowResize);
     }
 
 

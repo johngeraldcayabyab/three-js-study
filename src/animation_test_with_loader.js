@@ -84,7 +84,6 @@ function init() {
 }
 
 function createGUI(model, animations) {
-
     const states = ['Idle', 'Walking', 'Running', 'Dance', 'Death', 'Sitting', 'Standing'];
     const emotes = ['Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp'];
 

@@ -121,9 +121,9 @@ function main() {
 
         clock = new THREE.Clock();
         renderer = createRenderer(renderer);
-        renderer.domElement.addEventListener('pointermove', onPointerMove);
-        renderer.domElement.addEventListener('resize', onWindowResize);
         controls = createControls(controls, camera, renderer);
+        renderer.domElement.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('resize', onWindowResize);
     }
 
     function onPointerMove(e) {
@@ -146,10 +146,6 @@ function main() {
     }
 
     function pick() {
-        //render the picking scene off-screen
-
-        // set the view offset to represent just a single pixel under the mouse
-
         camera.setViewOffset(renderer.domElement.width, renderer.domElement.height, pointer.x * window.devicePixelRatio | 0, pointer.y * window.devicePixelRatio | 0, 1, 1);
 
         pickingUniforms.picking.value = 1;
