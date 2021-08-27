@@ -18,6 +18,14 @@ function main() {
     let pineTree, pineTreeVector;
     let distance = new THREE.Vector3();
 
+    let isArrowUp = false;
+    let isArrowDown = false;
+    let isArrowRight = false;
+    let isArrowLeft = false;
+    let isSpace = false;
+    let isEnter = false;
+
+
     init();
     animate();
 
@@ -66,23 +74,64 @@ function main() {
         // box2WorldPosition = box2Mesh.getWorldPosition(box2Position).normalize();
         // console.log(box2Mesh.position);
         scene.add(box2Mesh);
+        distance = distance.subVectors(box1Mesh.position, box2Mesh.position).length();
 
         // const distance = box1WorldPosition.distanceTo(box2WorldPosition);
         // console.log(distance);
-
-        distance.set(box1Mesh.position.x - box2Mesh.position.x, box1Mesh.position.y - box2Mesh.position.y, box1Mesh.position.z - box2Mesh.position.z);
-        console.log(box1Mesh.position);
-        console.log(box2Mesh.position);
-        console.log(distance.length());
-        console.log(distance.normalize());
+        // console.log(box1Mesh.position.subVectors(box2Mesh.position));
+        // distance.set(box1Mesh.position.x - box2Mesh.position.x, box1Mesh.position.y - box2Mesh.position.y, box1Mesh.position.z - box2Mesh.position.z);
+        // console.log(box1Mesh.position);
+        // console.log(box2Mesh.position);
+        // console.log(distance.subVectors(box1Mesh.position, box2Mesh.position));
+        // console.log(distance.normalize());
         // distance = box1Mesh.position.distanceTo(box2Mesh.position);
         // console.log(distance);
-
+        // distance = distance.subVectors(box1Mesh.position, box2Mesh.position).length();
+        // distance = distance.subVectors(box1Mesh.position, box2Mesh.position).length();
 
         clock = new THREE.Clock();
         renderer = createRenderer(renderer);
         controls = createControls(controls, camera, renderer);
         window.addEventListener('resize', onWindowResize);
+        window.addEventListener('keydown', setBoxDirection);
+    }
+
+    function setBoxDirection(e) {
+        let code = e.code;
+        if (code === 'ArrowUp') {
+            isArrowUp = true;
+            isArrowDown = false;
+            isArrowRight = false;
+            isArrowLeft = false;
+            isEnter = false;
+        } else if (code === 'ArrowDown') {
+            isArrowUp = false;
+            isArrowDown = true;
+            isArrowRight = false;
+            isArrowLeft = false;
+            isEnter = false;
+        } else if (code === 'ArrowRight') {
+            isArrowUp = false;
+            isArrowDown = false;
+            isArrowRight = true;
+            isArrowLeft = false;
+            isEnter = false;
+        } else if (code === 'ArrowLeft') {
+            isArrowUp = false;
+            isArrowDown = false;
+            isArrowRight = false;
+            isArrowLeft = true;
+            isEnter = false;
+        } else if (code === 'Enter') {
+            isArrowUp = false;
+            isArrowDown = false;
+            isArrowRight = false;
+            isArrowLeft = false;
+            isSpace = false;
+            isEnter = true;
+        } else if (code === 'Space') {
+            isSpace = true;
+        }
     }
 
     function animate() {
@@ -91,33 +140,36 @@ function main() {
         requestAnimationFrame(animate);
     }
 
+
     function render() {
         const now = performance.now();
         const delta = clock.getDelta();
-        // console.log(delta);
+        let theDistance = new THREE.Vector3();
+        theDistance = theDistance.subVectors(box1Mesh.position, box2Mesh.position).length();
+        console.log(theDistance);
 
+        if (isArrowUp) {
+            box1Mesh.position.z -= .5;
+        } else if (isArrowDown) {
+            box1Mesh.position.z += .5;
+        } else if (isArrowRight) {
+            box1Mesh.position.x += .5;
+        } else if (isArrowLeft) {
+            box1Mesh.position.x -= .5;
+        }
 
-        // box1Mesh.position.x += 1;
+        if (isSpace) {
+            box1Mesh.position.y += 1.5;
+            if(box1Mesh.position.y === 20){
+                isSpace = false;
+            }
+        } else if (box1Mesh.position.y > 5) {
+            box1Mesh.position.y -= 1.5;
+        }
 
 
         let speed = .05;
 
-        // console.log(box1Mesh.getWorldPosition());
-
-        // box2Normalized = box2
-        // Normalized.multiplyScalar(speed * delta);
-        // console.log(box2Normalized.x);
-        // box1Mesh.position.x += box2Normalized.x;
-        // console.log(box1Mesh);
-        // box1Mesh.setXYZ(box2Normalized);
-        // console.log(box2Normalized);
-
-
-        // box1Mesh.setPosition(box2Normalized * speed * delta);
-
-        // console.log(box2Normalized);
-        // box1Normalized.multiplyScalar(speed);
-        // box1Mesh.position.x += box2Normalized
 
         controls.update();
         renderer.render(scene, camera);
