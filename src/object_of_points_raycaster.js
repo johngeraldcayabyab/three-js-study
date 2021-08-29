@@ -1,4 +1,3 @@
-import "../style.css";
 import * as THREE from "three";
 import {createStats} from "../utils/scaffold.js";
 import {createPerspectiveCamera} from "../utils/scaffold.js";

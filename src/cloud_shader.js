@@ -1,4 +1,3 @@
-import "../style.css";
 import * as THREE from "three";
 import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise.js";
 import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";

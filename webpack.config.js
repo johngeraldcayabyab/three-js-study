@@ -17,13 +17,28 @@ fileReader.forEach(file => {
     }
 });
 
-let entry = {};
+files = files.filter(function (file) {
+    return file !== 'index.js'
+});
+
+files = files.filter(function (file) {
+    return file !== 'main.js'
+});
+
+let entry = {
+    index: './src/index.js',
+    main: './src/main.js'
+};
+
 let plugins = [];
 let links = '';
+
+
 files.forEach((file) => {
     let fileName = path.parse(file).name;
-    links += `<li><a href="/dist/${fileName}.html">${fileName}</a></li>`;
-})
+    links += `<li><a class="b-link" href="${fileName}.html">${fileName}</a></li>`;
+    // links += `<li><a href="/dist/${fileName}.html">${fileName}</a></li>`;
+});
 
 files.forEach((file) => {
     let fileName = path.parse(file).name;
@@ -32,7 +47,7 @@ files.forEach((file) => {
         template: 'template.html',
         title: fileName,
         nav: links,
-        chunks: [fileName],
+        chunks: ['index', 'main', fileName],
         filename: `${fileName}.html`
     }))
 });

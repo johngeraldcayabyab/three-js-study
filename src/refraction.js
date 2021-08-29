@@ -1,4 +1,3 @@
-import "../style.css";
 import * as THREE from "three";
 import {Refractor} from "three/examples/jsm/objects/Refractor.js";
 import {WaterRefractionShader} from "three/examples/jsm/shaders/WaterRefractionShader.js";

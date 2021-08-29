@@ -4,15 +4,6 @@ import {OrbitControls} from "three/examples/jsm/controls/experimental/CameraCont
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import {ImprovedNoise} from "three/examples/jsm/math/ImprovedNoise.js";
 
-export const createContainer = (container) => {
-    container = document.createElement('div');
-    document.body.appendChild(container);
-    container.setAttribute('id', 'container');
-    container = document.getElementById('container');
-    container.innerHTML = '';
-    return container;
-};
-
 export const createScene = (scene) => {
     scene = new THREE.Scene();
     // scene.background = new THREE.Color(0x000000);
@@ -30,6 +21,7 @@ export const createPerspectiveCamera = (camera, position = {x: 0, y: 200, z: 200
 
 export const createStats = (stats) => {
     stats = new Stats();
+    stats.dom.setAttribute('id', 'stats');
     document.body.appendChild(stats.dom);
     return stats;
 };

@@ -1,4 +1,3 @@
-import "../style.css";
 import * as THREE from "three";
 import {Lensflare} from "three/examples/jsm/objects/Lensflare.js";
 import {LensflareElement} from "three/examples/jsm/objects/Lensflare.js";
