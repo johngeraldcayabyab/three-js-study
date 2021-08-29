@@ -6,15 +6,9 @@
 </head>
 <body>
 
-<div id="open">
+<div id="b-wrapper">
     <div class="b-nav">
         <%= htmlWebpackPlugin.options.nav %>
-
-
-        <!--    <li><a class="b-link" href="https://github.com/mblode/burger" target="_blank">GitHub - burger</a></li>-->
-        <!--    <li><a class="b-link" href="https://github.com/mblode" target="_blank">Github - mblode</a></li>-->
-        <!--    <li><a class="b-link" href="https://codepen.io/mblode/" target="_blank">CodePen</a></li>-->
-        <!--    <li><a class="b-link" href="https://dribbble.com/mblode" target="_blank">Dribbble</a></li>-->
     </div>
 
 
@@ -29,28 +23,11 @@
     </div>
 </div>
 
-<!--<header>-->
-<!--    <nav>-->
-<!--        <ul class="nav__link">-->
-<!--            <%= htmlWebpackPlugin.options.nav %>-->
-<!--        </ul>-->
-<!--    </nav>-->
-<!--    <button class="cta" type="button">Contact</button>-->
-<!--</header>-->
-
-<script>
-    // window.addEventListener("scroll", function () {
-    //     let header = document.querySelector("header");
-    //     header.classList.toggle("sticky", window.scrollY > 0);
-    // });
-</script>
-
-
 <script>
     'use strict';
 
     (function () {
-        let open = document.getElementById('open');
+        let open = document.getElementById('b-wrapper');
         let burgerMenu = document.getElementsByClassName('b-menu')[0];
         let burgerContain = document.getElementsByClassName('b-container')[0];
         let burgerNav = document.getElementsByClassName('b-nav')[0];

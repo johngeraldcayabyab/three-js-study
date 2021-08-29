@@ -7,6 +7,7 @@ import {createStats} from "../utils/scaffold.js";
 import {createPlane} from "../utils/object_generator.js";
 import {createPineTree} from "../utils/object_generator.js";
 import {createCloud} from "../utils/object_generator.js";
+import {getWorldPosition, makeAxesGrid} from "../utils/utils.js";
 
 main();
 
@@ -62,31 +63,18 @@ function main() {
         // console.log(box1Mesh.position);
         scene.add(box1Mesh);
 
-        // const box2Position = new THREE.Vector3();
+        makeAxesGrid(box1Mesh);
+
         const box2Material = new THREE.MeshPhongMaterial();
         const box2Geometry = new THREE.BoxGeometry(10, 10, 10);
         box2Mesh = new THREE.Mesh(box2Geometry, box2Material);
         box2Mesh.position.x = 50;
         box2Mesh.position.y = 5;
         box2Mesh.position.z = -20;
-        // box2Mesh.getWorldPosition(box2Position);
-        // box2WorldPosition = box2Mesh.getWorldPosition(box2Position).normalize();
-        // console.log(box2Mesh.position);
+
         scene.add(box2Mesh);
         distance = distance.subVectors(box1Mesh.position, box2Mesh.position).length();
 
-        // const distance = box1WorldPosition.distanceTo(box2WorldPosition);
-        // console.log(distance);
-        // console.log(box1Mesh.position.subVectors(box2Mesh.position));
-        // distance.set(box1Mesh.position.x - box2Mesh.position.x, box1Mesh.position.y - box2Mesh.position.y, box1Mesh.position.z - box2Mesh.position.z);
-        // console.log(box1Mesh.position);
-        // console.log(box2Mesh.position);
-        // console.log(distance.subVectors(box1Mesh.position, box2Mesh.position));
-        // console.log(distance.normalize());
-        // distance = box1Mesh.position.distanceTo(box2Mesh.position);
-        // console.log(distance);
-        // distance = distance.subVectors(box1Mesh.position, box2Mesh.position).length();
-        // distance = distance.subVectors(box1Mesh.position, box2Mesh.position).length();
 
         clock = new THREE.Clock();
         renderer = createRenderer(renderer);
@@ -145,7 +133,16 @@ function main() {
         const delta = clock.getDelta();
         let theDistance = new THREE.Vector3();
         theDistance = theDistance.subVectors(box1Mesh.position, box2Mesh.position).length();
-        console.log(theDistance);
+
+        console.log(getWorldPosition(box1Mesh));
+
+
+        // console.log(theDistance, 'distance of box1 to box 2');
+
+        // let object3d = new THREE.Vector3();
+        // let box1DistanceToWorldOrigin = object3d.getWorldPosition(box1Mesh.position);
+        //
+        // console.log(box1DistanceToWorldOrigin);
 
         if (isArrowUp) {
             box1Mesh.position.z -= .5;
@@ -159,7 +156,7 @@ function main() {
 
         if (isSpace) {
             box1Mesh.position.y += 1.5;
-            if(box1Mesh.position.y === 20){
+            if (box1Mesh.position.y === 20) {
                 isSpace = false;
             }
         } else if (box1Mesh.position.y > 5) {

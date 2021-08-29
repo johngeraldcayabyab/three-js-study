@@ -38,7 +38,6 @@ function main() {
         const hlp = new THREE.GridHelper(1000, 20);
         scene.add(hlp);
 
-
         const somePoints = [
             new THREE.Vector3(-500, 0, -500),
             new THREE.Vector3(0, 0, -400),

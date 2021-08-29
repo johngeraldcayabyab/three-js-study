@@ -37,7 +37,6 @@ let links = '';
 files.forEach((file) => {
     let fileName = path.parse(file).name;
     links += `<li><a class="b-link" href="${fileName}.html">${fileName}</a></li>`;
-    // links += `<li><a href="/dist/${fileName}.html">${fileName}</a></li>`;
 });
 
 files.forEach((file) => {
