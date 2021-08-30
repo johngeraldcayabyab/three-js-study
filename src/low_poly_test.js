@@ -131,10 +131,25 @@ function main() {
     function render() {
         const now = performance.now();
         const delta = clock.getDelta();
-        let theDistance = new THREE.Vector3();
-        theDistance = theDistance.subVectors(box1Mesh.position, box2Mesh.position).length();
+        let subVector = new THREE.Vector3();
+        subVector = subVector.subVectors(box1Mesh.position, box2Mesh.position);
+        let distance = subVector.length();
+        let direction = subVector.normalize();
 
-        console.log(getWorldPosition(box1Mesh));
+        box1Mesh.position.x = box1Mesh.position.x - (direction.x * .5);
+        box1Mesh.position.y = box1Mesh.position.y - (direction.y * .5);
+        box1Mesh.position.z = box1Mesh.position.z - (direction.z * .5);
+
+        console.log(distance, 'of box1 to box2');
+
+        // direction.x =
+        // direction.x += .5;
+        // direction.x += .5;
+        //
+        // box1Mesh.position.multiplyVector3(direction);
+
+        // console.log(distance, 'normalized');
+        // console.log(getWorldPosition(box1Mesh));
 
 
         // console.log(theDistance, 'distance of box1 to box 2');
