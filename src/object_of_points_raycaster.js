@@ -137,7 +137,6 @@ function main() {
     }
 
     function animate(time) {
-        console.log(time);
         pickingUniforms.time.value = clock.getElapsedTime();
         render();
         stats.update();
