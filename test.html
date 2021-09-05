@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="container"></div>
+
+<canvas class="glslCanvas" data-fragment-url=“yourShader.frag" data-textures=“yourInputImage.png” width="500" height="500">
+
+</canvas>
+
+<!--<canvas id="test" width="640" height="480">-->
+<!--</canvas>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js" type="javascript"></script>-->
+<!--<script>-->
+<!--    function main(){-->
+<!--        const canvas = document.querySelector('#test');-->
+<!--        const gl = canvas.getContext('webgl');-->
+
+<!--        if(gl === null){-->
+<!--            alert('Your machine does not support web gl');-->
+<!--            return false;-->
+<!--        }-->
+
+<!--        // gl.-->
+<!--        gl.clearColor(0.0, 0.0, 0.0, 1.0);-->
+<!--        gl.clear(gl.COLOR_BUFFER_BIT);-->
+<!--    }-->
+<!--    window.onload = main;-->
+
+
+<!--    let test = `-->
+<!--        #ifdef-->
+<!--    `;-->
+<!--</script>-->
+
+
+<!--<script>-->
+<!--    function initShaderProgram(gl, vsSource, fsSource){-->
+<!--        const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);-->
+<!--        const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);-->
+
+<!--        const shaderProgram = gl.createProgram();-->
+<!--        gl.attachShader(shaderProgram, vertexShader);-->
+<!--        gl.attachShader(shaderProgram, fragmentShader);-->
+<!--        gl.linkProgram(shaderProgram);-->
+
+<!--        if(!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)){-->
+<!--            alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));-->
+<!--            return null;-->
+<!--        }-->
+
+<!--        return shaderProgram;-->
+<!--    }-->
+
+<!--    function loadShader(gl, type, source){-->
+<!--        const shader = gl.createShader(type);-->
+
+<!--        gl.shaderSource(shader, source);-->
+
+<!--        gl.compileShader(shader);-->
+
+<!--        if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS)){-->
+<!--            alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));-->
+<!--            gl.deleteShader(shader);-->
+<!--            return null;-->
+<!--        }-->
+
+<!--        return shader;-->
+<!--    }-->
+<!--</script>-->
+
+</body>
+</html>

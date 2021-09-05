@@ -136,6 +136,10 @@ function main() {
         let distance = subVector.length();
         let direction = subVector.normalize();
 
+        /**
+         *Getting closer
+         * because box 1 is directing to box265uguuuggggggiig999999999999y
+         */
         box1Mesh.position.x = box1Mesh.position.x - (direction.x * .5);
         box1Mesh.position.y = box1Mesh.position.y - (direction.y * .5);
         box1Mesh.position.z = box1Mesh.position.z - (direction.z * .5);
