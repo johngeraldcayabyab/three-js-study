@@ -4,17 +4,17 @@ import {createScene} from "../utils/scaffold.js";
 import {createPerspectiveCamera} from "../utils/scaffold.js";
 import {createControls} from "../utils/scaffold.js";
 import {createStats} from "../utils/scaffold.js";
-import {createPlane} from "../utils/object_generator.js";
+import {createAirplane, createPlane} from "../utils/object_generator.js";
 import {createPineTree} from "../utils/object_generator.js";
 import {createCloud} from "../utils/object_generator.js";
-import {getWorldPosition, makeAxesGrid} from "../utils/utils.js";
+import {getWorldPosition, goToVector, makeAxesGrid} from "../utils/utils.js";
 
 main();
 
 function main() {
     let renderer, scene, camera, controls, stats, clock;
     let last = performance.now();
-    let box1Mesh, box2Mesh, box1WorldPosition, box2WorldPosition;
+    let box1Mesh, box2Mesh, box1WorldPosition, box2WorldPosition, airplane;
     let pineTree, pineTreeVector;
     let distance = new THREE.Vector3();
 
@@ -75,6 +75,18 @@ function main() {
         scene.add(box2Mesh);
         distance = distance.subVectors(box1Mesh.position, box2Mesh.position).length();
 
+        airplane = createAirplane();
+        airplane.scale.x = .2;
+        airplane.scale.y = .2;
+        airplane.scale.z = .2;
+        airplane.position.set(20, 5, 30);
+        scene.add(airplane);
+
+        airplane.lookAt(new THREE.Vector3(3, 0, 0) );
+        // airplane.rotation =
+        // airplane.rotation
+
+        makeAxesGrid(airplane, 20, 100);
 
         clock = new THREE.Clock();
         renderer = createRenderer(renderer);
@@ -128,23 +140,19 @@ function main() {
     }
 
 
+    function airplaneAnimations() {
+        // airplane.rotation.z += .01;
+        // console.log(airplane.rotation.z);
+    }
+
+
     function render() {
         const now = performance.now();
         const delta = clock.getDelta();
         let subVector = new THREE.Vector3();
-        subVector = subVector.subVectors(box1Mesh.position, box2Mesh.position);
-        let distance = subVector.length();
-        let direction = subVector.normalize();
 
-        /**
-         *Getting closer
-         * because box 1 is directing to box265uguuuggggggiig999999999999y
-         */
-        box1Mesh.position.x = box1Mesh.position.x - (direction.x * .5);
-        box1Mesh.position.y = box1Mesh.position.y - (direction.y * .5);
-        box1Mesh.position.z = box1Mesh.position.z - (direction.z * .5);
-
-        console.log(distance, 'of box1 to box2');
+        airplaneAnimations();
+        // goToVector(box1Mesh, box2Mesh);
 
         // direction.x =
         // direction.x += .5;
