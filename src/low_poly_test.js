@@ -14,8 +14,7 @@ main();
 function main() {
     let renderer, scene, camera, controls, stats, clock;
     let last = performance.now();
-    let box1Mesh, box2Mesh, box1WorldPosition, box2WorldPosition, airplane;
-    let pineTree, pineTreeVector;
+    let box1, box2, box3, airplane, pineTree;
     let distance = new THREE.Vector3();
 
     let isArrowUp = false;
@@ -54,35 +53,52 @@ function main() {
 
         // const box1Position = new THREE.Vector3();
         // console.log(box1Position.);
-        const box1Material = new THREE.MeshPhongMaterial();
+        const box1Material = new THREE.MeshPhongMaterial({'color' : 'red'});
         const box1Geometry = new THREE.BoxGeometry(10, 10, 10);
-        box1Mesh = new THREE.Mesh(box1Geometry, box1Material);
-        box1Mesh.position.y = 5;
-        box1Mesh.position.z = 20;
+        box1 = new THREE.Mesh(box1Geometry, box1Material);
+        box1.position.y = 5;
+        box1.position.z = 20;
         // box1WorldPosition = box1Mesh.getWorldPosition(box1Position).normalize();
         // console.log(box1Mesh.position);
-        scene.add(box1Mesh);
+        scene.add(box1);
 
-        makeAxesGrid(box1Mesh);
+        makeAxesGrid(box1);
 
-        const box2Material = new THREE.MeshPhongMaterial();
+        const box2Material = new THREE.MeshPhongMaterial({color: 'green'});
         const box2Geometry = new THREE.BoxGeometry(10, 10, 10);
-        box2Mesh = new THREE.Mesh(box2Geometry, box2Material);
-        box2Mesh.position.x = 50;
-        box2Mesh.position.y = 5;
-        box2Mesh.position.z = -20;
+        box2 = new THREE.Mesh(box2Geometry, box2Material);
+        box2.position.x = 50;
+        box2.position.y = 5;
+        box2.position.z = -20;
 
-        scene.add(box2Mesh);
-        distance = distance.subVectors(box1Mesh.position, box2Mesh.position).length();
+        scene.add(box2);
+        distance = distance.subVectors(box1.position, box2.position).length();
+
+
+        const box3Material = new THREE.MeshPhongMaterial({color: 'blue'});
+        const box3Geometry = new THREE.BoxGeometry(10, 10, 10);
+        box3 = new THREE.Mesh(box3Geometry, box3Material);
+        box3.position.x = 100;
+        box3.position.y = 5;
+        box3.position.z = 100;
+
+
+
+        scene.add(box3);
+
+
 
         airplane = createAirplane();
         airplane.scale.x = .2;
         airplane.scale.y = .2;
         airplane.scale.z = .2;
-        airplane.position.set(20, 5, 30);
+        airplane.position.set(20, 9, 30);
         scene.add(airplane);
 
-        airplane.lookAt(new THREE.Vector3(3, 0, 0) );
+        airplane.lookAt(box1.position);
+        console.log(airplane.rotation);
+        // airplane.rotation.z = 50;
+        // airplane.lookAt(new THREE.Vector3(box3.position.x, box3.position.y, box3.position.z));
         // airplane.rotation =
         // airplane.rotation
 
@@ -141,6 +157,7 @@ function main() {
 
 
     function airplaneAnimations() {
+        airplane.children[7].rotation.x += 0.3;
         // airplane.rotation.z += .01;
         // console.log(airplane.rotation.z);
     }
@@ -172,22 +189,22 @@ function main() {
         // console.log(box1DistanceToWorldOrigin);
 
         if (isArrowUp) {
-            box1Mesh.position.z -= .5;
+            box1.position.z -= .5;
         } else if (isArrowDown) {
-            box1Mesh.position.z += .5;
+            box1.position.z += .5;
         } else if (isArrowRight) {
-            box1Mesh.position.x += .5;
+            box1.position.x += .5;
         } else if (isArrowLeft) {
-            box1Mesh.position.x -= .5;
+            box1.position.x -= .5;
         }
 
         if (isSpace) {
-            box1Mesh.position.y += 1.5;
-            if (box1Mesh.position.y === 20) {
+            box1.position.y += 1.5;
+            if (box1.position.y === 20) {
                 isSpace = false;
             }
-        } else if (box1Mesh.position.y > 5) {
-            box1Mesh.position.y -= 1.5;
+        } else if (box1.position.y > 5) {
+            box1.position.y -= 1.5;
         }
 
 
