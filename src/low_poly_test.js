@@ -23,6 +23,8 @@ function main() {
     let isArrowLeft = false;
     let isSpace = false;
     let isEnter = false;
+    let isDigit1 = false;
+    let isDigit2 = false;
 
 
     init();
@@ -53,7 +55,7 @@ function main() {
 
         // const box1Position = new THREE.Vector3();
         // console.log(box1Position.);
-        const box1Material = new THREE.MeshPhongMaterial({'color' : 'red'});
+        const box1Material = new THREE.MeshPhongMaterial({'color': 'red'});
         const box1Geometry = new THREE.BoxGeometry(10, 10, 10);
         box1 = new THREE.Mesh(box1Geometry, box1Material);
         box1.position.y = 5;
@@ -83,26 +85,24 @@ function main() {
         box3.position.z = 100;
 
 
-
         scene.add(box3);
 
 
+        // airplane = createAirplane();
+        // airplane.scale.x = .2;
+        // airplane.scale.y = .2;
+        // airplane.scale.z = .2;
+        // airplane.position.set(20, 9, 30);
+        // scene.add(airplane);
 
-        airplane = createAirplane();
-        airplane.scale.x = .2;
-        airplane.scale.y = .2;
-        airplane.scale.z = .2;
-        airplane.position.set(20, 9, 30);
-        scene.add(airplane);
-
-        airplane.lookAt(box1.position);
-        console.log(airplane.rotation);
+        // airplane.lookAt(box1.position);
+        // console.log(airplane.rotation);
         // airplane.rotation.z = 50;
         // airplane.lookAt(new THREE.Vector3(box3.position.x, box3.position.y, box3.position.z));
         // airplane.rotation =
         // airplane.rotation
 
-        makeAxesGrid(airplane, 20, 100);
+        // makeAxesGrid(airplane, 20, 100);
 
         clock = new THREE.Clock();
         renderer = createRenderer(renderer);
@@ -113,6 +113,7 @@ function main() {
 
     function setBoxDirection(e) {
         let code = e.code;
+        console.log(code);
         if (code === 'ArrowUp') {
             isArrowUp = true;
             isArrowDown = false;
@@ -137,6 +138,22 @@ function main() {
             isArrowRight = false;
             isArrowLeft = true;
             isEnter = false;
+        } else if (code === 'Digit1') {
+            isArrowUp = false;
+            isArrowDown = false;
+            isArrowRight = false;
+            isArrowLeft = false;
+            isEnter = false;
+            isDigit1 = true;
+            isDigit2 = false;
+        } else if (code === 'Digit2') {
+            isArrowUp = false;
+            isArrowDown = false;
+            isArrowRight = false;
+            isArrowLeft = false;
+            isEnter = false;
+            isDigit1 = false;
+            isDigit2 = true;
         } else if (code === 'Enter') {
             isArrowUp = false;
             isArrowDown = false;
@@ -162,14 +179,19 @@ function main() {
         // console.log(airplane.rotation.z);
     }
 
+    function box1Animations() {
+        // box1.rotation.x += 0.01;
+    }
 
     function render() {
+        // alert('kelp');
         const now = performance.now();
         const delta = clock.getDelta();
         let subVector = new THREE.Vector3();
-
-        airplaneAnimations();
-        // goToVector(box1Mesh, box2Mesh);
+        box1Animations();
+        // airplaneAnimations();
+        // box1.lookAt(box2.position);
+        // goToVector(box1, box2);
 
         // direction.x =
         // direction.x += .5;
@@ -196,6 +218,12 @@ function main() {
             box1.position.x += .5;
         } else if (isArrowLeft) {
             box1.position.x -= .5;
+        } else if (isDigit1) {
+            box1.lookAt(box2.position);
+            goToVector(box1, box2);
+        }else if(isDigit2){
+            box1.lookAt(box3.position);
+            goToVector(box1, box3);
         }
 
         if (isSpace) {

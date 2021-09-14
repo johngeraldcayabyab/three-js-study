@@ -19,16 +19,17 @@ export const getWorldPosition = (object) => {
 };
 
 
-
-export const goToVector = (fromMesh, toMesh) => {
+export const goToVector = (fromMesh, toMesh, log = false) => {
     let subVector = new THREE.Vector3();
     subVector = subVector.subVectors(fromMesh.position, toMesh.position);
     let distance = subVector.length();
     let direction = subVector.normalize();
-    if(distance > 0.3) {
+    if (distance > 0.3) {
         fromMesh.position.x = fromMesh.position.x - (direction.x * .1);
         fromMesh.position.y = fromMesh.position.y - (direction.y * .1);
         fromMesh.position.z = fromMesh.position.z - (direction.z * .1);
-        console.log('distance of mesh1 to mesh 2', distance);
+        if (log) {
+            console.log('distance of mesh1 to mesh 2', log);
+        }
     }
 }
