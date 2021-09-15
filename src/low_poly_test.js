@@ -219,6 +219,7 @@ function main() {
         } else if (isArrowLeft) {
             box1.position.x -= .5;
         } else if (isDigit1) {
+            console.log(box1);
             box1.lookAt(box2.position);
             goToVector(box1, box2);
         }else if(isDigit2){
