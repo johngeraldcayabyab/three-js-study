@@ -139,19 +139,19 @@ function main() {
             isArrowLeft = true;
             isEnter = false;
         } else if (code === 'Digit1') {
-            isArrowUp = false;
-            isArrowDown = false;
-            isArrowRight = false;
-            isArrowLeft = false;
-            isEnter = false;
+            // isArrowUp = false;
+            // isArrowDown = false;
+            // isArrowRight = false;
+            // isArrowLeft = false;
+            // isEnter = false;
             isDigit1 = true;
             isDigit2 = false;
         } else if (code === 'Digit2') {
-            isArrowUp = false;
-            isArrowDown = false;
-            isArrowRight = false;
-            isArrowLeft = false;
-            isEnter = false;
+            // isArrowUp = false;
+            // isArrowDown = false;
+            // isArrowRight = false;
+            // isArrowLeft = false;
+            // isEnter = false;
             isDigit1 = false;
             isDigit2 = true;
         } else if (code === 'Enter') {
@@ -218,13 +218,15 @@ function main() {
             box1.position.x += .5;
         } else if (isArrowLeft) {
             box1.position.x -= .5;
-        } else if (isDigit1) {
+        }
+
+        if (isDigit1) {
             console.log(box1);
             box1.lookAt(box2.position);
-            goToVector(box1, box2);
-        }else if(isDigit2){
+            // goToVector(box1, box2);
+        } else if (isDigit2) {
             box1.lookAt(box3.position);
-            goToVector(box1, box3);
+            // goToVector(box1, box3);
         }
 
         if (isSpace) {
