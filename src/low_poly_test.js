@@ -221,10 +221,28 @@ function main() {
         }
 
         if (isDigit1) {
-            console.log(box1);
-            box1.lookAt(box2.position);
+            // console.log();
+
+            let subVector = new THREE.Vector3();
+            subVector = subVector.subVectors(box1.position, box2.position);
+            console.log(subVector.length());
+            // let subVector = new THREE.Vector3();
+            // subVector = subVector.subVectors(box1.rotation, box2.rotation);
+            // let distance = subVector.length();
+            // let direction = subVector.normalize();
+            // if (distance > 0.3) {
+            //     box1.rotation.x = box1.rotation.x - (direction.x * .1);
+            //     box1.rotation.y = box1.rotation.y - (direction.y * .1);
+            //     box1.rotation.z = box1.rotation.z - (direction.z * .1);
+            // }
+            // console.log(box1.rotation);
+            // box1.lookAt(box2.position);
+
+            // console.log(box1.position);
+
             // goToVector(box1, box2);
         } else if (isDigit2) {
+            // console.log(box1.rotation);
             box1.lookAt(box3.position);
             // goToVector(box1, box3);
         }
@@ -241,7 +259,7 @@ function main() {
 
         let speed = .05;
 
-
+        // console.log(box1.rotation);
         controls.update();
         renderer.render(scene, camera);
     }
