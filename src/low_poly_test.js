@@ -26,6 +26,7 @@ function main() {
     let isDigit1 = false;
     let isDigit2 = false;
 
+    let mouseVector = new THREE.Vector2();
 
     init();
     animate();
@@ -109,6 +110,7 @@ function main() {
         controls = createControls(controls, camera, renderer);
         window.addEventListener('resize', onWindowResize);
         window.addEventListener('keydown', setBoxDirection);
+        window.addEventListener('mousemove', onMouseMove);
     }
 
     function setBoxDirection(e) {
@@ -189,6 +191,11 @@ function main() {
         const delta = clock.getDelta();
         let subVector = new THREE.Vector3();
         box1Animations();
+
+        // console.log(mouseVector);
+
+        // box1.lookAt(mouseVector);
+
         // airplaneAnimations();
         // box1.lookAt(box2.position);
         // goToVector(box1, box2);
@@ -221,11 +228,13 @@ function main() {
         }
 
         if (isDigit1) {
+
+            box1.lookAt(box2.position);
             // console.log();
 
-            let subVector = new THREE.Vector3();
-            subVector = subVector.subVectors(box1.position, box2.position);
-            console.log(subVector.length());
+            // let subVector = new THREE.Vector3();
+            // subVector = subVector.subVectors(box1.position, box2.position);
+            // console.log(subVector.length());
             // let subVector = new THREE.Vector3();
             // subVector = subVector.subVectors(box1.rotation, box2.rotation);
             // let distance = subVector.length();
@@ -268,5 +277,14 @@ function main() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function onMouseMove(event) {
+        event.preventDefault();
+        // mouseVector.x = (event.clientX / window.innerWidth);
+        // mouseVector.y = -(event.clientY / window.innerHeight);
+        // mouseVector.z =
+        mouseVector.x = (event.clientX / window.innerWidth);
+        mouseVector.y = -(event.clientY / window.innerHeight);
     }
 }

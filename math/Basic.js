@@ -19,6 +19,10 @@ class Vector {
     getNormalizedLength() {
         return this.getNormalizedVector().getLength();
     }
+
+    getDotProduct() {
+
+    }
 }
 
 class PointVector {
@@ -85,6 +89,7 @@ class Main {
 
         // console.log(inkyToPacman.getLength(), clydeToPacman.getLength());
     }
+
 }
 
 (new Main()).init();
