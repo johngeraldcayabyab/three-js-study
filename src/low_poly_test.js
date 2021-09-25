@@ -167,6 +167,7 @@ function main() {
     }
 
     function animate() {
+        Math.
         render();
         stats.update();
         requestAnimationFrame(animate);
