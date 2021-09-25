@@ -5,6 +5,7 @@ class Vector {
     }
 
     getLength() {
+        //Pythagorean theorem
         return Math.sqrt((this.x * this.x) + (this.y * this.y));
     }
 
@@ -17,6 +18,10 @@ class Vector {
 
     getNormalizedLength() {
         return this.getNormalizedVector().getLength();
+    }
+
+    getDotProduct() {
+
     }
 }
 
@@ -84,6 +89,7 @@ class Main {
 
         // console.log(inkyToPacman.getLength(), clydeToPacman.getLength());
     }
+
 }
 
 (new Main()).init();

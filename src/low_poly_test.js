@@ -26,6 +26,7 @@ function main() {
     let isDigit1 = false;
     let isDigit2 = false;
 
+    let mouseVector = new THREE.Vector2();
 
     init();
     animate();
@@ -109,6 +110,7 @@ function main() {
         controls = createControls(controls, camera, renderer);
         window.addEventListener('resize', onWindowResize);
         window.addEventListener('keydown', setBoxDirection);
+        window.addEventListener('mousemove', onMouseMove);
     }
 
     function setBoxDirection(e) {
@@ -166,9 +168,14 @@ function main() {
         }
     }
 
+<<<<<<< HEAD
     function animate() {
         Math.
         render();
+=======
+    function animate(time) {
+        render(time);
+>>>>>>> 5912b611deb3fac377f79ba05b010d85156b2fdb
         stats.update();
         requestAnimationFrame(animate);
     }
@@ -184,65 +191,95 @@ function main() {
         // box1.rotation.x += 0.01;
     }
 
-    function render() {
-        // alert('kelp');
-        const now = performance.now();
-        const delta = clock.getDelta();
-        let subVector = new THREE.Vector3();
-        box1Animations();
-        // airplaneAnimations();
-        // box1.lookAt(box2.position);
-        // goToVector(box1, box2);
+    function render(time) {
+        time *= 0.001;
+        box1.position.y = Math.sin(time * 2) * 4;
 
-        // direction.x =
-        // direction.x += .5;
-        // direction.x += .5;
+        // // alert('kelp');
+        // const now = performance.now();
+        // const delta = clock.getDelta();
+        // let subVector = new THREE.Vector3();
+        // box1Animations();
         //
-        // box1Mesh.position.multiplyVector3(direction);
-
-        // console.log(distance, 'normalized');
-        // console.log(getWorldPosition(box1Mesh));
-
-
-        // console.log(theDistance, 'distance of box1 to box 2');
-
-        // let object3d = new THREE.Vector3();
-        // let box1DistanceToWorldOrigin = object3d.getWorldPosition(box1Mesh.position);
+        // box2.position.dotVectors3()
         //
-        // console.log(box1DistanceToWorldOrigin);
+        // // console.log(mouseVector);
+        //
+        // // box1.lookAt(mouseVector);
+        //
+        // // airplaneAnimations();
+        // // box1.lookAt(box2.position);
+        // // goToVector(box1, box2);
+        //
+        // // direction.x =
+        // // direction.x += .5;
+        // // direction.x += .5;
+        // //
+        // // box1Mesh.position.multiplyVector3(direction);
+        //
+        // // console.log(distance, 'normalized');
+        // // console.log(getWorldPosition(box1Mesh));
+        //
+        //
+        // // console.log(theDistance, 'distance of box1 to box 2');
+        //
+        // // let object3d = new THREE.Vector3();
+        // // let box1DistanceToWorldOrigin = object3d.getWorldPosition(box1Mesh.position);
+        // //
+        // // console.log(box1DistanceToWorldOrigin);
+        //
+        // if (isArrowUp) {
+        //     box1.position.z -= .5;
+        // } else if (isArrowDown) {
+        //     box1.position.z += .5;
+        // } else if (isArrowRight) {
+        //     box1.position.x += .5;
+        // } else if (isArrowLeft) {
+        //     box1.position.x -= .5;
+        // }
+        //
+        // if (isDigit1) {
+        //
+        //     box1.lookAt(box2.position);
+        //     // console.log();
+        //
+        //     // let subVector = new THREE.Vector3();
+        //     // subVector = subVector.subVectors(box1.position, box2.position);
+        //     // console.log(subVector.length());
+        //     // let subVector = new THREE.Vector3();
+        //     // subVector = subVector.subVectors(box1.rotation, box2.rotation);
+        //     // let distance = subVector.length();
+        //     // let direction = subVector.normalize();
+        //     // if (distance > 0.3) {
+        //     //     box1.rotation.x = box1.rotation.x - (direction.x * .1);
+        //     //     box1.rotation.y = box1.rotation.y - (direction.y * .1);
+        //     //     box1.rotation.z = box1.rotation.z - (direction.z * .1);
+        //     // }
+        //     // console.log(box1.rotation);
+        //     // box1.lookAt(box2.position);
+        //
+        //     // console.log(box1.position);
+        //
+        //     // goToVector(box1, box2);
+        // } else if (isDigit2) {
+        //     // console.log(box1.rotation);
+        //     box1.lookAt(box3.position);
+        //     // goToVector(box1, box3);
+        // }
+        //
+        // if (isSpace) {
+        //     box1.position.y += 1.5;
+        //     if (box1.position.y === 20) {
+        //         isSpace = false;
+        //     }
+        // } else if (box1.position.y > 5) {
+        //     box1.position.y -= 1.5;
+        // }
+        //
+        //
+        // let speed = .05;
 
-        if (isArrowUp) {
-            box1.position.z -= .5;
-        } else if (isArrowDown) {
-            box1.position.z += .5;
-        } else if (isArrowRight) {
-            box1.position.x += .5;
-        } else if (isArrowLeft) {
-            box1.position.x -= .5;
-        }
-
-        if (isDigit1) {
-            console.log(box1);
-            box1.lookAt(box2.position);
-            // goToVector(box1, box2);
-        } else if (isDigit2) {
-            box1.lookAt(box3.position);
-            // goToVector(box1, box3);
-        }
-
-        if (isSpace) {
-            box1.position.y += 1.5;
-            if (box1.position.y === 20) {
-                isSpace = false;
-            }
-        } else if (box1.position.y > 5) {
-            box1.position.y -= 1.5;
-        }
-
-
-        let speed = .05;
-
-
+        // console.log(box1.rotation);
         controls.update();
         renderer.render(scene, camera);
     }
@@ -251,5 +288,14 @@ function main() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function onMouseMove(event) {
+        event.preventDefault();
+        // mouseVector.x = (event.clientX / window.innerWidth);
+        // mouseVector.y = -(event.clientY / window.innerHeight);
+        // mouseVector.z =
+        mouseVector.x = (event.clientX / window.innerWidth);
+        mouseVector.y = -(event.clientY / window.innerHeight);
     }
 }
