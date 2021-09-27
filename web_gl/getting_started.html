@@ -46,7 +46,7 @@
         let fsSource = `
           varying lowp vec4 vColor;
 
-          void main(){
+          void main(void){
             gl_FragColor = vColor;
           }
         `;
@@ -80,6 +80,8 @@
             1.0, -1.0
         ];
 
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
         let colors = [
             1.0, 1.0, 1.0, 1.0,
             1.0, 0.0, 0.0, 1.0,
@@ -91,8 +93,6 @@
         gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
-
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
         return {
             position: positionBuffer,
@@ -126,8 +126,8 @@
             let type = gl.FLOAT;
             let normalize = false;
             let stride = 0;
-
             let offset = 0;
+
             gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
             gl.vertexAttribPointer(
                 programInfo.attribLocations.vertexPosition,
