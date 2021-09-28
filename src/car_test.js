@@ -5,7 +5,6 @@ import {GUI} from "three/examples/jsm/libs/dat.gui.module.js";
 main();
 
 let main = () => {
-
     const renderer = new THREE.WebGLRenderer({antialias: true});
     const gui = new GUI();
     renderer.setSize(window.innerWidth, window.innerHeight);
