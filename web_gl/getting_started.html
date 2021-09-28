@@ -73,20 +73,22 @@
 
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-        let positions = [
-            -1.0, 1.0,
-            1.0, 1.0,
-            -1.0, -1.0,
-            1.0, -1.0
-        ];
+        // let positions = [
+        //     -2.0, 2.0,
+        //     2.0, 2.0,
+        //     -2.0, -2.0,
+        //     2.0, -2.0,
+        // ];
+
+        let positions = squareMatrix();
 
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
         let colors = [
-            1.0, 1.0, 1.0, 1.0,
-            1.0, 0.0, 0.0, 1.0,
-            0.0, 1.0, 0.0, 1.0,
-            0.0, 0.0, 1.0, 1.0
+            // 1.0, 1.0, 1.0, 1.0, // white
+            // 1.0, 0.0, 0.0, 1.0, // red
+            // 0.0, 1.0, 0.0, 1.0, // green
+            // 0.0, 0.0, 1.0, 1.0 // blue
         ];
 
         let colorBuffer = gl.createBuffer();
@@ -208,6 +210,24 @@
         }
 
         return shader;
+    }
+
+
+    function triangleMatrix() {
+        return [
+            0.0, 1.0,
+            2.0, -2.0,
+            -2.0, -2.0,
+        ];
+    }
+
+    function squareMatrix() {
+        return [
+            -2.0, 2.0,
+            2.0, 2.0,
+            -2.0, -2.0,
+            2.0, -2.0,
+        ];
     }
 
     window.onload = main;
