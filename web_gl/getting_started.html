@@ -31,24 +31,31 @@
 
         let vsSource = `
             attribute vec4 aVertexPosition;
-            attribute vec4 aVertexColor;
+            // attribute vec4 aVertexColor;
+            attribute vec2 aTextureCoord;
 
             uniform mat4 uModelViewMatrix;
             uniform mat4 uProjectionMatrix;
 
-            varying lowp vec4 vColor;
+            // varying lowp vec4 vColor;
+            varying highp vec2 vTextureCoord;
 
             void main(){
                 gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-                vColor = aVertexColor;
+                // vColor = aVertexColor;
+                vTextureCoord = aTextureCoord;
             }
         `;
 
         let fsSource = `
-          varying lowp vec4 vColor;
+          // varying lowp vec4 vColor;
+          varying highp vec2 vTextureCoord
+
+          uniform sampler2D uSampler;
 
           void main(void){
-            gl_FragColor = vColor;
+            // gl_FragColor = vColor;
+            gl_FragColor = texture2D(uSampler, vTextureCoord);
           }
         `;
 
@@ -58,11 +65,13 @@
             program: shaderProgram,
             attribLocations: {
                 vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
-                vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor'),
+                // vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor'),
+                textureCoord: gl.getAttribLocation(shaderProgram, 'aTextureCoord'),
             },
             uniformLocations: {
                 projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
                 modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+                uSampler: gl.getUniformLocation(shaderProgram, 'uSampler'),
             },
         };
 
@@ -71,10 +80,15 @@
 
         function render(now) {
             now *= 0.001;
-            const deltaTime = now - then;
+            let deltaTime = now - then;
             then = now;
 
-            drawScene(gl, programInfo, initBuffers(gl), deltaTime);
+            drawScene(gl, programInfo, initBuffers(gl), texture, deltaTime);
+
+
+            // let texture = loadTexture(gl, 'https://i.pinimg.com/236x/3e/dc/e0/3edce08472326f054d5b3f004ebf08f6--seamless-textures-textures-patterns.jpg');
+
+            let texture = loadTexture(gl, '../src/textures/waternormals.jpg');
 
             requestAnimationFrame(render);
         }
@@ -88,6 +102,7 @@
         let positionBuffer = gl.createBuffer()
 
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
 
         let positions = squareMatrix();
 
@@ -130,15 +145,54 @@
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
 
 
+        let textureCoordBuffer = gl.createBuffer();
+        gl.bindBuffer();
+
+        let textureCoordinates = [
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0,
+
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0,
+
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0,
+
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0,
+
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0,
+
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0,
+        ];
+
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
+
+
         return {
             position: positionBuffer,
-            color: colorBuffer,
+            // color: colorBuffer,
+            textureCoord: textureCoordBuffer,
             indices: indexBuffer,
         };
     }
 
 
-    function drawScene(gl, programInfo, buffers, deltaTime) {
+    function drawScene(gl, programInfo, buffers, texture, deltaTime) {
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.clearDepth(1.0);
         gl.enable(gl.DEPTH_TEST);
@@ -157,30 +211,45 @@
 
         let modelViewMatrix = mat4.create();
 
-        mat4.trahytrhnslate(modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -6.0]);
+        mat4.translate(modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -6.0]);
 
         mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotation, [0, 0, 1]);
         mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotation * .7, [0, 1, 0]);
 
 
         {
-            let numComponents = 3;
+            // let numComponents = 3;
+            // let type = gl.FLOAT;
+            // let normalize = false;
+            // let stride = 0;
+            // let offset = 0;
+            //
+            // gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+            // gl.vertexAttribPointer(
+            //     programInfo.attribLocations.vertexPosition,
+            //     numComponents,
+            //     type,
+            //     normalize,
+            //     stride,
+            //     offset);
+            //
+            // gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+
+            let num = 2;
             let type = gl.FLOAT;
             let normalize = false;
             let stride = 0;
             let offset = 0;
-
-            gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-            gl.vertexAttribPointer(
-                programInfo.attribLocations.vertexPosition,
-                numComponents,
-                type,
-                normalize,
-                stride,
-                offset);
-
-            gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffers.textureCoord);
+            gl.vertexAttribPointer(programInfo.attribLocations.textureCoord, num, type, normalize, stride, offset);
+            gl.enableVertexAttribArray(programInfo.attribLocations.textureCoord);
         }
+
+        gl.activeTexture(gl.TEXTURE0);
+
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+
+        gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
 
 
         {
