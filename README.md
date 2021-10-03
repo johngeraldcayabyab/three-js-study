@@ -1,6 +1,8 @@
-To understand the basics of computer graphics through javascript by copying and modifying the source code from three js examples.
+To understand the basics of computer graphics through javascript.
 
 References:
+<br>
+https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html
 <br>
 http://stemkoski.github.io/Three.js/#hello-world
 <br>
