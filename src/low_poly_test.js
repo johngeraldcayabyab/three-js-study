@@ -4,10 +4,10 @@ import {createScene} from "../utils/scaffold.js";
 import {createPerspectiveCamera} from "../utils/scaffold.js";
 import {createControls} from "../utils/scaffold.js";
 import {createStats} from "../utils/scaffold.js";
-import {createAirplane, createPlane} from "../utils/object_generator.js";
+import {createPlane} from "../utils/object_generator.js";
 import {createPineTree} from "../utils/object_generator.js";
 import {createCloud} from "../utils/object_generator.js";
-import {getWorldPosition, goToVector, makeAxesGrid} from "../utils/utils.js";
+import {makeAxesGrid} from "../utils/utils.js";
 
 main();
 
@@ -168,14 +168,9 @@ function main() {
         }
     }
 
-<<<<<<< HEAD
-    function animate() {
-        Math.
-        render();
-=======
+
     function animate(time) {
         render(time);
->>>>>>> 5912b611deb3fac377f79ba05b010d85156b2fdb
         stats.update();
         requestAnimationFrame(animate);
     }
