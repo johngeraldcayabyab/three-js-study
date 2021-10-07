@@ -19,7 +19,7 @@ class Circle {
     }
 
     getRadius() {
-        Math.sin()
+
     }
 
 }
