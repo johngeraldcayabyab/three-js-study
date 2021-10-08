@@ -2,12 +2,8 @@ class RightTriangle {
 
     square(number, exponent) {
         let newNumber = number;
-
-        for (let i = 0; i <= exponent; i++) {
-            newNumber = newNumber * number;
+        for (let i = 1; i < exponent; i++) {
         }
-
-        return newNumber;
     }
 
     pythagorean() {
