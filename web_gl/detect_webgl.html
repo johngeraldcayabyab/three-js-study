@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        body {
+            text-align: center;
+        }
+
+        button {
+            display: block;
+            font-size: inherit;
+            margin: auto;
+            padding: 0.6em;
+        }
+    </style>
+</head>
+<body>
+<p>[ Here would go the result of WebGL feature detection ]</p>
+<button>Press here to detect WebGLRenderingContext</button>
+
+
+<script type="text/javascript">
+    window.addEventListener("load", function () {
+        let paragraph = document.querySelector("p");
+        let button = document.querySelector("button");
+        button.addEventListener("click", detectWebGLContext, false);
+
+        function detectWebGLContext() {
+            let canvas = document.createElement("canvas");
+            let gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+            if (gl && gl instanceof WebGLRenderingContext) {
+                paragraph.textContent = "Congratulations! Your browser supports WebGL.";
+            } else {
+                paragraph.textContent = "Failed to get WebGL context. Your browser or device may not support WebGL"
+            }
+        }
+    }, false);
+</script>
+
+</body>
+</html>
