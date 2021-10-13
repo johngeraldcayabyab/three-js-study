@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Color animation with clear</title>
+
+    <style>
+        body {
+            text-align: center;
+        }
+
+        canvas {
+            display: block;
+            width: 280px;
+            height: 210px;
+            margin: auto;
+            padding: 0;
+            border: none;
+            background-color: black;
+        }
+
+        button {
+            display: inline-block;
+            font-size: inherit;
+            margin: auto;
+            padding: 0.6em;
+        }
+    </style>
+</head>
+<body>
+
+<p>A simple WebGL program that shows color animation.</p>
+<p>You can click the button below to toggle the
+    color animation on or off.</p>
+<canvas id="canvas-view">Your browser does not seem to support
+    HTML5 canvas.
+</canvas>
+<button id="animation-onoff">
+    Press here to
+    <strong>[verb goes here]</strong>
+    the animation
+</button>
+
+<script type="text/javascript">
+    window.addEventListener("load", function setupAnimation(evt) {
+        "use strict"
+        window.removeEventListener(evt.type, setupAnimation, false);
+
+        let timer;
+
+        let button = document.querySelector("#animation-onoff");
+        let verb = document.querySelector("strong");
+
+        function startAnimation(evt) {
+            button.removeEventListener(evt.type, startAnimation, false);
+            button.addEventListener("click", stopAnimation, false);
+            verb.textContent = "stop";
+            timer = setInterval(drawAnimation, 1000);
+            drawAnimation();
+        }
+
+        function stopAnimation(evt) {
+            button.removeEventListener(evt.type, stopAnimation, false);
+            button.addEventListener("click", startAnimation, false);
+            verb.textContent = "start";
+            clearInterval(timer);
+        }
+
+        stopAnimation({type: "click"});
+
+        let gl;
+
+        function drawAnimation() {
+            if (!gl) {
+                let canvas = document.querySelector("#canvas-view");
+                gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+                if (!gl) {
+                    clearInterval(timer);
+                    alert("Failed to get WebGL context. Your browser or device may not support WebGL.");
+                    return false;
+                }
+                gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+            }
+
+            let color = getRandomColor();
+            gl.clearColor(color[0], color[1], color[2], 1.0);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+        }
+
+        function getRandomColor() {
+            return [Math.random(), Math.random(), Math.random()]
+        }
+    }, false);
+</script>
+
+</body>
+</html>
