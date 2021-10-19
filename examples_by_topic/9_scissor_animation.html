@@ -28,8 +28,8 @@
     </style>
 </head>
 <body>
-<p>[ Some descriptive text about the example. ]</p>
-<button>[ Optional button element. ]</button>
+<p>WebGL animation by clearing the drawing buffer with solid color and applying scissor test.</p>
+<button>Press here to <strong>start</strong> the animation</button>
 <canvas>Your browser does not seem to support
     HTML5 canvas.
 </canvas>
@@ -53,7 +53,7 @@
         gl.clearColor(color[0], color[1], color[2], 1.0);
 
         position = [0, gl.drawingBufferHeight];
-
+        console.log(position);
         let button = document.querySelector("button");
         let timer;
 
@@ -88,7 +88,7 @@
                 Math.random() * (gl.drawingBufferWidth - size[0]),
                 gl.drawingBufferHeight
             ];
-            velocity = 1.0 + 6.0 * Math.random();
+            // velocity = 1.0 + 6.0 * Math.random();
             color = getRandomColor();
             gl.clearColor(color[0], color[1], color[2], 1.0);
         }
