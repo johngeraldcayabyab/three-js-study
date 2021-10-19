@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Boilerplate 1</title>
+
+    <style>
+        body {
+            text-align: center;
+        }
+
+        canvas {
+            display: block;
+            width: 280px;
+            height: 210px;
+            margin: auto;
+            padding: 0;
+            border: none;
+            background-color: black;
+        }
+
+        button {
+            display: block;
+            font-size: inherit;
+            margin: auto;
+            padding: 0.6em;
+        }
+    </style>
+</head>
+<body>
+<p>[ Some descriptive text about the example. ]</p>
+<button>[ Optional button element. ]</button>
+<canvas>Your browser does not seem to support
+    HTML5 canvas.
+</canvas>
+
+
+<script type="text/javascript">
+    function getRenderingContext() {
+        let canvas = document.querySelector("canvas");
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+        let gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+        if (!gl) {
+            let paragraph = document.querySelector("p");
+            paragraph.innerHTML = "Failed to get WebGL context. Your browser or device may not support WebGL.";
+            return false;
+        }
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        return gl;
+    }
+</script>
+</body>
+</html>
