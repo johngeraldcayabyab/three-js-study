@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Adding 2D content to a WebGL context</title>
+    <title>Using shaders to apply color in WebGL</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.6.1/gl-matrix-min.js"
             integrity="sha512-5gjtrbkSzY8jdrVyMSiXO+0AERPMGYpUueFLkBMITgfPL+2qAfZnQyW2YWJkXS4ELmFJLhDZu1WbK8UKFjmC/A=="
@@ -10,13 +10,12 @@
 </head>
 <body>
 
-
 <canvas id="glCanvas" width="640" height="480"></canvas>
 
 <script type="text/javascript">
 
-
     function main() {
+
         let canvas = document.querySelector("#glCanvas");
         let gl = canvas.getContext("webgl");
         if (gl === null) {
@@ -26,42 +25,29 @@
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT);
 
-
         let vsSource = `
             attribute vec4 aVertexPosition;
+            attribute vec4 aVertexColor;
 
             uniform mat4 uModelViewMatrix;
             uniform mat4 uProjectionMatrix;
 
-            void main(){
+            varying lowp vec4 vColor;
+
+            void main(void){
                 gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+                vColor = aVertexColor;
             }
         `;
+
 
         let fsSource = `
+            varying lowp vec4 vColor;
+
             void main(){
-                gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+                gl_FragColor = vColor;
             }
         `;
-
-
-        let shaderProgram = initShaderProgram(gl, vsSource, fsSource);
-
-
-        let programInfo = {
-            program: shaderProgram,
-            attribLocations: {
-                vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
-            },
-            uniformLocations: {
-                projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-                modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
-            }
-        };
-
-
-        drawScene(gl, programInfo, initBuffers(gl));
-
 
         function initShaderProgram(gl, vsSource, fsSource) {
             let vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
@@ -80,45 +66,52 @@
             return shaderProgram;
         }
 
-        function loadShader(gl, type, source) {
-            let shader = gl.createShader(type);
-
-            gl.shaderSource(shader, source);
-
-            gl.compileShader(shader);
-
-            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
-                gl.deleteShader(shader);
-                return null;
-            }
-
-            return shader;
-        }
-
-        function initBuffers(gl) {
-            let positionBuffer = gl.createBuffer();
-
-            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
+        function initBuffer(gl) {
             let positions = [
                 -1.0, 1.0,
                 1.0, 1.0,
                 -1.0, -1.0,
                 1.0, -1.0,
             ];
-
-            gl.bufferData(
+            let positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.bindBuffer(
                 gl.ARRAY_BUFFER,
                 new Float32Array(positions),
                 gl.STATIC_DRAW
             );
 
+            let colors = [
+                1.0, 1.0, 1.0, 1.0,
+                1.0, 0.0, 0.0, 1.0,
+                0.0, 1.0, 0.0, 1.0,
+                0.0, 0.0, 1.0, 1.0,
+            ];
+            let colorBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+            gl.bufferData(
+                gl.ARRAY_BUFFER,
+                new Float32Array(colors),
+                gl.STATIC_DRAW
+            );
+
             return {
-                position: positionBuffer
+                position: positionBuffer,
+                color: colorBuffer
             }
         }
 
+        function loadShader(gl, type, source) {
+            let shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getParameter(shader, gl.COMPILE_STATUS)) {
+                alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
+                gl.deleteShader(shader)
+                return null;
+            }
+            return shader;
+        }
 
         function drawScene(gl, programInfo, buffers) {
             gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -148,7 +141,7 @@
                 modelViewMatrix,
                 modelViewMatrix,
                 [-0.0, 0.0, -6.0]
-            );
+            )
 
             {
                 let numComponents = 2;
@@ -176,14 +169,14 @@
             gl.uniformMatrix4fv(
                 programInfo.uniformLocations.projectionMatrix,
                 false,
-                projectionMatrix
+                projectionMatrix,
             );
 
             gl.uniformMatrix4fv(
-                programInfo.uniformLocations.modelViewMatrix,
+                projectionMatrix.uniformLocations.modelViewMatrix,
                 false,
-                modelViewMatrix
-            )
+                modelViewMatrix,
+            );
 
             {
                 let offset = 0;
@@ -194,7 +187,6 @@
     }
 
     window.onload = main;
-
 
 </script>
 </body>
