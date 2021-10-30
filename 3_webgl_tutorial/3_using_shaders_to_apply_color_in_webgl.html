@@ -80,7 +80,7 @@
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
         const colors = [
-            1.0, 1.0, 1.0, 1.0,
+            1.0, 0.0, 0.0, 1.0,
             1.0, 0.0, 0.0, 1.0,
             0.0, 1.0, 0.0, 1.0,
             0.0, 0.0, 1.0, 1.0,
@@ -108,6 +108,7 @@
         const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
         const zNear = 0.1;
         const zFar = 100.0;
+
         const projectionMatrix = mat4.create();
 
         mat4.perspective(
@@ -139,8 +140,9 @@
                 type,
                 normalize,
                 stride,
-                offset
-            );
+                offset);
+            gl.enableVertexAttribArray(
+                programInfo.attribLocations.vertexPosition);
         }
 
         {
@@ -156,9 +158,9 @@
                 type,
                 normalize,
                 stride,
-                offset
-            );
-            gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
+                offset);
+            gl.enableVertexAttribArray(
+                programInfo.attribLocations.vertexColor);
         }
 
         gl.useProgram(programInfo.program);
@@ -166,13 +168,11 @@
         gl.uniformMatrix4fv(
             programInfo.uniformLocations.projectionMatrix,
             false,
-            modelViewMatrix
-        );
+            projectionMatrix);
         gl.uniformMatrix4fv(
             programInfo.uniformLocations.modelViewMatrix,
             false,
-            modelViewMatrix
-        );
+            modelViewMatrix);
 
         {
             const offset = 0;
@@ -182,8 +182,10 @@
     }
 
     const initShaderProgram = (gl, vsSource, fsSource) => {
+
         const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
         const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
 
         const shaderProgram = gl.createProgram();
         gl.attachShader(shaderProgram, vertexShader);
@@ -200,6 +202,8 @@
             alert(`Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgram)}`);
             return null;
         }
+
+        return shaderProgram;
     }
 
     const loadShader = (gl, type, source) => {
@@ -212,6 +216,7 @@
             gl.deleteShader(shader);
             return null;
         }
+        return shader;
     }
 
     main();
